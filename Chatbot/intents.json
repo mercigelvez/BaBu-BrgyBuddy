@@ -1,0 +1,169 @@
+{
+  "intents": [
+    {
+      "tag": "greeting",
+      "patterns": [
+        "Hi",
+        "Hey",
+        "Hello",
+        "Good morning",
+        "Good evening"
+      ],
+      "responses": [
+        "Hey, Babu is here to help you",
+        "Hello, I'm Babu. What can I help you with?",
+        "Hi there, what can I do for you?",
+        "Hi there, how can I help?",
+        "Hello! How can I assist you today?"
+      ]
+    },
+    {
+      "tag": "goodbye",
+      "patterns": [
+        "Bye",
+        "See you later",
+        "Goodbye",
+        "I have to go",
+        "That's it for now"
+      ],
+      "responses": [
+        "See you later, thanks for chatting with Babu",
+        "Have a nice day",
+        "Bye! Come back again soon.",
+        "Goodbye! Don't hesitate to return if you have more questions.",
+        "See you next time, thanks for chatting"
+      ]
+    },
+    {
+      "tag": "thanks",
+      "patterns": [
+        "Thanks",
+        "Thank you",
+        "Thank's a lot!",
+        "Thank you so much",
+        "Salamat"
+      ],
+      "responses": [
+        "Happy to help!",
+        "Any time!",
+        "My pleasure",
+        "Glad I could assist!",
+        "Anytime!"
+      ]
+    },
+    {
+      "tag": "documents",
+      "patterns": [
+        "Can you list all available documents can i get?",
+        "What are the documents?",
+        "what documents can i get?",
+        "What can I request?",
+        "What services do you offer?"
+      ],
+      "responses": [
+        "Barangay Market Area offers: Barangay Clearance \n Barangay Indigency \n Certificate of Residency \n Solo Parents Certificate\n No Fix Income \n No Garage \n Business Closure \n Unable to Vote \n Business Permit \n Health Certificate \n First Time Job Seeker \n Late Registration \n Barangay ID",
+        "The following documents are: Barangay Clearance \n Barangay Indigency \n Certificate of Residency \n Solo Parents Certificate\n No Fix Income \n No Garage \n Business Closure \n Unable to Vote \n Business Permit \n Health Certificate \n First Time Job Seeker \n Late Registration \n Barangay ID",
+        "The documents you can get in the brgy are: Barangay Clearance \n Barangay Indigency \n Certificate of Residency \n Solo Parents Certificate\n No Fix Income \n No Garage \n Business Closure \n Unable to Vote \n Business Permit \n Health Certificate \n First Time Job Seeker \n Late Registration \n Barangay ID",
+        "You can get these on the brgy: Barangay Clearance \n Barangay Indigency \n Certificate of Residency \n Solo Parents Certificate\n No Fix Income \n No Garage \n Business Closure \n Unable to Vote \n Business Permit \n Health Certificate \n First Time Job Seeker \n Late Registration \n Barangay ID",
+        "Barangay Market Area has the following: Barangay Clearance \n Barangay Indigency \n Certificate of Residency \n Solo Parents Certificate\n No Fix Income \n No Garage \n Business Closure \n Unable to Vote \n Business Permit \n Health Certificate \n First Time Job Seeker \n Late Registration \n Barangay ID"
+      ]
+    },
+    {
+      "tag": "payments",
+      "patterns": [
+        "how much is the payment for each document?",
+        "Are you cash only?",
+        "how much?",
+        "how much is a document?",
+        "What's the price for a document?"
+      ],
+      "responses": [
+        "Document ranges from 60 to 80 pesos. You can pay with cash or gcash through the brgy treasurer",
+        "Document can range from 60 to 80 pesos. Can be paid using cash or gcash through the brgy premises",
+        "Each document costs between 60 to 80 pesos. Payment can be made via cash or Gcash  through the brgy treasurer",
+        "Document payment can be via cash or gcash through the brgy premises",
+        "A document can costs between 60 to 80 pesos. You can pay cash or through gcash in the brgy treasurer"
+      ]
+    },
+    {
+      "tag": "working_days",
+      "patterns": [
+        "How long before I can get my document?",
+        "How long does the document to be finished?",
+        "When do I get my document?",
+        "What is the processing time for a document?",
+        "How long do i need to wait?"
+      ],
+      "responses": [
+        "You can comeback for your document after 2-3 days",
+        "You can go back to the brgy after 2-3 days",
+        "Your document will be ready for pickup in 2-3 days",
+        "You can get your document after 2-3 days",
+        "The document will be ready after 2-3 days"
+      ]
+    },
+    {
+      "tag": "hours_of_operation",
+      "patterns": [
+        "What time can i request the document?",
+        "When are you open?",
+        "What time do you close?",
+        "When can I visit?",
+        "What days you are open?"
+      ],
+      "responses": [
+        "Our hours of operation are from 8:00 AM to 5:00 PM, Monday to Friday.",
+        "We're open from 8:00 AM to 5:00 PM on weekdays.",
+        "You can visit us anytime between 8:00 AM and 5:00 PM from Monday to Friday.",
+        "You can visit the barangay from Monday to Friday between 8:00am to 5:00pm.",
+        "You can go to the barangay on weekdays only between 8:00am to 5:00pm"
+
+      ]
+    },
+    {
+      "tag": "contact",
+      "patterns": [
+        "What is the brgy number?",
+        "How to contact the brgy?",
+        "brgy have an email?",
+        "brgy contact information?",
+        "What is the brgy contact details?"
+      ],
+      "responses": [
+        "You can contact the brgy at 0000 or email us at --- .",
+        "The brgy phone number is 00000 and our email is ---.",
+        "You can reach the brgy at 0000 or --- .",
+        "You can contact this phone numer 00000 or email at ---- .",
+        "This is the brgy contact details: 0000 or ---"
+      ]
+    },
+    {
+      "tag": "unknown",
+      "patterns": [""],
+      "responses": [
+        "I'm sorry, I didn't understand that. Could you please rephrase or provide more information?",
+        "I'm not sure I understand. Could you clarify?",
+        "I'm sorry, could you please provide more details?",
+        "Im not sure, could you repeat that please?",
+        "Sorry I didn't quite understand, could you please rephrase?"
+      ]
+    },
+    {
+      "tag": "who_to_talk",
+      "patterns": [
+        "Who can I talk about the document request?",
+        "Who is the person can I ask about document request?",
+        "Who can I ask about my concern?",
+        "Who can I ask during emergency?",
+        "Who will aide me on my document request?"
+      ],
+      "responses": [
+        "The barangay secretary will handle your request, Barangay Treasurer for your payment, and Barangay Captain for your emergency",
+        "You can talk to the barangay secretary for yur request, Barangay Treasurer for your payment, and Barangay Captain for your emergency ",
+        "For your request you can talk to the barangay secretary, Barangay Treasurer for your payment, and Barangay Captain for your emergency",
+        "The document request will be handled by the barangay secretary, Barangay Treasurer for your payment, and Barangay Captain for your emergency",
+        "Barangay Secretary will aide you in your document, Barangay Treasurer for your payment, and Barangay Captain for your emergency"
+      ]
+    }
+  ]
+}
