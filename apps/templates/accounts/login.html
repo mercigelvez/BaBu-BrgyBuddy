@@ -17,20 +17,6 @@
     .logo {
       font-size: 4rem;
     }
-    
-    .image-container {
-      position: relative;
-      height: 100vh;
-      overflow: hidden; /* Ensure the image doesn't overflow */
-    }
-    .image-container img {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 100%; /* Make the image width 100% */
-      height: auto; /* Maintain aspect ratio */
-    }
   </style>
 {% endblock %}
 
@@ -38,7 +24,7 @@
   <div class="container-fluid">
     <div class="row justify-content-center align-items-center">
       <div class="col-lg-5 col-md-7">
-        <div class="card bg-white">
+        <div class="bg-white">
           <div class="card-body px-lg-5 py-lg-5">
             <div class="text-center mb-4">
               {% comment %} <span class="logo text-success">&#128572;</span> {% endcomment %}
@@ -77,18 +63,18 @@
               <div class="text-center">
                 <button type="submit" class="btn btn-success btn-block my-4">Sign in</button>
               </div>
+              <div class="register-button">
+                <a href="{% url 'register' %}" class="text-success"><small>Register</small></a>
+              </div>
             </form>
-          </div>
-        </div>
-        <div class="row mt-3">
-          <div class="col-6">
-            <a href="{% url 'register' %}" class="text-success"><small>Register</small></a>
           </div>
         </div>
       </div>
       <div class="col-lg-7 d-none d-lg-block">
         <div class="image-container">
-          <img src="{% static 'assets/img/loginbabu.png' %}" alt="Large Image" />
+          <span class="babu-text">BaBu</span>
+          <span class="buddy">Your Barangay Buddy</span>
+          <img class="babu-logo" src="{% static 'assets/img/babulogo.png' %}" alt="Login Image">
         </div>
       </div>
     </div>
