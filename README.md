@@ -8,7 +8,8 @@ BaBu-BrgyBuddy is a Django project that aims to assist residents when asking for
 1. Clone the repository: `git clone https://github.com/mercigelvez/BaBu-BrgyBuddy.git`
 2. Install the required dependencies: `pip install -r requirements.txt`
 3. Configure the database settings in `settings.py`
-4. Apply database migrations: `python manage.py migrate`
+4. Install the mysql client: `pip install mysqlclient`
+5. Apply database migrations: `python manage.py migrate`
 
 ## Usage
 1. Start the development server: `python manage.py runserver`
