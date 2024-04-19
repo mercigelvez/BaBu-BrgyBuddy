@@ -52,10 +52,10 @@
       ]
     },
     {
-      "tag": "documents",
+      "tag": "services",
       "patterns": [
-        "Can you list all available documents can i get?",
-        "What are the documents?",
+        "Can you list all available services can i get?",
+        "What are the services?",
         "what documents can i get?",
         "What can I request?",
         "What services do you offer?"
@@ -86,7 +86,7 @@
       ]
     },
     {
-      "tag": "working_days",
+      "tag": "long",
       "patterns": [
         "How long before I can get my document?",
         "How long does the document to be finished?",
@@ -117,7 +117,6 @@
         "You can visit us anytime between 8:00 AM and 5:00 PM from Monday to Friday.",
         "You can visit the barangay from Monday to Friday between 8:00am to 5:00pm.",
         "You can go to the barangay on weekdays only between 8:00am to 5:00pm"
-
       ]
     },
     {
@@ -139,7 +138,9 @@
     },
     {
       "tag": "unknown",
-      "patterns": [""],
+      "patterns": [
+        ""
+      ],
       "responses": [
         "I'm sorry, I didn't understand that. Could you please rephrase or provide more information?",
         "I'm not sure I understand. Could you clarify?",
@@ -163,6 +164,57 @@
         "For your request you can talk to the barangay secretary, Barangay Treasurer for your payment, and Barangay Captain for your emergency",
         "The document request will be handled by the barangay secretary, Barangay Treasurer for your payment, and Barangay Captain for your emergency",
         "Barangay Secretary will aide you in your document, Barangay Treasurer for your payment, and Barangay Captain for your emergency"
+      ]
+    },
+    {
+      "tag": "lost_and_found",
+      "patterns": [
+        "I lost something in the barangay area. Can you help me?",
+        "Is there a lost and found service in the barangay?",
+        "Where can I inquire about lost items within the barangay?",
+        "I misplaced an item in the barangay. What should I do?",
+        "How can I report a lost item in the barangay?"
+      ],
+      "responses": [
+        "If you've lost something in the barangay area, you can inquire at the barangay office for our lost and found service.",
+        "Yes, we have a lost and found service available at the barangay office. Please visit or contact us for assistance.",
+        "For inquiries about lost items within the barangay, please contact the barangay office or visit us directly.",
+        "In case you misplaced an item in the barangay, please report it to the barangay office so we can assist you.",
+        "To report a lost item in the barangay, please visit the barangay office or contact us via phone or email."
+      ]
+    },
+    {
+      "tag": "volunteer_opportunities",
+      "patterns": [
+        "Are there volunteer opportunities in the barangay?",
+        "Can I volunteer for community service in the barangay?",
+        "Where can I sign up for volunteer work in the barangay?",
+        "Is there a way to contribute as a volunteer in the barangay?",
+        "Do you accept volunteers for barangay programs?"
+      ],
+      "responses": [
+        "Yes, we welcome volunteers for various community initiatives and programs in the barangay. Please inquire at the barangay office for available opportunities.",
+        "Volunteer opportunities for community service are available in the barangay. Contact us to learn more about how you can contribute.",
+        "To sign up for volunteer work in the barangay, please visit the barangay office or reach out to us via phone or email.",
+        "Contributing as a volunteer in the barangay is highly encouraged. Get involved by contacting the barangay office for volunteer opportunities.",
+        "Yes, we accept volunteers for barangay programs and activities. Feel free to inquire about available opportunities at the barangay office."
+      ]
+    },
+    {
+      "tag": "environmental_concerns",
+      "patterns": [
+        "I have concerns about environmental issues in the barangay.",
+        "Where can I report environmental problems in the barangay?",
+        "Is there a way to address environmental issues within the barangay?",
+        "How can I contribute to environmental conservation efforts in the barangay?",
+        "Are there programs in place to address environmental concerns in the barangay?"
+      ],
+      "responses": [
+        "If you have concerns about environmental issues in the barangay, please report them to the barangay office for proper action and resolution.",
+        "To report environmental problems in the barangay, please contact the barangay office or visit us to discuss the issue.",
+        "Yes, we have mechanisms in place to address environmental issues within the barangay. Feel free to share your concerns with us for action.",
+        "You can contribute to environmental conservation efforts in the barangay by participating in our clean-up drives and tree-planting activities. Contact us to get involved.",
+        "The barangay has programs dedicated to addressing environmental concerns such as waste management, greening projects, and pollution control initiatives."
       ]
     }
   ]
