@@ -7,6 +7,8 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from .forms import LoginForm, SignUpForm
+from django.contrib.auth import authenticate
+from django.core.mail import send_mail
 
 
 def login_view(request):
@@ -46,7 +48,7 @@ def register_user(request):
             msg = 'User created - please <a href="/login">login</a>.'
             success = True
 
-            # return redirect("/login/")
+            return redirect("/login/")
 
         else:
             msg = 'Form is not valid'
@@ -54,3 +56,21 @@ def register_user(request):
         form = SignUpForm()
 
     return render(request, "accounts/register.html", {"form": form, "msg": msg, "success": success})
+
+
+def forgot_password(request):
+    if request.method == 'POST':
+        email = request.POST['email']
+        user = authenticate(username=email)
+
+        if user:
+            send_password_reset_email(user)
+            # Optionally, send a custom success message
+            message = 'An email has been sent to your registered email address with instructions to reset your password.'
+            return render(request, 'accounts/forgot_password_done.html', {'message': message})
+        else:
+            # Optionally, handle invalid email case (security best practice)
+            message = 'The email address you entered is not associated with an account.'
+            return render(request, 'accounts/forgot_password.html', {'message': message})
+    else:
+        return render(request, 'accounts/forgot_password.html')

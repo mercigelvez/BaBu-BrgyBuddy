@@ -29,7 +29,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'apps.home'  # Enable the inner home (home)
+    'apps.home',  # Enable the inner home (home)
+    'apps.authentication',
+    'landing',
 ]
 
 MIDDLEWARE = [
@@ -123,6 +125,13 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(CORE_DIR, 'apps/static'),
 )
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.mailtrap.io'
+EMAIL_PORT = 2525  
+EMAIL_HOST_USER = '4a0632f6152931'
+EMAIL_HOST_PASSWORD = 'ad39080429d0f2'
+EMAIL_USE_TLS = True  # Set to True if using port 587
 
 
 #############################################################

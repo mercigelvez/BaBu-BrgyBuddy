@@ -2911,7 +2911,8 @@ input[type="button"].btn-block {
   white-space: nowrap;
   background-color: #fff;
   border: 1px solid #dee2e6;
-  border-radius: 0.25rem; }
+  border-radius: 0.25rem;
+ }
   .input-group-text input[type="radio"],
   .input-group-text input[type="checkbox"] {
     margin-top: 0; }
@@ -3669,6 +3670,7 @@ input[type="button"].btn-block {
 
 }
 
+
 .babu-text{
   position: absolute;
   color:#000;
@@ -3676,6 +3678,12 @@ input[type="button"].btn-block {
   font-weight: bold;
   margin-left: 380px;
   margin-top: 500px;
+}
+
+.welcome-text{
+  color:#000;
+  font-size: 50px;
+  font-weight: bold;
 }
 
 .buddy{
