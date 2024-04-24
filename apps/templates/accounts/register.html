@@ -100,11 +100,17 @@ Login {% endblock %} {% block stylesheets %}
             <span class="text-error">{{ form.password2.errors }}</span>
             <div class="text-center">
               <button type="submit" class="btn btn-success mt-4">
-                Create account
+                Signup
               </button>
+              
+            </form>
+           
             </div>
-          </form>
+           
         </div>
+      </div>
+      <div class="register-button">
+        Already have an account? <a href="{% url 'login' %}" class="text-success">Login</a>
       </div>
     </div>
     <div class="col-lg-7 d-none d-lg-block">
