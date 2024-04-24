@@ -79,10 +79,13 @@ background-image: linear-gradient(180deg, white, green);">
                 <h6 class="text-overflow m-0">Hi there!</h6>
               </div>
               <div class="dropdown-divider"></div>
-              <a href="{% url 'logout' %}" class="dropdown-item">
-                <i class="ni ni-user-run text-red"></i>
-                <span>Logout</span>
-              </a>
+              <form action="{% url 'logout' %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="dropdown-item">
+                    <i class="ni ni-user-run text-red"></i>
+                    <span>Logout</span>
+                </button>
+            </form>            
             </div>
           </li>
         </ul>
