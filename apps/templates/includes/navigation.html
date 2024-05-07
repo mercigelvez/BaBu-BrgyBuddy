@@ -1,0 +1,109 @@
+    <!-- Navbar -->
+    <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl " id="navbarBlur" data-scroll="false">
+        <div class="container-fluid py-1 px-3">
+          <nav aria-label="breadcrumb">
+            
+            <h6 class="font-weight-bolder text-black mb-0 fs-2">Barangay Buddy</h6>
+          </nav>
+          <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
+            <div class="ms-md-auto pe-md-3 d-flex align-items-center">
+              <!--to make the next icons to stay on right-->
+            </div>
+            <ul class="navbar-nav  justify-content-end">
+              
+              <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
+                <a href="javascript:;" class="nav-link text-black p-0" id="iconNavbarSidenav">
+                  <div class="sidenav-toggler-inner">
+                    <i class="sidenav-toggler-line bg-black"></i>
+                    <i class="sidenav-toggler-line bg-black"></i>
+                    <i class="sidenav-toggler-line bg-black"></i>
+                  </div>
+                </a>
+              </li>
+              <li class="nav-item dropdown pe-2 d-flex align-items-center">
+                <a href="javascript:;" class="nav-link text-black p-0" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                  <i class=" cursor-pointer"></i>
+                  <span class="fs-3 font-weight-bold">:</span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end px-2 py-3 me-sm-n4" aria-labelledby="dropdownMenuButton">
+                  <li class="nav-item d-flex align-items-center">
+                    <a href="#" class="nav-link font-weight-bold px-0" id="feedbackLink">
+                      <i class="fa fa-message me-sm-1 text-dark"></i>
+                      <span class="d-sm-inline d-none">Feedback</span>
+                    </a>
+                  </li>
+                  <li class="nav-item d-flex align-items-center">
+                    <a class="nav-link {% if 'profile' in segment %} active {% endif %}" href="/profile.html">
+                      <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="ni ni-single-02 text-dark text-sm opacity-10"></i>
+                        <span class="nav-link-text ms-1">Profile</span>
+                      </div>
+                    </a>
+                  </li>
+                  <li class="nav-item d-flex align-items-center">
+                    <a href="{{ url_for('authentication_blueprint.logout') }}" class="nav-link font-weight-bold px-0">
+                      <i class="fa fa-sign-out me-sm-1 text-dark"></i>
+                      <span class="d-sm-inline d-none">LOGOUT</span>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+
+       <!-- Feedback Modal -->
+       <div class="modal fade" id="feedbackModal" tabindex="2" role="dialog" aria-labelledby="feedbackModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="feedbackModalLabel">Feedback Rating</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <p>Please click on the specific area of the page that your feedback is related to.</p>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="feedbackType" id="suggest" value="suggest">
+                <label class="form-check-label" for="suggest">
+                  Suggest
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="feedbackType" id="like" value="like" checked>
+                <label class="form-check-label" for="like">
+                  <i class="fa fa-thumbs-up"></i> Like
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="feedbackType" id="dislike" value="dislike">
+                <label class="form-check-label" for="dislike">
+                  <i class="fa fa-thumbs-down"></i> Dislike
+                </label>
+              </div>
+              <div class="form-group">
+                <label for="feedbackText">Enter feedback (required)</label>
+                <textarea class="form-control" id="feedbackText" rows="3" placeholder="The details provided is accurate"></textarea>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+              <button type="button" class="btn btn-primary">Send</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- End Navbar -->
+
+      
+<script>
+  var feedbackModal = new bootstrap.Modal(document.getElementById('feedbackModal'));
+
+// Add event listener to the "Feedback" link
+document.getElementById('feedbackLink').addEventListener('click', function(event) {
+  event.preventDefault(); // Prevent the default link behavior
+  feedbackModal.show(); // Show the modal
+});
+</script>  
