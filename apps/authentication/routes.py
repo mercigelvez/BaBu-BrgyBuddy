@@ -84,7 +84,7 @@ def register():
         # Delete user from session
         logout_user()
 
-        return render_template('accounts/register.html',
+        return render_template('accounts/login.html',
                                msg='User created successfully.',
                                success=True,
                                form=create_account_form)

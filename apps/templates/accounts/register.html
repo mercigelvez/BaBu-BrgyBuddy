@@ -6,137 +6,124 @@
 {% block stylesheets %}{% endblock stylesheets %}
 
 {% block content %}
-
-  <main class="main-content  mt-0">
-    <div class="page-header align-items-start min-vh-50 pt-5 pb-11 m-3 border-radius-lg" style="background-image: url('https://raw.githubusercontent.com/creativetimofficial/public-assets/master/babu-pro/assets/img/signup-cover.jpg'); background-position: top;">
-      <span class="mask bg-gradient-dark opacity-6"></span>
+<main class="main-content mt-0">
+  <section>
+    <div class="page-header min-vh-100">
       <div class="container">
-        <div class="row justify-content-center">
-          <div class="col-lg-5 text-center mx-auto">
-            <h1 class="text-white mb-2 mt-5">Welcome!</h1>
-            <p class="text-lead text-white">
-              Open-Source Seed Project
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="container">
-      <div class="row mt-lg-n10 mt-md-n11 mt-n10 justify-content-center">
-        <div class="col-xl-4 col-lg-5 col-md-7 mx-auto">
-          <div class="card z-index-0">
-            <div class="card-header text-center pt-4">
-              <h5>Register</h5>
-            </div>
-            <div class="row px-xl-5 px-sm-4 px-3">
-              <div class="mt-2 position-relative text-center">
-                <p class="text-sm font-weight-bold mb-2 text-secondary text-border d-inline z-index-2 bg-white px-3">
+        <div class="row">
+          <div
+            class="col-xl-6 offset-xl-1 col-lg-6 offset-lg-10 col-md-12 d-flex flex-column mx-lg-0 mx-auto custom-card"
+          >
+            <div class="card card-plain card-size">
+              <div class="card-header pb-0 text-center">
+                <h4 class="font-weight-bolder fs-1" style="color: black">
+                  Get Started
+                </h4>
+                <p class="mb-0">
                   {% if msg %}
-                    <span class="text-info">{{ msg | safe }}</span>
+                  <span class="text-danger">{{ msg | safe }}</span>
                   {% else %}
-                    Add your credentials
-                  {% endif %}                  
+                  <span> </span>
+                  {% endif %}
                 </p>
               </div>
-            </div>
-            <div class="card-body">
-              
+              <div class="card-body">
+                  
               {% if success %}
 
-                <div class="text-center">
-                  <a href="{{ url_for('authentication_blueprint.login') }}" class="btn bg-gradient-dark w-100 my-4 mb-2">Sign IN</a>
-                </div>
+              <div class="text-center">
+                <a href="{{ url_for('authentication_blueprint.login') }}" class="btn bg-gradient-dark w-100 my-4 mb-2">Sign IN</a>
+              </div>
 
-              {% else %}
-
+            {% else %}
                 <form role="form" method="post" action="">
-
                   {{ form.hidden_tag() }}
 
-                  <div class="mb-3">
-                    {{ form.username(placeholder="Username",class="form-control") }}
+                  <div class="mb-3 col-md-12">
+                    <label for="input">Username</label>
+                    {{ form.username(placeholder="Enter Username",
+                    class="input-field") }}
                   </div>
-                  <div class="mb-3">
-                    {{ form.email(placeholder="Email",class="form-control") }}
+
+                  <div class="mb-3 col-md-12">
+                    <label for="input">Username</label>
+                    {{ form.email(placeholder="Enter Email",
+                    class="input-field") }}
                   </div>
-                  <div class="mb-3">
-                    {{ form.password(placeholder="Password",class="form-control",type="password") }}
+
+                  <div class="mb-3 col-md-12">
+                    <label for="password-input">Password</label>
+                    {{ form.password(id="password-input", placeholder="Enter Password", class="input-field", type="password") }}
+                    <span class="input">
+                      <i class="fas fa-eye-slash"></i>
+                    </span>
                   </div>
-                  <div class="form-check form-check-info text-start">
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked>
-                    <label class="form-check-label" for="flexCheckDefault">
-                      I agree the <a href="javascript:;" class="text-dark font-weight-bolder">Terms and Conditions</a>
-                    </label>
+
+                  <div class="mb-3 col-md-12">
+                    <label for="input">Confirm Password</label>
+                    {{ form.confirm_password(placeholder="Confirm Password", class="input-field") }}
                   </div>
+
                   <div class="text-center">
-                    <button type="submit" name="register" class="btn bg-gradient-dark w-100 my-4 mb-2">Sign UP</button>
+                    <button
+                      type="submit"
+                      name="register"
+                      class="btn btn-lg btn-success btn-lg w-70 mt-4 mb-0"
+                    >
+                      SIGN UP
+                    </button>
                   </div>
-                  <p class="text-sm mt-3 mb-0 text-center">
-                    Already have an account? <a href="{{ url_for('authentication_blueprint.login') }}" class="text-dark font-weight-bolder">Sign IN</a>
-                  </p>
                 </form>
+              </div>
+              <div class="card-footer text-center pt-0 px-lg-2 px-1">
+                <p class="mb-4 text-sm mx-auto">
+                  Already have an account?
+                  <a
+                    href="{{ url_for('authentication_blueprint.login') }}"
+                    class="text-success text-gradient font-weight-bold"
+                    >Sign In</a
+                  >
+                </p>
+              </div>
+            {% endif %}
+            </div>
+          </div>
+          <div
+            class="col-6 d-lg-flex d-none h-100 my-auto pe-0 position-absolute top-0 end-0 text-center justify-content-center flex-column"
+          >
+            <div
+              class="position-relative bg-gradient-success h-100 m-3 px-7 border-radius-lg d-flex flex-column justify-content-center overflow-hidden"
+              style="background-image: url(''); background-size: cover"
+            >
+              <div
+                class="d-flex justify-content-center align-items-center"
+                style="height: 30%"
+              >
+                <img
+                  src="{{ config.ASSETS_ROOT }}/img/babu-logo.png"
+                  alt="babu"
+                  style="z-index: 1; height: auto; width: 50%"
+                  class="babu-image"
+                />
+              </div>
 
-              {% endif %}
-
-
+              <span class="mask bg-gradient-success opacity-6"></span>
+              <h4
+                class="mt-5 text-black font-weight-bolder position-relative babu-font"
+              >
+                BaBu
+              </h4>
+              <p class="text-black fs-3 position-relative font-weight-bolder">
+                Your Barangay Buddy
+              </p>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </main>
-
-  <footer class="footer py-5">
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-8 mb-4 mx-auto text-center">
-          <a href="javascript:;" target="_blank" class="text-secondary me-xl-5 me-3 mb-sm-0 mb-2">
-            Company
-          </a>
-          <a href="javascript:;" target="_blank" class="text-secondary me-xl-5 me-3 mb-sm-0 mb-2">
-            About Us
-          </a>
-          <a href="javascript:;" target="_blank" class="text-secondary me-xl-5 me-3 mb-sm-0 mb-2">
-            Team
-          </a>
-          <a href="javascript:;" target="_blank" class="text-secondary me-xl-5 me-3 mb-sm-0 mb-2">
-            Products
-          </a>
-          <a href="javascript:;" target="_blank" class="text-secondary me-xl-5 me-3 mb-sm-0 mb-2">
-            Blog
-          </a>
-          <a href="javascript:;" target="_blank" class="text-secondary me-xl-5 me-3 mb-sm-0 mb-2">
-            Pricing
-          </a>
-        </div>
-        <div class="col-lg-8 mx-auto text-center mb-4 mt-2">
-          <a href="javascript:;" target="_blank" class="text-secondary me-xl-4 me-4">
-            <span class="text-lg fab fa-dribbble"></span>
-          </a>
-          <a href="javascript:;" target="_blank" class="text-secondary me-xl-4 me-4">
-            <span class="text-lg fab fa-twitter"></span>
-          </a>
-          <a href="javascript:;" target="_blank" class="text-secondary me-xl-4 me-4">
-            <span class="text-lg fab fa-instagram"></span>
-          </a>
-          <a href="javascript:;" target="_blank" class="text-secondary me-xl-4 me-4">
-            <span class="text-lg fab fa-pinterest"></span>
-          </a>
-          <a href="javascript:;" target="_blank" class="text-secondary me-xl-4 me-4">
-            <span class="text-lg fab fa-github"></span>
-          </a>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-8 mx-auto text-center mt-1">
-          <p class="mb-0 text-secondary">
-            &copy; <a href="https://www.creative-tim.com?AFFILIATE=128200" class="font-weight-bold" target="_blank">Creative Tim</a>
-            - Coded by AppSeed.
-          </p>
-        </div>
-      </div>
-    </div>
-  </footer>
+  </section>
+</main>
+  
     
 {% endblock content %}
 
