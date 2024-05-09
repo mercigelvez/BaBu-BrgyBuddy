@@ -24,14 +24,25 @@ def route_default():
 
 # Login & Registration
 
-@blueprint.route('/check_email_availability', methods=['POST'])
-def check_email_availability():
+@blueprint.route('/check_username', methods=['POST'])
+def check_username():
+    username = request.form.get('username')
+    user = Users.query.filter_by(username=username).first()
+    if user:
+        return jsonify({'username_exists': True})
+    else:
+        return jsonify({'username_exists': False})
+
+
+@blueprint.route('/check_email', methods=['POST'])
+def check_email():
     email = request.form.get('email')
     user = Users.query.filter_by(email=email).first()
     if user:
-        return jsonify({'available': False})
+        return jsonify({'email_exists': True})
     else:
-        return jsonify({'available': True})
+        return jsonify({'email_exists': False})
+
 
 @blueprint.route('/login', methods=['GET', 'POST'])
 def login():
@@ -83,7 +94,8 @@ def register():
         # Check if email exists
         user = Users.query.filter_by(email=email).first()
         if user:
-            return render_template('accounts/register.html', msg='Email already registered', success=False, form=create_account_form)
+            check_username_url = url_for('authentication_blueprint.check_username_availability')
+            return render_template('accounts/register.html', msg='Email already registered', success=False, form=create_account_form, check_username_url=check_username_url)
 
         # Create the user
         user = Users(username=username, email=email, password=password)
