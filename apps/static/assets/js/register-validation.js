@@ -1,3 +1,4 @@
+//-----------USERNAME VALIDATION--------//
 $(document).ready(function () {
   $("#username_create").on("input", function () {
     var input = $(this);
@@ -35,6 +36,7 @@ $(document).ready(function () {
   });
 });
 
+//-----------EMAIL VALIDATION--------//
 $(document).ready(function () {
   $("#email_create").on("input", function () {
     var input = $(this);
@@ -81,6 +83,8 @@ $(document).ready(function () {
   });
 });
 
+//-----------PASSWORD VALIDATION--------//
+
 function validatePassword(password) {
   // At least one uppercase letter, one lowercase letter, one number, one special character, and minimum 6 characters in length
   var passwordPattern =
@@ -123,6 +127,7 @@ function togglePasswordVisibility(inputId, iconId) {
   }
 }
 
+//-----------CONFIRM PASSWORD VALIDATION--------//
 
 function validateConfirmPassword(password, confirmPassword) {
     return password === confirmPassword;
