@@ -107,33 +107,22 @@ $(document).ready(function () {
         .removeClass("success-message");
     }
   });
-
-  // Password visibility toggle
-  $(".input i").on("click", function () {
-    var input = $("#pwd_create");
-    if (input.attr("type") === "password") {
-      input.attr("type", "text");
-      $(this).removeClass("fa-eye-slash").addClass("fa-eye");
-    } else {
-      input.attr("type", "password");
-      $(this).removeClass("fa-eye").addClass("fa-eye-slash");
-    }
-  });
 });
 
-function togglePasswordVisibility() {
-  var passwordInput = document.getElementById("confirm_pwd_create");
-  var eyeIcon = document.getElementById("eye-icon");
+function togglePasswordVisibility(inputId, iconId) {
+  var passwordInput = document.getElementById(inputId);
+  var eyeIcon = document.getElementById(iconId);
   if (passwordInput.type === "password") {
-    passwordInput.type = "text";
-    eyeIcon.classList.remove("fa-eye-slash");
-    eyeIcon.classList.add("fa-eye");
+      passwordInput.type = "text";
+      eyeIcon.classList.remove("fa-eye-slash");
+      eyeIcon.classList.add("fa-eye");
   } else {
-    passwordInput.type = "password";
-    eyeIcon.classList.remove("fa-eye");
-    eyeIcon.classList.add("fa-eye-slash");
+      passwordInput.type = "password";
+      eyeIcon.classList.remove("fa-eye");
+      eyeIcon.classList.add("fa-eye-slash");
   }
 }
+
 
 function validateConfirmPassword(password, confirmPassword) {
     return password === confirmPassword;

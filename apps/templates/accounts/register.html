@@ -61,20 +61,20 @@ endblock title %}
                   <div class="mb-3 col-md-12">
                     <label for="password-input">Password</label>
                     {{ form.password(id="pwd_create", placeholder="Enter Password", class="input-field", type="password") }}
-                    <span class="input">
-                      <i class="fas fa-eye-slash"></i>
-                      <div class="password-error-message"></div>
-                    </span>
-                  </div>
-
-                  <div class="mb-3 col-md-12">
-                    <label for="confirm-password-input">Confirm Password</label>
-                    {{ form.confirm_password(id="confirm_pwd_create", placeholder="Confirm Password", class="input-field", type="password") }}
-                    <span class="input" onclick="togglePasswordVisibility()">
-                        <i id="eye-icon" class="fas fa-eye-slash"></i>
-                        <div class="confirm-password-error-message"></div>
+                    <span class="input" onclick="togglePasswordVisibility('pwd_create', 'eye-icon-pwd')">
+                        <i id="eye-icon-pwd" class="fas fa-eye-slash"></i>
+                        <div class="password-error-message"></div>
                     </span>
                 </div>
+                
+                <div class="mb-3 col-md-12">
+                    <label for="confirm-password-input">Confirm Password</label>
+                    {{ form.confirm_password(id="confirm_pwd_create", placeholder="Confirm Password", class="input-field", type="password") }}
+                    <span class="input" onclick="togglePasswordVisibility('confirm_pwd_create', 'eye-icon-confirm')">
+                        <i id="eye-icon-confirm" class="fas fa-eye-slash"></i>
+                        <div class="confirm-password-error-message"></div>
+                    </span>
+                </div>                
 
                   <div class="text-center">
                     <button
