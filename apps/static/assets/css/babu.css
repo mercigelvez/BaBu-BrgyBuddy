@@ -23013,7 +23013,7 @@ pre[class*=language-] {
 
 @media (min-width: 992px) { /* Apply this rule for screens wider than 992px */
   .custom-card {
-    left: -70px;
+    left: -90px;
   }
 }
 

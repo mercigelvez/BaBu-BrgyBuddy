@@ -5,9 +5,16 @@ $(document).ready(function () {
     var is_name = input.val();
     var errorMessageContainer = $(".username-error-message");
 
-    if (is_name.length >= 4 && is_name.length <= 25) {
-      // Send AJAX request to check if username exists
-      $.post("/check_username", { username: is_name }, function (data) {
+    // Check if username contains space
+    if (/\s/.test(is_name)) {
+      input.removeClass("valid").addClass("invalid");
+      errorMessageContainer
+        .text("Username cannot contain spaces")
+        .addClass("error-message")
+        .removeClass("success-message");
+    } else if (is_name.length >= 4 && is_name.length <= 25) {
+      // Convert username to lowercase before sending AJAX request
+      $.post("/check_username", { username: is_name.toLowerCase() }, function (data) {
         if (data.username_exists) {
           input.removeClass("valid").addClass("invalid");
           errorMessageContainer
@@ -49,8 +56,14 @@ $(document).ready(function () {
     // Check for .c0m or .c00m instead of .com
     var invalidDomainPattern = /\.(c0m|c00m)$/i;
 
-    // Check if the email is in the proper format and doesn't contain .c0m or .c00m
-    if (emailPattern.test(email) && !invalidDomainPattern.test(email)) {
+    // Check if email contains space
+    if (/\s/.test(email)) {
+      input.removeClass("valid").addClass("invalid");
+      errorMessageContainer
+        .text("Email cannot contain spaces")
+        .addClass("error-message")
+        .removeClass("success-message");
+    } else if (emailPattern.test(email) && !invalidDomainPattern.test(email)) {
       // Send AJAX request to check if email exists
       $.post("/check_email", { email: email }, function (data) {
         if (data.email_exists) {
