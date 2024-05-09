@@ -1,11 +1,8 @@
-{% extends 'layouts/base-fullscreen.html' %}
-
-{% block title %} Sign UP {% endblock title %}
+{% extends 'layouts/base-fullscreen.html' %} {% block title %} Sign UP {%
+endblock title %}
 
 <!-- Specific CSS goes HERE -->
-{% block stylesheets %}{% endblock stylesheets %}
-
-{% block content %}
+{% block stylesheets %}{% endblock stylesheets %} {% block content %}
 <main class="main-content mt-0">
   <section>
     <div class="page-header min-vh-100">
@@ -28,27 +25,37 @@
                 </p>
               </div>
               <div class="card-body">
-                  
-              {% if success %}
+                {% if success %}
 
-              <div class="text-center">
-                <a href="{{ url_for('authentication_blueprint.login') }}" class="btn bg-gradient-dark w-100 my-4 mb-2">Sign IN</a>
-              </div>
+                <div class="text-center">
+                  <div class="card card-plain card-size">
+                    <div class="card-header pb-0 text-center">
+                      <a
+                        href="{{ url_for('authentication_blueprint.login') }}"
+                        class="btn bg-gradient-dark w-100 my-4 mb-2"
+                        >Sign IN</a
+                      >
+                    </div>
+                  </div>
+                </div>
 
-            {% else %}
+                {% else %}
                 <form role="form" method="post" action="">
                   {{ form.hidden_tag() }}
 
                   <div class="mb-3 col-md-12">
                     <label for="input">Username</label>
-                    {{ form.username(placeholder="Enter Username",
-                    class="input-field") }}
+                    {{ form.username(placeholder="Enter Username", class="input-field", id="username_create") }}
+                    <div class="username-error-message"></div>
+                    {% for error in form.username.errors %}
+                    <span style="color: red">{{ error }}</span>
+                    {% endfor %}
                   </div>
-
+                  
                   <div class="mb-3 col-md-12">
-                    <label for="input">Username</label>
-                    {{ form.email(placeholder="Enter Email",
-                    class="input-field") }}
+                    <label for="input">Email</label>
+                    {{ form.email(placeholder="Enter Email", class="input-field", id="email_create") }}
+                    <div class="email-error-message"></div>
                   </div>
 
                   <div class="mb-3 col-md-12">
@@ -60,8 +67,13 @@
                   </div>
 
                   <div class="mb-3 col-md-12">
-                    <label for="input">Confirm Password</label>
-                    {{ form.confirm_password(placeholder="Confirm Password", class="input-field") }}
+                    <label for="confirm-password-input">Confirm Password</label>
+                    {{ form.confirm_password(id="confirm-password-input",
+                    placeholder="Confirm Password", class="input-field",
+                    type="password") }}
+                    <span class="input">
+                      <i class="fas fa-eye-slash"></i>
+                    </span>
                   </div>
 
                   <div class="text-center">
@@ -85,7 +97,7 @@
                   >
                 </p>
               </div>
-            {% endif %}
+              {% endif %}
             </div>
           </div>
           <div
@@ -123,9 +135,10 @@
     </div>
   </section>
 </main>
-  
-    
+
 {% endblock content %}
 
-<!-- Specific JS goes HERE --> 
-{% block javascripts %}{% endblock javascripts %}
+<!-- Specific JS goes HERE -->
+{% block javascripts %}
+<script src="{{ config.ASSETS_ROOT }}/js/register-validation.js"></script>
+{% endblock javascripts %}

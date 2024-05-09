@@ -18351,7 +18351,7 @@ label,
 }
 
 .bg-gradient-success {
-  background-image: linear-gradient(310deg, #008636 100%, #ffffff 0%);
+  background-image: linear-gradient(7deg, #008636 0%, #ffffff 100%);
 }
 
 .bg-gradient-info {
@@ -23027,4 +23027,21 @@ pre[class*=language-] {
 
 .babu-button {
   size: 20%;
+}
+
+/*-----VALIDATION--------*/
+.valid {
+  border-color: green;
+}
+
+.invalid {
+  border-color: red;
+}
+
+.success-message {
+  color: green;
+}
+
+.error-message {
+  color: red;
 }

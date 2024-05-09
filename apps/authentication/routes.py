@@ -14,6 +14,7 @@ from apps import db, login_manager
 from apps.authentication import blueprint
 from apps.authentication.forms import LoginForm, CreateAccountForm
 from apps.authentication.models import Users
+from flask import jsonify, request
 
 from apps.authentication.util import verify_pass
 
@@ -22,6 +23,15 @@ def route_default():
     return redirect(url_for('authentication_blueprint.login'))
 
 # Login & Registration
+
+@blueprint.route('/check_email_availability', methods=['POST'])
+def check_email_availability():
+    email = request.form.get('email')
+    user = Users.query.filter_by(email=email).first()
+    if user:
+        return jsonify({'available': False})
+    else:
+        return jsonify({'available': True})
 
 @blueprint.route('/login', methods=['GET', 'POST'])
 def login():
@@ -56,39 +66,34 @@ def login():
 def register():
     create_account_form = CreateAccountForm(request.form)
     if 'register' in request.form:
-
         username = request.form['username']
         email = request.form['email']
+        password = request.form['password']
+        confirm_password = request.form['confirm_password']
 
-        # Check usename exists
+        # Check if passwords match
+        if password != confirm_password:
+            return render_template('accounts/register.html', msg='Passwords do not match', success=False, form=create_account_form)
+
+        # Check if username exists
         user = Users.query.filter_by(username=username).first()
         if user:
-            return render_template('accounts/register.html',
-                                   msg='Username already registered',
-                                   success=False,
-                                   form=create_account_form)
+            return render_template('accounts/register.html', msg='Username already registered', success=False, form=create_account_form)
 
-        # Check email exists
+        # Check if email exists
         user = Users.query.filter_by(email=email).first()
         if user:
-            return render_template('accounts/register.html',
-                                   msg='Email already registered',
-                                   success=False,
-                                   form=create_account_form)
+            return render_template('accounts/register.html', msg='Email already registered', success=False, form=create_account_form)
 
-        # else we can create the user
-        user = Users(**request.form)
+        # Create the user
+        user = Users(username=username, email=email, password=password)
         db.session.add(user)
         db.session.commit()
 
         # Delete user from session
         logout_user()
 
-        return render_template('accounts/login.html',
-                               msg='User created successfully.',
-                               success=True,
-                               form=create_account_form)
-
+        return render_template('accounts/register.html', msg='User created successfully.', success=True, form=create_account_form)
     else:
         return render_template('accounts/register.html', form=create_account_form)
 
