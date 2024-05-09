@@ -19,15 +19,22 @@ class Config(object):
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-    DB_ENGINE   = os.getenv('DB_ENGINE'   , None)
-    DB_USERNAME = os.getenv('DB_USERNAME' , None)
-    DB_PASS     = os.getenv('DB_PASS'     , None)
-    DB_HOST     = os.getenv('DB_HOST'     , None)
-    DB_PORT     = os.getenv('DB_PORT'     , None)
-    DB_NAME     = os.getenv('DB_NAME'     , None)
+    DB_ENGINE   = os.getenv('DB_ENGINE'   , 'mysql')
+    DB_USERNAME = os.getenv('DB_USERNAME' , 'root')
+    DB_PASS     = os.getenv('DB_PASS'     , '')
+    DB_HOST     = os.getenv('DB_HOST'     , 'localhost')
+    DB_PORT     = os.getenv('DB_PORT'     , '3306')
+    DB_NAME     = os.getenv('DB_NAME'     , 'babu-website')
+    
+    MAIL_SERVER = os.getenv('MAIL_SERVER', 'smtp.googlemail.com')
+    MAIL_PORT = os.getenv('MAIL_PORT', 587)
+    MAIL_USE_TLS = os.getenv('MAIL_USE_TLS', True)
+    MAIL_USERNAME = os.getenv('MAIL_USERNAME', 'babu.brgybuddy@gmail.com')
+    MAIL_PASSWORD = os.getenv('MAIL_PASSWORD', 'kxmy pbaj bsoh pxld')
 
-    USE_SQLITE  = True 
 
+    USE_SQLITE  = False
+    
     # try to set up a Relational DBMS
     if DB_ENGINE and DB_NAME and DB_USERNAME:
 

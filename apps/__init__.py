@@ -9,15 +9,17 @@ from flask import Flask
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 from importlib import import_module
+from flask_mail import Mail
 
 
 db = SQLAlchemy()
 login_manager = LoginManager()
-
+mail = Mail()
 
 def register_extensions(app):
     db.init_app(app)
     login_manager.init_app(app)
+    mail.init_app(app)
 
 
 def register_blueprints(app):
@@ -34,14 +36,14 @@ def configure_database(app):
             db.create_all()
         except Exception as e:
 
-            print('> Error: DBMS Exception: ' + str(e) )
+             print('> Error: DBMS Exception: ' + str(e) )
 
-            # fallback to SQLite
-            basedir = os.path.abspath(os.path.dirname(__file__))
-            app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'db.sqlite3')
+            # # fallback to SQLite
+            # basedir = os.path.abspath(os.path.dirname(__file__))
+            # app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'db.sqlite3')
 
-            print('> Fallback to SQLite ')
-            db.create_all()
+            # print('> Fallback to SQLite ')
+            # db.create_all()
 
     @app.teardown_request
     def shutdown_session(exception=None):
@@ -54,4 +56,5 @@ def create_app(config):
     register_extensions(app)
     register_blueprints(app)
     configure_database(app)
+    mail = Mail(app)
     return app

@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField
+from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import Email, DataRequired, EqualTo, Length, ValidationError
 import re
 
@@ -25,3 +25,11 @@ class CreateAccountForm(FlaskForm):
     password = PasswordField("Password", id="pwd_create", validators=[DataRequired(), PasswordComplexityValidator()])
     confirm_password = PasswordField("Confirm Password", id="confirm_pwd_create", validators=[DataRequired(), EqualTo("password", message="Passwords must match")])
 
+class ForgotPasswordForm(FlaskForm):
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    submit = SubmitField('Send Reset Password')
+
+class ResetPasswordForm(FlaskForm):
+    password = PasswordField('Password', validators=[DataRequired()])
+    confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
+    submit = SubmitField('Reset Password')

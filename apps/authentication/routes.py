@@ -12,9 +12,15 @@ from flask_login import (
 
 from apps import db, login_manager
 from apps.authentication import blueprint
-from apps.authentication.forms import LoginForm, CreateAccountForm
+from apps.authentication.forms import LoginForm, CreateAccountForm, ForgotPasswordForm, ResetPasswordForm
 from apps.authentication.models import Users
 from flask import jsonify, request
+from itsdangerous import URLSafeTimedSerializer
+from flask_mail import Message
+from apps import mail
+from flask import render_template, redirect, url_for, flash
+
+s = URLSafeTimedSerializer('Thisisasecret!')
 
 from apps.authentication.util import verify_pass
 
@@ -135,3 +141,37 @@ def not_found_error(error):
 @blueprint.errorhandler(500)
 def internal_error(error):
     return render_template('home/page-500.html'), 500
+
+
+@blueprint.route('/forgot_password', methods=['GET', 'POST'])
+def forgot_password():
+    form = ForgotPasswordForm()
+    if form.validate_on_submit():
+        user = Users.query.filter_by(email=form.email.data).first()
+        if user:
+            token = s.dumps(user.email, salt='email-confirm')
+            msg = Message('Password Reset Request', sender='noreply@demo.com', recipients=[user.email])
+            link = url_for('authentication_blueprint.reset_password', token=token, _external=True)
+            msg.body = f'Your link is {link}'
+            mail.send(msg)
+        flash('If your email is registered, you will receive a password reset email.', 'info')
+        return redirect(url_for('authentication_blueprint.login'))
+    return render_template('accounts/forgot_password.html', form=form)
+
+
+@blueprint.route('/reset_password/<token>', methods=['GET', 'POST'])
+def reset_password(token):
+    try:
+        email = s.loads(token, salt='email-confirm', max_age=3600)
+    except:
+        flash('The reset link is invalid or has expired.', 'warning')
+        return redirect(url_for('authentication_blueprint.forgot_password'))
+    form = ResetPasswordForm()
+    if form.validate_on_submit():
+        user = Users.query.filter_by(email=email).first()
+        if user:
+            user.password = form.password.data.decode('utf-8')
+            db.session.commit()
+            flash('Your password has been updated!', 'success')
+            return redirect(url_for('authentication_blueprint.login'))
+    return render_template('accounts/reset_password.html', form=form)
