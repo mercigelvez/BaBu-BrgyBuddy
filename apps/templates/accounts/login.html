@@ -38,7 +38,7 @@ endblock title %}
                     <label for="password-input">Password</label>
                     {{ form.password(id="password-input", placeholder="Enter Password", class="input-field", type="password") }}
                     <span class="input">
-                      <i class="fas fa-eye-slash"></i>
+                        <i id="toggle-password" class="fas fa-eye-slash"></i>
                     </span>
                   </div>
 
@@ -110,4 +110,6 @@ endblock title %}
 {% endblock content %}
 
 <!-- Specific JS goes HERE -->
-{% block javascripts %}{% endblock javascripts %}
+{% block javascripts %}
+<script src="{{ config.ASSETS_ROOT }}/js/login-validation.js"></script>
+{% endblock javascripts %}
