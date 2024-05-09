@@ -56,11 +56,20 @@ $(document).ready(function () {
     // Check for .c0m or .c00m instead of .com
     var invalidDomainPattern = /\.(c0m|c00m)$/i;
 
+    // Check if email contains @test
+    var testEmailPattern = /@test/i;
+
     // Check if email contains space
     if (/\s/.test(email)) {
       input.removeClass("valid").addClass("invalid");
       errorMessageContainer
         .text("Email cannot contain spaces")
+        .addClass("error-message")
+        .removeClass("success-message");
+    } else if (testEmailPattern.test(email)) {
+      input.removeClass("valid").addClass("invalid");
+      errorMessageContainer
+        .text("Email cannot contain @test")
         .addClass("error-message")
         .removeClass("success-message");
     } else if (emailPattern.test(email) && !invalidDomainPattern.test(email)) {
@@ -89,12 +98,13 @@ $(document).ready(function () {
     } else {
       input.removeClass("valid").addClass("invalid");
       errorMessageContainer
-        .text("Invalid email format")
+        .text("Email is required")
         .addClass("error-message")
         .removeClass("success-message");
     }
   });
 });
+
 
 //-----------PASSWORD VALIDATION--------//
 
