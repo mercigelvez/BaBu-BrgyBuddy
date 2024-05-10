@@ -179,5 +179,4 @@ def reset_password(token):
             db.session.commit()
             flash('Your password has been updated! You can now login', 'success')
 
-
     return render_template('accounts/reset_password.html', form=form)
