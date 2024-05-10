@@ -19,6 +19,7 @@ from itsdangerous import URLSafeTimedSerializer
 from flask_mail import Message
 from apps import mail
 from flask import render_template, redirect, url_for, flash
+from apps.authentication import util
 
 s = URLSafeTimedSerializer('Thisisasecret!')
 
@@ -155,23 +156,28 @@ def forgot_password():
             msg.body = f'Your link is {link}'
             mail.send(msg)
         flash('If your email is registered, you will receive a password reset email.', 'info')
-        return redirect(url_for('authentication_blueprint.login'))
     return render_template('accounts/forgot_password.html', form=form)
 
 
 @blueprint.route('/reset_password/<token>', methods=['GET', 'POST'])
 def reset_password(token):
+    print(f"Received token: {token}")
     try:
         email = s.loads(token, salt='email-confirm', max_age=3600)
-    except:
+        print(f"Decoded email: {email}")
+    except Exception as e:
+        print(f"Error decoding token: {e}")
         flash('The reset link is invalid or has expired.', 'warning')
         return redirect(url_for('authentication_blueprint.forgot_password'))
+
     form = ResetPasswordForm()
     if form.validate_on_submit():
         user = Users.query.filter_by(email=email).first()
         if user:
-            user.password = form.password.data.decode('utf-8')
+            hashed_password = util.hash_pass(form.password.data)
+            user.password = hashed_password
             db.session.commit()
-            flash('Your password has been updated!', 'success')
-            return redirect(url_for('authentication_blueprint.login'))
+            flash('Your password has been updated! You can now login', 'success')
+
+
     return render_template('accounts/reset_password.html', form=form)
