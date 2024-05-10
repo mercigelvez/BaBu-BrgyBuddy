@@ -25,6 +25,8 @@ $ $env:FLASK_ENV = "development"
 
 <br />
 
+>Install: 'pip install mysqlclient'
+
 > Start the app
 
 ```bash

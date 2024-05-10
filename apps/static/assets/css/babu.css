@@ -4101,6 +4101,7 @@ textarea.form-control-lg {
   align-items: center;
   justify-content: space-between;
   padding: var(--bs-navbar-padding-y) var(--bs-navbar-padding-x);
+  /* overflow-x: hidden; */
 }
 .navbar > .container,
 .navbar > .container-fluid,
@@ -5623,7 +5624,7 @@ textarea.form-control-lg {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: var(--bs-modal-zindex);
+  z-index: var(--bs-modal-zindex) !important;
   display: none;
   width: 100%;
   height: 100%;
@@ -19760,13 +19761,14 @@ hr.horizontal.gray-light {
   color: #fff;
 }
 
-.main-content,
-.sidenav {
+.main-content  {
   transition: all 0.2s ease-in-out;
 }
 
+/* sidenav-alignment */
 .sidenav {
-  z-index: 999;
+  z-index: 999 !important;
+  transition: all 0.2s ease-in-out;
 }
 .sidenav .navbar-brand,
 .sidenav .navbar-heading {
@@ -20889,7 +20891,7 @@ html * {
 
 body {
   font-weight: 400;
-  line-height: 1.6;
+  line-height: 1.6; 
 }
 
 h1, .h1 {
@@ -22867,12 +22869,12 @@ pre[class*=language-] {
   background: #f9f9f9;
   height: 600px;
   width: auto;
-  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
   overflow-y: auto;
   display: flex;
   flex-direction: column-reverse;
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
 }
 
 /* Messages */
@@ -23051,5 +23053,15 @@ pre[class*=language-] {
   background-color: white; 
   border-radius: 20px; 
   width: 75%;
-  box-shadow: #000;
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+}
+
+.my-navbar {
+  overflow-x: hidden;
+}
+
+.black-button {
+  background-color: black;
+  color: white;
+  border-radius: 10px;
 }
