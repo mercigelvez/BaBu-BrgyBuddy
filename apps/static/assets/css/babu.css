@@ -23045,3 +23045,11 @@ pre[class*=language-] {
 .error-message {
   color: red;
 }
+
+/*-----SIDENAV--------*/
+.new-chat {
+  background-color: white; 
+  border-radius: 20px; 
+  width: 75%;
+  box-shadow: #000;
+}
