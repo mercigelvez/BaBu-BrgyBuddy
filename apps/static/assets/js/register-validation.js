@@ -23,7 +23,10 @@ $(document).ready(function () {
             .removeClass("success-message");
         } else {
           input.removeClass("invalid").addClass("valid");
-          errorMessageContainer.text("").removeClass("error-message");
+          errorMessageContainer
+            .text("Username is valid")
+            .addClass("success-message")
+            .removeClass("error-message");
         }
       });
     } else {
@@ -42,6 +45,7 @@ $(document).ready(function () {
     }
   });
 });
+
 
 //-----------EMAIL VALIDATION--------//
 $(document).ready(function () {
@@ -92,7 +96,7 @@ $(document).ready(function () {
     } else if (invalidDomainPattern.test(email)) {
       input.removeClass("valid").addClass("invalid");
       errorMessageContainer
-        .text("Invalid email format. Please use .com instead of .c0m or .c00m")
+        .text("Invalid email format. Please use .com instead of .c0m")
         .addClass("error-message")
         .removeClass("success-message");
     } else {
@@ -121,18 +125,27 @@ $(document).ready(function () {
     var password = input.val();
     var errorMessageContainer = $(".password-error-message");
 
-    if (validatePassword(password)) {
-      input.removeClass("invalid").addClass("valid");
-      errorMessageContainer.text("").removeClass("error-message");
-    } else {
-      input.removeClass("valid").addClass("invalid");
-      errorMessageContainer
-        .text(
-          "Password must contain at least one uppercase letter, one lowercase letter, one number, one special character, and be at least 6 characters long"
-        )
-        .addClass("error-message")
-        .removeClass("success-message");
-    }
+  if (validatePassword(password)) {
+    input.removeClass("invalid").addClass("valid");
+    errorMessageContainer
+      .text("Valid Password")
+      .addClass("success-message")
+      .removeClass("error-message");
+  } else {
+    input.removeClass("valid").addClass("invalid");
+    errorMessageContainer
+      .html(
+      "<ul class='error-message'>" +
+      "<li>Password must contain at least one uppercase letter (A-Z)</li>" +
+      "<li>Password must contain at least one lowercase letter (a-z)</li>" +
+      "<li>Password must contain at least one number (0-9)</li>" +
+      "<li>Password must contain at least one special character (@, $, !, %, *, ?, &)</li>" +
+      "<li>Password must be at least 6 characters long</li>" +
+      "</ul>"
+    )
+      .addClass("error-message")
+      .removeClass("success-message");
+  }
   });
 });
 
@@ -140,60 +153,63 @@ function togglePasswordVisibility(inputId, iconId) {
   var passwordInput = document.getElementById(inputId);
   var eyeIcon = document.getElementById(iconId);
   if (passwordInput.type === "password") {
-      passwordInput.type = "text";
-      eyeIcon.classList.remove("fa-eye-slash");
-      eyeIcon.classList.add("fa-eye");
+    passwordInput.type = "text";
+    eyeIcon.classList.remove("fa-eye-slash");
+    eyeIcon.classList.add("fa-eye");
   } else {
-      passwordInput.type = "password";
-      eyeIcon.classList.remove("fa-eye");
-      eyeIcon.classList.add("fa-eye-slash");
+    passwordInput.type = "password";
+    eyeIcon.classList.remove("fa-eye");
+    eyeIcon.classList.add("fa-eye-slash");
   }
 }
 
 //-----------CONFIRM PASSWORD VALIDATION--------//
 
 function validateConfirmPassword(password, confirmPassword) {
-    return password === confirmPassword;
+  return password === confirmPassword;
 }
 
 $(document).ready(function () {
-    $("#confirm_pwd_create").on("input", function () {
-        var input = $(this);
-        var confirmPassword = input.val();
-        var password = $("#pwd_create").val();
-        var errorMessageContainer = $(".confirm-password-error-message");
+  $("#confirm_pwd_create").on("input", function () {
+    var input = $(this);
+    var confirmPassword = input.val();
+    var password = $("#pwd_create").val();
+    var errorMessageContainer = $(".confirm-password-error-message");
 
-        if (validateConfirmPassword(password, confirmPassword)) {
-            input.removeClass("invalid").addClass("valid");
-            errorMessageContainer.text("").removeClass("error-message");
-        } else {
-            input.removeClass("valid").addClass("invalid");
-            errorMessageContainer
-                .text("Confirm password must match the password")
-                .addClass("error-message")
-                .removeClass("success-message");
-        }
-    });
+    if (validateConfirmPassword(password, confirmPassword)) {
+      input.removeClass("invalid").addClass("valid");
+      errorMessageContainer
+        .text("Passwords match")
+        .addClass("success-message")
+        .removeClass("error-message");
+    } else {
+      input.removeClass("valid").addClass("invalid");
+      errorMessageContainer
+        .text("Confirm password must match the password")
+        .addClass("error-message")
+        .removeClass("success-message");
+    }
+  });
 });
 
 //CHECK FORMS IF ALL VALID
 function checkFormValidity() {
-    var usernameIsValid = $("#username_create").hasClass("valid");
-    var emailIsValid = $("#email_create").hasClass("valid");
-    var passwordIsValid = $("#pwd_create").hasClass("valid");
-    var confirmPasswordIsValid = $("#confirm_pwd_create").hasClass("valid");
+  var usernameIsValid = $("#username_create").hasClass("valid");
+  var emailIsValid = $("#email_create").hasClass("valid");
+  var passwordIsValid = $("#pwd_create").hasClass("valid");
+  var confirmPasswordIsValid = $("#confirm_pwd_create").hasClass("valid");
 
-    return usernameIsValid && emailIsValid && passwordIsValid && confirmPasswordIsValid;
+  return usernameIsValid && emailIsValid && passwordIsValid && confirmPasswordIsValid;
 }
 
 $(document).ready(function () {
 
-    $("#username_create, #email_create, #pwd_create, #confirm_pwd_create").on("input", function () {
-        if (checkFormValidity()) {
-            $("#signup-button").prop("disabled", false);
-        } else {
-            $("#signup-button").prop("disabled", true);
-        }
-    });
+  $("#username_create, #email_create, #pwd_create, #confirm_pwd_create").on("input", function () {
+    if (checkFormValidity()) {
+      $("#signup-button").prop("disabled", false);
+    } else {
+      $("#signup-button").prop("disabled", true);
+    }
+  });
 });
 

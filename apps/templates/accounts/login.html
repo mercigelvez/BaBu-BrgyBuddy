@@ -27,13 +27,17 @@
                     {{ form.hidden_tag() }}
                     <div class="mb-3 col-md-12">
                       <label for="input">Username</label>
-                      {{ form.username(placeholder='Enter Username', class='input-field') }}
+                        <div class="input-field">
+                          {{ form.username(placeholder='Enter Username', class='custom-input') }}
+                        </div>
                     </div>
 
                     <div class="mb-3 col-md-12">
                       <label for="password-input">Password</label>
-                      {{ form.password(id='password-input', placeholder='Enter Password', class='input-field', type='password') }}
-                      <span class="input"><i id="toggle-password" class="fas fa-eye-slash"></i></span>
+                        <div class="input-field">
+                          {{ form.password(id='password-input',placeholder="Enter Password", type='password', class='custom-input') }}
+                          <span class="input"><i id="toggle-password" class="fas fa-eye-slash"></i></span>
+                        </div>
                     </div>
 
                     <div class="text-end text-success text-gradient">

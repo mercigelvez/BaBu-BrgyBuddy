@@ -2,7 +2,27 @@
 endblock title %}
 
 <!-- Specific CSS goes HERE -->
-{% block stylesheets %}{% endblock stylesheets %} {% block content %}
+{% block stylesheets %}
+  <style>
+    .valid {
+      border-color: green;
+    }
+
+    .invalid {
+      border-color: red;
+    }
+
+    .success-message {
+      color: green;
+    }
+
+    .error-message {
+      color: red;
+    }
+  </style>
+{% endblock stylesheets %} 
+
+{% block content %}
 <main class="main-content mt-0">
   <section>
     <div class="page-header min-vh-100">
@@ -45,45 +65,44 @@ endblock title %}
 
                   <div class="mb-3 col-md-12">
                     <label for="input">Username</label>
-                    {{ form.username(placeholder="Enter Username", class="input-field", id="username_create") }}
-                    <div class="username-error-message"></div>
-                    {% for error in form.username.errors %}
-                    <span style="color: red">{{ error }}</span>
-                    {% endfor %}
+                      <div class="input-field">
+                        {{ form.username(placeholder="Enter Username", class='custom-input', id="username_create") }}
+                      </div>
+                       <div class="username-error-message"></div>
                   </div>
                   
                   <div class="mb-3 col-md-12">
                     <label for="input">Email</label>
-                    {{ form.email(placeholder="Enter Email", class="input-field", id="email_create") }}
-                    <div class="email-error-message"></div>
+                      <div class="input-field">
+                        {{ form.email(placeholder="Enter Email", class='custom-input', id="email_create", maxlength="70") }}
+                      </div>
+                      <div class="email-error-message"></div>
                   </div>
 
                   <div class="mb-3 col-md-12">
                     <label for="password-input">Password</label>
-                    {{ form.password(id="pwd_create", placeholder="Enter Password", class="input-field", type="password") }}
-                    <span class="input" onclick="togglePasswordVisibility('pwd_create', 'eye-icon-pwd')">
-                        <i id="eye-icon-pwd" class="fas fa-eye-slash"></i>
-                        <div class="password-error-message"></div>
-                    </span>
-                </div>
+                      <div class="input-field">
+                        {{ form.password(id="pwd_create", placeholder="Enter Password", class='custom-input', type="password") }}
+                        <span class="input" onclick="togglePasswordVisibility('pwd_create', 'eye-icon-pwd')">
+                            <i id="eye-icon-pwd" class="fas fa-eye-slash"></i>
+                        </span>
+                      </div>
+                      <div class="password-error-message"></div>
+                  </div>
                 
-                <div class="mb-3 col-md-12">
+                  <div class="mb-3 col-md-12">
                     <label for="confirm-password-input">Confirm Password</label>
-                    {{ form.confirm_password(id="confirm_pwd_create", placeholder="Confirm Password", class="input-field", type="password") }}
-                    <span class="input" onclick="togglePasswordVisibility('confirm_pwd_create', 'eye-icon-confirm')">
-                        <i id="eye-icon-confirm" class="fas fa-eye-slash"></i>
-                        <div class="confirm-password-error-message"></div>
-                    </span>
-                </div>                
+                      <div class="input-field">
+                        {{ form.confirm_password(id="confirm_pwd_create", placeholder="Confirm Password", class='custom-input', type="password") }}
+                        <span class="input" onclick="togglePasswordVisibility('confirm_pwd_create', 'eye-icon-confirm')">
+                            <i id="eye-icon-confirm" class="fas fa-eye-slash"></i>
+                        </span>
+                      </div>
+                      <div class="confirm-password-error-message"></div>
+                  </div>                
 
                   <div class="text-center">
-                    <button
-                      type="submit"
-                      name="register"
-                      class="btn btn-lg btn-success btn-lg w-70 mt-4 mb-0"
-                      id="signup-button"
-                      disabled
-                      >
+                    <button type="submit" name="register" class="btn btn-lg btn-success btn-lg w-70 mt-4 mb-0" id="signup-button" disabled>
                         SIGN UP
                     </button>                
                   </div>
