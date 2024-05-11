@@ -24,7 +24,7 @@
           <div class="dropdown-menu dropdown-menu-right custom-dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
             <a class="dropdown-item" href="#" data-toggle="modal" data-target="#feedbackModal"><i class="fas fa-comment-dots"></i> Feedback</a>
             <a class="dropdown-item" href="#" data-target="#profileModal" data-toggle="modal"><i class="fas fa-user"></i> Profile</a>
-            <a class="dropdown-item" href="{{ url_for('authentication_blueprint.logout') }}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal"><i class="fas fa-sign-out-alt"></i> Logout</a>
           </div>
         </li>
       </ul>
@@ -32,7 +32,7 @@
   </div>
   <!-- Feedback Modal -->
   <div class="modal fade" id="feedbackModal" tabindex="2" role="dialog" aria-labelledby="feedbackModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header" style="border-bottom: 3px solid #000; padding: 0.2rem;">
           <h5 class="modal-title" id="feedbackModalLabel">Feedback Rating</h5>
@@ -60,7 +60,6 @@
         <div class="modal-footer align-items-center">
           <button type="button" class="btn btn-success">Send</button>
           <button type="button" class="close btn black-button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">Close</span></button>
-
         </div>
       </div>
     </div>
@@ -69,7 +68,7 @@
 
   <!-- Profile Modal -->
   <div class="modal fade" id="profileModal" tabindex="-1" role="dialog" aria-labelledby="profileModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header" style="border-bottom: 3px solid #000; padding: 0.2rem;">
           <h5 class="modal-title" id="profileModalLabel" style="margin: 2%;">Profile</h5>
@@ -115,8 +114,24 @@
       </div>
     </div>
   </div>
-
   <!-- End Profile Modal -->
+  <!-- Logout Modal -->
+  <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header ml-auto">
+          <h5 class="modal-title" id="logoutModalLabel">  </h5>
+          <button type="button" class="close ml-auto" data-dismiss="modal" aria-label="Close" style="background-color: black; color:white; border-radius: 49%;font-size: 0.5rem;"><span aria-hidden="true"><i class="fas fa-times fa-sm"></i></span></button>
+        </div>
+        <div class="modal-body fs-5 text-center">Are you sure you want to leave BaBu?</div>
+        <div class="modal-footer justify-content-center">
+          <a class="btn black-button" href="{{ url_for('authentication_blueprint.logout') }}">Yes</a>
+          <button type="btn black-button" class="btn btn-secondary" data-dismiss="modal">No</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End Logout Modal -->
 </nav>
 <!-- End Navbar -->
 
@@ -163,12 +178,11 @@
   })
   
   $(document).ready(function () {
-    $('#editProfileBtn').click(function() {
-      $('#nameInput, #emailInput, #currentPasswordInput, #newPasswordInput, #saveChangesBtn').removeAttr('disabled');
-      $('#saveChangesBtn').show(); // Show the "Save Changes" button
-      $(this).hide(); // Hide the "Edit" button
-    });
-    
+    $('#editProfileBtn').click(function () {
+      $('#nameInput, #emailInput, #currentPasswordInput, #newPasswordInput, #saveChangesBtn').removeAttr('disabled')
+      $('#saveChangesBtn').show() // Show the "Save Changes" button
+      $(this).hide() // Hide the "Edit" button
+    })
   
     $('#saveChangesBtn').click(function () {
       // Code to save the updated profile information to the server
