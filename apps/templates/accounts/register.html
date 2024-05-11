@@ -1,0 +1,165 @@
+{% extends 'layouts/base-fullscreen.html' %} {% block title %} Sign UP {%
+endblock title %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+  <style>
+    .valid {
+      border-color: green;
+    }
+
+    .invalid {
+      border-color: red;
+    }
+
+    .success-message {
+      color: green;
+    }
+
+    .error-message {
+      color: red;
+    }
+  </style>
+{% endblock stylesheets %} 
+
+{% block content %}
+<main class="main-content mt-0">
+  <section>
+    <div class="page-header min-vh-100">
+      <div class="container">
+        <div class="row">
+          <div
+            class="col-xl-6 offset-xl-1 col-lg-6 offset-lg-10 col-md-12 d-flex flex-column mx-lg-0 mx-auto custom-card"
+          >
+            <div class="card card-plain card-size">
+              <div class="card-header pb-0 text-center">
+                <h4 class="font-weight-bolder fs-1" style="color: black">
+                  Get Started
+                </h4>
+                <p class="mb-0">
+                  {% if msg %}
+                  <span class="text-danger">{{ msg | safe }}</span>
+                  {% else %}
+                  <span> </span>
+                  {% endif %}
+                </p>
+              </div>
+              <div class="card-body">
+                {% if success %}
+
+                <div class="text-center">
+                  <div class="card card-plain card-size">
+                    <div class="card-header pb-0 text-center">
+                      <a
+                        href="{{ url_for('authentication_blueprint.login') }}"
+                        class="btn bg-gradient-dark w-100 my-4 mb-2"
+                        >Sign IN</a
+                      >
+                    </div>
+                  </div>
+                </div>
+
+                {% else %}
+                <form role="form" method="post" action="">
+                  {{ form.hidden_tag() }}
+
+                  <div class="mb-3 col-md-12">
+                    <label for="input">Username</label>
+                      <div class="input-field">
+                        {{ form.username(placeholder="Enter Username", class='custom-input', id="username_create") }}
+                      </div>
+                       <div class="username-error-message"></div>
+                  </div>
+                  
+                  <div class="mb-3 col-md-12">
+                    <label for="input">Email</label>
+                      <div class="input-field">
+                        {{ form.email(placeholder="Enter Email", class='custom-input', id="email_create", maxlength="70") }}
+                      </div>
+                      <div class="email-error-message"></div>
+                  </div>
+
+                  <div class="mb-3 col-md-12">
+                    <label for="password-input">Password</label>
+                      <div class="input-field">
+                        {{ form.password(id="pwd_create", placeholder="Enter Password", class='custom-input', type="password") }}
+                        <span class="input" onclick="togglePasswordVisibility('pwd_create', 'eye-icon-pwd')">
+                            <i id="eye-icon-pwd" class="fas fa-eye-slash"></i>
+                        </span>
+                      </div>
+                      <div class="password-error-message"></div>
+                  </div>
+                
+                  <div class="mb-3 col-md-12">
+                    <label for="confirm-password-input">Confirm Password</label>
+                      <div class="input-field">
+                        {{ form.confirm_password(id="confirm_pwd_create", placeholder="Confirm Password", class='custom-input', type="password") }}
+                        <span class="input" onclick="togglePasswordVisibility('confirm_pwd_create', 'eye-icon-confirm')">
+                            <i id="eye-icon-confirm" class="fas fa-eye-slash"></i>
+                        </span>
+                      </div>
+                      <div class="confirm-password-error-message"></div>
+                  </div>                
+
+                  <div class="text-center">
+                    <button type="submit" name="register" class="btn btn-lg btn-success btn-lg w-70 mt-4 mb-0" id="signup-button" disabled>
+                        SIGN UP
+                    </button>                
+                  </div>
+                </form>
+              </div>
+              <div class="card-footer text-center pt-0 px-lg-2 px-1">
+                <p class="mb-4 text-sm mx-auto">
+                  Already have an account?
+                  <a
+                    href="{{ url_for('authentication_blueprint.login') }}"
+                    class="text-success text-gradient font-weight-bold"
+                    >Sign In</a
+                  >
+                </p>
+              </div>
+              {% endif %}
+            </div>
+          </div>
+          <div
+            class="col-6 d-lg-flex d-none h-100 my-auto pe-0 position-absolute top-0 end-0 text-center justify-content-center flex-column"
+          >
+            <div
+              class="position-relative bg-gradient-success h-100 m-3 px-7 border-radius-lg d-flex flex-column justify-content-center overflow-hidden"
+              style="background-image: url(''); background-size: cover"
+            >
+              <div
+                class="d-flex justify-content-center align-items-center"
+                style="height: 30%"
+              >
+                <img
+                  src="{{ config.ASSETS_ROOT }}/img/babu-logo.png"
+                  alt="babu"
+                  style="z-index: 1; height: auto; width: 50%"
+                  class="babu-image"
+                />
+              </div>
+
+              <span class="mask bg-gradient-success opacity-6"></span>
+              <h4
+                class="mt-5 text-black font-weight-bolder position-relative babu-font"
+              >
+                BaBu
+              </h4>
+              <p class="text-black fs-3 position-relative font-weight-bolder">
+                Your Barangay Buddy
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+{% endblock content %}
+
+<!-- Specific JS goes HERE -->
+{% block javascripts %}
+<script src="{{ config.ASSETS_ROOT }}/js/register-validation.js"></script>
+{% endblock javascripts %}
