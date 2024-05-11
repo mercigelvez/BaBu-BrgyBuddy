@@ -4,6 +4,7 @@
 
 <!-- Specific CSS goes HERE -->
 {% block stylesheets %}
+
 {% endblock %} {% block content %}
   <main class="main-content mt-0">
     <section>
@@ -20,6 +21,13 @@
                     {% else %}
                       <span></span>
                     {% endif %}
+                    {% with messages=get_flashed_messages(with_categories=true) %}
+                      {% if messages %}
+                        {% for category, message in messages %}
+                          <div class="{{ category }} custom-flash">{{ message }}</div>
+                        {% endfor %}
+                      {% endif %}
+                    {% endwith %}
                   </p>
                 </div>
                 <div class="card-body">
@@ -27,17 +35,15 @@
                     {{ form.hidden_tag() }}
                     <div class="mb-3 col-md-12">
                       <label for="input">Username</label>
-                        <div class="input-field">
-                          {{ form.username(placeholder='Enter Username', class='custom-input') }}
-                        </div>
+                      <div class="input-field">{{ form.username(placeholder='Enter Username', class='custom-input') }}</div>
                     </div>
 
                     <div class="mb-3 col-md-12">
                       <label for="password-input">Password</label>
-                        <div class="input-field">
-                          {{ form.password(id='password-input',placeholder="Enter Password", type='password', class='custom-input') }}
-                          <span class="input"><i id="toggle-password" class="fas fa-eye-slash"></i></span>
-                        </div>
+                      <div class="input-field">
+                        {{ form.password(id='password-input', placeholder='Enter Password', type='password', class='custom-input') }}
+                        <span class="input"><i id="toggle-password" class="fas fa-eye-slash"></i></span>
+                      </div>
                     </div>
 
                     <div class="text-end text-success text-gradient">

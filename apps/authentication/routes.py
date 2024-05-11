@@ -109,10 +109,11 @@ def register():
         db.session.add(user)
         db.session.commit()
 
-        # Delete user from session
-        logout_user()
+        # Flash a success message
+        flash('User created successfully. Please log in.', 'success')
 
-        return render_template('accounts/register.html', msg='User created successfully.', success=True, form=create_account_form)
+        # Redirect to login page
+        return redirect(url_for('authentication_blueprint.login'))
     else:
         return render_template('accounts/register.html', form=create_account_form)
 
