@@ -1,16 +1,50 @@
-# BaBu-BrgyBuddy
-A Chatbot Assistant using NLP and Naive Bayes Algorithm
+### Set Up for `Windows` 
 
-## Description
-BaBu-BrgyBuddy is a Django project that aims to assist residents when asking for information about barangay services through chatbot.
+> Install modules via `VENV` (windows)
+> Make sure to use cmd terminal not powershell
 
-## Installation
-1. Clone the repository: `git clone https://github.com/mercigelvez/BaBu-BrgyBuddy.git`
-2. Install the required dependencies: `pip install -r requirements.txt`
-3. Configure the database settings in `settings.py`
-4. Apply database migrations: `python manage.py migrate`
+```
+$ virtualenv env
+$ .\env\Scripts\activate
+$ pip3 install -r requirements.txt
+```
 
-## Usage
-1. Start the development server: `python manage.py runserver`
-2. Access the application in your web browser at `http://localhost:8000`
+<br />
 
+> Set Up Flask Environment
+
+```bash
+$ # CMD 
+$ set FLASK_APP=run.py
+$ set FLASK_ENV=development
+$
+$ # Powershell
+$ $env:FLASK_APP = ".\run.py"
+$ $env:FLASK_ENV = "development"
+```
+
+<br />
+
+>Install: 'pip install mysqlclient'
+
+> Start the app
+
+```bash
+$ flask run
+```
+
+At this point, the app runs at `http://127.0.0.1:5000/`. 
+
+<br />
+
+### Create Users
+
+By default, the app redirects guest users to authenticate. In order to access the private pages, follow this set up: 
+
+- Start the app via `flask run`
+- Access the `registration` page and create a new user:
+  - `http://127.0.0.1:5000/register`
+- Access the `sign in` page and authenticate
+  - `http://127.0.0.1:5000/login`
+
+<br />
