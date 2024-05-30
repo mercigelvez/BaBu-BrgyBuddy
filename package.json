@@ -1,17 +1,17 @@
 {
-    "name": "boilerplate-code-flask-dashboard",
-    "mastertemplate": "boilerplate-code-flask-dashboard",
+    "name": "BaBu Brgy Buddy",
+    "mastertemplate": "BaBu - Brgy. Buddy",
     "version": "2stable.0.1",
-    "description": "Template project - Flask Boilerplate Code",
+    "description": "Assistant Chabot for Brgy",
     "repository": {
         "type": "git",
-        "url": "https://github.com/app-generator/boilerplate-code-flask-dashboard"
+        "url": "https://github.com/mercigelvez/BaBu-BrgyBuddy"
     },
     "bugs": {
-        "url": "https://github.com/app-generator/boilerplate-code-flask-dashboard/issues",
+        "url": "https://github.com/mercigelvez/BaBu-BrgyBuddy/issues",
         "email": "support@appseed.us"
     },
-    "author": "AppSeed App Generator <support@appseed.us> (https://appseed.us)",
+    "author": "Team BaBu",
     "engines": {
         "node": ">=10.0.0"
     },
