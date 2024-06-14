@@ -6,7 +6,12 @@
         "Hi",
         "Hey",
         "Hello",
+        "Hi there",
+        "Hello there",
         "Good morning",
+        "Good afternoon",
+        "Good evening",
+        "Good day"
         "Good afternoon",
         "Good evening",
         "Good day"
@@ -30,6 +35,10 @@
         "See you",
         "Catch you later",
         "Talk to you soon"
+        "That's it for now",
+        "See you",
+        "Catch you later",
+        "Talk to you soon"
       ],
       "responses": [
         "See you later, thanks for chatting with Babu",
@@ -46,7 +55,10 @@
         "Thank you",
         "Thank's a lot!",
         "Thank you so much",
-        "Salamat"
+        "Salamat",
+        "Thanks a bunch",
+        "Many thanks",
+        "Appreciate it"
       ],
       "responses": [
         "Happy to help!",
@@ -78,9 +90,9 @@
         "What is needed for a barangay clearance?"
       ],
       "responses": [
-        "To get a barangay clearance, you typically need to provide a valid ID, proof of residency, and a barangay certificate.",
-        "The requirements for a barangay clearance usually include a valid ID, proof of address, and a barangay certificate.",
-        "For a barangay clearance, you'll need to bring a valid government-issued ID, proof of residency in the barangay."
+        "To get a barangay clearance, you typically need to provide a valid ID, proof of residency, and a barangay certificate. Please visit the barangay office for more details.",
+        "The requirements for a barangay clearance usually include a valid ID, proof of address, and a barangay certificate. You can inquire at the barangay office for the specific documents needed.",
+        "For a barangay clearance, you'll need to bring a valid government-issued ID, proof of residency in the barangay, and any other documents specified by the barangay office. I recommend checking with them for the complete list of requirements."
       ]
     },
     {
@@ -92,9 +104,9 @@
         "Can you explain the barangay indigency certificate?"
       ],
       "responses": [
-        "A barangay indigency certificate is a document that certifies an individual or family's low-income status within the barangay. It is typically required for various government assistance programs.",
-        "The barangay indigency certificate is issued to residents who are considered indigent or living below the poverty line. It is often required for availing government subsidies or discounts.",
-        "The barangay indigency certificate confirms that an individual or family is financially disadvantaged within the barangay. To obtain this certificate, you'll need to present proof of income, residency."
+        "A barangay indigency certificate is a document that certifies an individual or family's low-income status within the barangay. It is typically required for various government assistance programs. You can inquire at the barangay office for the specific requirements to obtain this certificate.",
+        "The barangay indigency certificate is issued to residents who are considered indigent or living below the poverty line. It is often required for availing government subsidies or discounts. Visit the barangay office and provide the necessary documents to apply for this certificate.",
+        "The barangay indigency certificate confirms that an individual or family is financially disadvantaged within the barangay. To obtain this certificate, you'll need to present proof of income, residency, and other supporting documents as required by the barangay office."
       ]
     },
     {
@@ -106,9 +118,9 @@
         "Can you explain the requirements for a certificate of residency?"
       ],
       "responses": [
-        "A certificate of residency is a document that confirms your residence within the barangay. It is often required for various purposes, such as school enrollment or government transactions. Visit the barangay office and provide proof of address, valid ID.",
-        "The certificate of residency is issued by the barangay to certify that an individual resides within the barangay boundaries. To get this certificate, you'll typically need to submit a valid ID, proof of address (e.g., utility bills).",
-        "The certificate of residency serves as proof that you are a resident of the barangay. To apply for this certificate, you'll need to present a valid government-issued ID, documents showing your address within the barangay (e.g., utility bills, lease agreement)."
+        "A certificate of residency is a document that confirms your residence within the barangay. It is often required for various purposes, such as school enrollment or government transactions. Visit the barangay office and provide proof of address, valid ID, and any other required documents to obtain this certificate.",
+        "The certificate of residency is issued by the barangay to certify that an individual resides within the barangay boundaries. To get this certificate, you'll typically need to submit a valid ID, proof of address (e.g., utility bills), and any other documents specified by the barangay office.",
+        "The certificate of residency serves as proof that you are a resident of the barangay. To apply for this certificate, you'll need to present a valid government-issued ID, documents showing your address within the barangay (e.g., utility bills, lease agreement), and any other requirements set by the barangay office."
       ]
     },
     {
@@ -120,9 +132,9 @@
         "Can you explain the solo parents certificate?"
       ],
       "responses": [
-        "A solo parents certificate is a document that certifies an individual's status as a solo parent, which entitles them to certain benefits and assistance programs. To obtain this certificate, you'll need to provide proof of being a solo parent, such as a birth certificate of your child.",
-        "The solo parents certificate is issued to individuals who are raising a child or children without the support of a spouse or partner. To apply for this certificate, you'll typically need to submit your child's birth certificate, proof of your solo parent status, valid ID.",
-        "The solo parents certificate recognizes individuals who are solely responsible for raising their child or children. To obtain this certificate, you must provide documents such as your child's birth certificate, proof of your marital status or separation, valid ID."
+        "A solo parents certificate is a document that certifies an individual's status as a solo parent, which entitles them to certain benefits and assistance programs. To obtain this certificate, you'll need to provide proof of being a solo parent, such as a birth certificate of your child, and any other required documents specified by the barangay office.",
+        "The solo parents certificate is issued to individuals who are raising a child or children without the support of a spouse or partner. To apply for this certificate, you'll typically need to submit your child's birth certificate, proof of your solo parent status, valid ID, and any other requirements set by the barangay office.",
+        "The solo parents certificate recognizes individuals who are solely responsible for raising their child or children. To obtain this certificate, you must provide documents such as your child's birth certificate, proof of your marital status or separation, valid ID, and any additional requirements specified by the barangay office."
       ]
     },
     {
@@ -134,9 +146,9 @@
         "Can you explain the no fix income certificate?"
       ],
       "responses": [
-        "A no fix income certificate is a document that certifies an individual or family does not have a regular or fixed source of income. This certificate is often required for various government assistance programs or discounts. To obtain this certificate, you'll need to provide proof of your financial situation, valid ID.",
-        "The no fix income certificate is issued to individuals or families who do not have a stable or regular income source. To apply for this certificate, you'll typically need to submit documents such as proof of unemployment, financial statements, valid ID.",
-        "The no fix income certificate confirms that an individual or family does not have a fixed or regular source of income. To obtain this certificate, you must provide documents that demonstrate your financial situation, such as proof of unemployment, lack of income sources, valid ID."
+        "A no fix income certificate is a document that certifies an individual or family does not have a regular or fixed source of income. This certificate is often required for various government assistance programs or discounts. To obtain this certificate, you'll need to provide proof of your financial situation, valid ID, and any other required documents specified by the barangay office.",
+        "The no fix income certificate is issued to individuals or families who do not have a stable or regular income source. To apply for this certificate, you'll typically need to submit documents such as proof of unemployment, financial statements, valid ID, and any additional requirements set by the barangay office.",
+        "The no fix income certificate confirms that an individual or family does not have a fixed or regular source of income. To obtain this certificate, you must provide documents that demonstrate your financial situation, such as proof of unemployment, lack of income sources, valid ID, and any other requirements specified by the barangay office."
       ]
     },
     {
@@ -148,9 +160,9 @@
         "Can you explain the process for reporting a business closure?"
       ],
       "responses": [
-        "To report a business closure in the barangay, you'll typically need to provide your business permit or license, a written notice of closure.",
-        "Reporting a business closure involves submitting your business permit or license, a formal notice stating the closure date, and any additional documents required by the barangay office.",
-        "The process for reporting a business closure usually involves providing your business permit or license, a written notice indicating the closure date and reason, valid ID."
+        "To report a business closure in the barangay, you'll typically need to provide your business permit or license, a written notice of closure, and any other required documents specified by the barangay office. Visit them or inquire about the complete process.",
+        "Reporting a business closure involves submitting your business permit or license, a formal notice stating the closure date, and any additional documents required by the barangay office. I recommend visiting them in person to ensure you have all the necessary paperwork.",
+        "The process for reporting a business closure usually involves providing your business permit or license, a written notice indicating the closure date and reason, valid ID, and any other requirements set by the barangay office. Check with them for the specific steps to follow."
       ]
     },
     {
@@ -162,9 +174,9 @@
         "What is required to get an unable to vote certificate?"
       ],
       "responses": [
-        "An unable to vote certificate is issued to individuals who are unable to participate in elections due to various reasons, such as disability or being out of the country. To obtain this certificate, you'll need to provide valid identification, proof of your inability to vote.",
-        "The unable to vote certificate is given to residents who cannot exercise their right to vote due to specific circumstances. To apply for this certificate, you'll typically need to submit a valid ID, documents proving your inability to vote (e.g., medical certificate, travel documents).",
-        "If you are unable to vote due to reasons such as illness, disability, or being abroad, you can request an unable to vote certificate from the barangay office. To obtain this certificate, you'll need to provide a valid ID, evidence supporting your inability to vote (e.g., medical records, travel documents)."
+        "An unable to vote certificate is issued to individuals who are unable to participate in elections due to various reasons, such as disability or being out of the country. To obtain this certificate, you'll need to provide valid identification, proof of your inability to vote, and any other documents required by the barangay office.",
+        "The unable to vote certificate is given to residents who cannot exercise their right to vote due to specific circumstances. To apply for this certificate, you'll typically need to submit a valid ID, documents proving your inability to vote (e.g., medical certificate, travel documents), and any additional requirements set by the barangay office.",
+        "If you are unable to vote due to reasons such as illness, disability, or being abroad, you can request an unable to vote certificate from the barangay office. To obtain this certificate, you'll need to provide a valid ID, evidence supporting your inability to vote (e.g., medical records, travel documents), and any other documents specified by the barangay."
       ]
     },
     {
@@ -176,9 +188,9 @@
         "What documents do I need to apply for a business permit?"
       ],
       "responses": [
-        "To obtain a business permit in the barangay, you'll typically need to provide valid identification, proof of business registration, tax documents.",
-        "The process for getting a business permit usually involves submitting your valid ID, business registration documents, tax records, and any additional documents required by the barangay office.",
-        "To apply for a business permit, you'll need to prepare the following documents: valid ID, business registration certificates, tax records."
+        "To obtain a business permit in the barangay, you'll typically need to provide valid identification, proof of business registration, tax documents, and any other requirements specified by the barangay office. Visit them or inquire about the complete process and necessary documents.",
+        "The process for getting a business permit usually involves submitting your valid ID, business registration documents, tax records, and any additional documents required by the barangay office. I recommend visiting or contacting them directly to ensure you have all the necessary paperwork.",
+        "To apply for a business permit, you'll need to prepare the following documents: valid ID, business registration certificates, tax records, and any other requirements set by the barangay office. Check with them for the specific steps and documents needed to obtain a business permit in the barangay."
       ]
     },
     {
@@ -190,9 +202,9 @@
         "What documents do I need to apply for a health certificate?"
       ],
       "responses": [
-        "To obtain a health certificate from the barangay, you'll typically need to provide a valid ID, medical records or clearance from a healthcare facility.",
-        "The process for getting a health certificate usually involves submitting your valid ID, medical records or clearance from a clinic or hospital, and any additional documents required by the barangay office.",
-        "To apply for a health certificate, you'll need to prepare the following documents: valid ID, medical records or clearance from a healthcare facility."
+        "To obtain a health certificate from the barangay, you'll typically need to provide a valid ID, medical records or clearance from a healthcare facility, and any other requirements specified by the barangay office. Visit them or inquire about the complete process and necessary documents.",
+        "The process for getting a health certificate usually involves submitting your valid ID, medical records or clearance from a clinic or hospital, and any additional documents required by the barangay office. I recommend visiting or contacting them directly to ensure you have all the necessary paperwork.",
+        "To apply for a health certificate, you'll need to prepare the following documents: valid ID, medical records or clearance from a healthcare facility, and any other requirements set by the barangay office. Check with them for the specific steps and documents needed to obtain a health certificate in the barangay."
       ]
     },
     {
@@ -204,9 +216,9 @@
         "Can you explain the first-time job seeker certificate?"
       ],
       "responses": [
-        "A first-time job seeker certificate is a document issued to individuals who are seeking employment for the first time. To obtain this certificate, you'll typically need to provide a valid ID, proof of residency.",
-        "The first-time job seeker certificate is given to residents who are entering the workforce for the first time. To apply for this certificate, you'll need to submit a valid ID, proof of your residency in the barangay.",
-        "The first-time job seeker certificate is issued to individuals who are looking for their first job or employment opportunity. To obtain this certificate, you must provide a valid ID, documents proving your residency in the barangay."
+        "A first-time job seeker certificate is a document issued to individuals who are seeking employment for the first time. To obtain this certificate, you'll typically need to provide a valid ID, proof of residency, and any other documents required by the barangay office.",
+        "The first-time job seeker certificate is given to residents who are entering the workforce for the first time. To apply for this certificate, you'll need to submit a valid ID, proof of your residency in the barangay, and any additional requirements set by the barangay office.",
+        "The first-time job seeker certificate is issued to individuals who are looking for their first job or employment opportunity. To obtain this certificate, you must provide a valid ID, documents proving your residency in the barangay, and any other requirements specified by the barangay office."
       ]
     },
     {
@@ -218,9 +230,9 @@
         "Can you explain the late registration certificate?"
       ],
       "responses": [
-        "A late registration certificate is a document issued to individuals who need to register or process documents after the prescribed deadline. To obtain this certificate, you'll typically need to provide a valid ID, proof of the reason for late registration.",
-        "The late registration certificate is given to residents who need to register or submit documents after the designated deadline due to specific circumstances. To apply for this certificate, you'll need to submit a valid ID, evidence supporting the reason for late registration (e.g., medical records, travel documents).",
-        "The late registration certificate is issued to individuals who need to register or process documents beyond the specified deadline. To obtain this certificate, you must provide a valid ID, documents justifying the reason for late registration (e.g., medical certificates, travel documents)."
+        "A late registration certificate is a document issued to individuals who need to register or process documents after the prescribed deadline. To obtain this certificate, you'll typically need to provide a valid ID, proof of the reason for late registration, and any other documents required by the barangay office.",
+        "The late registration certificate is given to residents who need to register or submit documents after the designated deadline due to specific circumstances. To apply for this certificate, you'll need to submit a valid ID, evidence supporting the reason for late registration (e.g., medical records, travel documents), and any additional requirements set by the barangay office.",
+        "The late registration certificate is issued to individuals who need to register or process documents beyond the specified deadline. To obtain this certificate, you must provide a valid ID, documents justifying the reason for late registration (e.g., medical certificates, travel documents), and any other requirements specified by the barangay office."
       ]
     },
     {
@@ -232,9 +244,9 @@
         "What documents do I need to apply for a barangay ID?"
       ],
       "responses": [
-        "To obtain a barangay ID, you'll typically need to provide a valid government-issued ID, proof of residency in the barangay.",
-        "The process for getting a barangay ID usually involves submitting your valid government-issued ID, documents proving your residency in the barangay (e.g., utility bills, lease agreement), and any additional documents required by the barangay office.",
-        "To apply for a barangay ID, you'll need to prepare the following documents: valid government-issued ID, proof of residency in the barangay (e.g., utility bills, lease agreement)."
+        "To obtain a barangay ID, you'll typically need to provide a valid government-issued ID, proof of residency in the barangay, and any other requirements specified by the barangay office. Visit them or inquire about the complete process and necessary documents.",
+        "The process for getting a barangay ID usually involves submitting your valid government-issued ID, documents proving your residency in the barangay (e.g., utility bills, lease agreement), and any additional documents required by the barangay office. I recommend visiting or contacting them directly to ensure you have all the necessary paperwork.",
+        "To apply for a barangay ID, you'll need to prepare the following documents: valid government-issued ID, proof of residency in the barangay (e.g., utility bills, lease agreement), and any other requirements set by the barangay office. Check with them for the specific steps and documents needed to obtain a barangay ID."
       ]
     },
     {
@@ -246,9 +258,9 @@
         "What kinds of documents and services can I get from the barangay?"
       ],
       "responses": [
-        "The barangay offers a range of services and documents, including barangay clearance, barangay indigency certificate, certificate of residency, solo parents certificate, no fix income certificate, no garage certificate, business closure certification, unable to vote certificate, business permit, health certificate, first-time job seeker certificate, late registration certificate, and barangay ID.",
+        "The barangay offers a range of services and documents, including barangay clearance, barangay indigency certificate, certificate of residency, solo parents certificate, no fix income certificate, no garage certificate, business closure certification, unable to vote certificate, business permit, health certificate, first-time job seeker certificate, late registration certificate, and barangay ID. Visit the barangay office for more details on each service.",
         "Some of the main services provided by the barangay include issuance of barangay clearances, certificates of residency, indigency certificates, solo parent certificates, business permits, health certificates, and barangay IDs. The barangay also assists with processes like business closure reporting, late registration, and certification for those unable to vote or first-time job seekers.",
-        "The barangay offers various services to its residents, such as barangay clearances, certificates of residency, indigency certifications, solo parent certificates, business permits and closures, health certificates, late registration assistance, certifications for unable to vote or first-time job seekers, and issuance of barangay IDs."
+        "The barangay offers various services to its residents, such as barangay clearances, certificates of residency, indigency certifications, solo parent certificates, business permits and closures, health certificates, late registration assistance, certifications for unable to vote or first-time job seekers, and issuance of barangay IDs. I recommend visiting the barangay office to inquire about the specific requirements for each service."
       ]
     },
     {
