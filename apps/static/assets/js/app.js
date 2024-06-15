@@ -34,33 +34,33 @@ class Chatbox {
 
     // http://127.0.0.1:5000/predict
     fetch($SCRIPT_ROOT + '/predict', {
-        method: 'POST',
-        body: JSON.stringify({ message: text1 }),
-        mode: 'cors',
-        headers: {
-            'Content-Type': 'application/json'
-        },
+      method: 'POST',
+      body: JSON.stringify({ message: text1, user_id: 'current_user_id' }),
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json'
+      },
     })
     .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error ${response.status}`);
-        }
-        return response.json();
+      if (!response.ok) {
+        throw new Error(`HTTP error ${response.status}`);
+      }
+      return response.json();
     })
     .then(r => {
-        if (r.error) {
-            console.error('Error:', r.error);
-        } else {
-            let msg2 = { name: "Babu", message: r.answer };
-            this.messages.push(msg2);
-            this.updateChatText();
-            textInput.value = '';
-        }
-    })
-    .catch((error) => {
-        console.error('Error:', error);
+      if (r.error) {
+        console.error('Error:', r.error);
+      } else {
+        let msg2 = { name: "Babu", message: r.answer };
+        this.messages.push(msg2);
         this.updateChatText();
         textInput.value = '';
+      }
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+      this.updateChatText();
+      textInput.value = '';
     });
   }
 
@@ -88,7 +88,51 @@ class Chatbox {
   }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+$(document).ready(function() {
   const chatbox = new Chatbox();
   chatbox.display();
+
+  // Handle "New Chat" click
+  $('a[href="#"]').click(function(e) {
+    e.preventDefault();
+    $.ajax({
+      type: 'POST',
+      url: '/new_chat',
+      data: {
+        user_id: 'current_user_id'  // Replace with the actual user ID
+      },
+      success: function(data) {
+        // Clear the chat container
+        $('.chatboxmessages').html('');
+      },
+      error: function(xhr, status, error) {
+        console.error(error);
+      }
+    });
+  });
+
+  // Handle chat history title click
+  $('a[href="#"]').click(function(e) {
+    e.preventDefault();
+    $.ajax({
+      type: 'GET',
+      url: '/get_chat_history',
+      data: {
+        user_id: 'current_user_id'  // Replace with the actual user ID
+      },
+      success: function(data) {
+        // Render the chat history in the chat container
+        var chatContainer = $('.chatboxmessages');
+        chatContainer.html('');
+        var messages = data.messages.split('\n');
+        $.each(messages, function(index, message) {
+          var messageElement = $('<div>').text(message);
+          chatContainer.append(messageElement);
+        });
+      },
+      error: function(xhr, status, error) {
+        console.error(error);
+      }
+    });
+  });
 });

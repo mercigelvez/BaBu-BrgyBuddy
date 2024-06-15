@@ -1,36 +1,39 @@
-{% extends 'layouts/base.html' %} 
+{% extends 'layouts/base.html' %}
 
-{% block title %} {% endblock title %}
+{% block title %}
 
-{% block stylesheets %} 
-<style>
-  .logo-description {
-    position: absolute;
-    top: 250px;
-    left: 50%;
-    transform: translateX(-50%);
-    text-align: center;
-  }
-  .logo-description img {
-    width: 50px;
-    height: 50px;
-  }
-</style>
-{% endblock stylesheets %} 
+{% endblock %}
 
-{% block content %} 
+{% block stylesheets %}
+  <style>
+    .logo-description {
+      position: absolute;
+      top: 250px;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+    }
+    .logo-description img {
+      width: 50px;
+      height: 50px;
+    }
+    
 
-{% include "includes/sidenav.html" %}
+  </style>
+{% endblock %}
 
-<main class="main-content position-relative border-radius-lg">
-  {% include "includes/navigation.html" %}
+{% block content %}
+  {% include 'includes/sidenav.html' %}
 
-  <div class="container-fluid py-2 col-md-12">
-    <div class="row">
-      <div class="col-md-12">
-        <div class="container-fluid mt--6 chat_container">
+  <main class="main-content position-relative border-radius-lg">
+    {% include 'includes/navigation.html' %}
+
+    <div class="container-fluid py-2 col-md-12">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="container-fluid mt--6 chat_container">
             <div class="logo-description">
-              <img src="{{ config.ASSETS_ROOT }}/img/babu-logo.png" alt="Logo">
+              <img src="{{ config.ASSETS_ROOT }}/img/babu-logo.png" alt="Logo" />
               <p>Welcome to BaBu -your Barangay Buddy! How can I assist you?</p>
             </div>
             <div class="chatbox__support col-md-12">
@@ -39,26 +42,23 @@
               </div>
             </div>
             <div class="chatbox__footer">
-              <input type="text" class="chatbox__input" placeholder="Write a message..." oninput="this.previousElementSibling.style.display='none'">
+              <input type="text" class="chatbox__input" placeholder="Write a message..." oninput="this.previousElementSibling.style.display='none'" />
               <button class="chatbox__send--footer send__button">Send</button>
             </div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</main>
-
-{% endblock content %}
+  </main>
+{% endblock %}
 
 <!-- Specific JS goes HERE -->
 {% block javascripts %}
-<script>
+  <script>
   $SCRIPT_ROOT = {{ request.script_root|tojson }};
 </script>
-<script
-  type="text/javascript" src="{{ url_for('static', filename='assets/js/app.js') }}"
-></script>
-<script>
+  <script type="text/javascript" src="{{ url_for('static', filename='assets/js/app.js') }}"></script>
+  <script>
   
   var input = document.querySelector('.chatbox__input');
 
@@ -72,4 +72,4 @@
     }
   });
 </script>
-{% endblock javascripts %}
+{% endblock %}

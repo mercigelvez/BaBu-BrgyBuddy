@@ -1,7 +1,4 @@
 # -*- encoding: utf-8 -*-
-"""
-Copyright (c) 2019 - present AppSeed.us
-"""
 
 from apps.home import blueprint
 from flask import render_template, request
@@ -9,6 +6,10 @@ from flask_login import login_required
 from jinja2 import TemplateNotFound
 from apps.chatbot.chat import get_response, preprocess_input
 from flask import Blueprint, jsonify, request
+
+from flask import jsonify, request
+from apps.models import ChatHistory
+from apps import db
 
 @blueprint.route('/index')
 @login_required
@@ -53,6 +54,7 @@ def get_segment(request):
 
     except:
         return None
+    
 
 @blueprint.route('/predict', methods=['POST'])
 def predict():
@@ -61,9 +63,42 @@ def predict():
         return jsonify({'error': 'Invalid JSON data'}), 400
 
     user_input = data.get('message')
-    if not user_input:
-        return jsonify({'error': 'Missing message parameter'}), 400
+    user_id = data.get('user_id')
+    if not user_input or not user_id:
+        return jsonify({'error': 'Missing message or user_id parameter'}), 400
 
     cleaned_input = preprocess_input(user_input)
     response = get_response(cleaned_input)
+
+    # Save the chat history
+    chat_history = ChatHistory.query.filter_by(user_id=user_id).first()
+    if chat_history:
+        chat_history.messages += f'User: {user_input}\nBot: {response}\n'
+    else:
+        chat_history = ChatHistory(user_id, f'User: {user_input}\nBot: {response}\n')
+        db.session.add(chat_history)
+    db.session.commit()
+
     return jsonify({'answer': response})
+
+
+@blueprint.route('/new_chat', methods=['POST'])
+def new_chat():
+    user_id = request.form.get('user_id')
+    if user_id:
+        chat_history = ChatHistory.query.filter_by(user_id=user_id).first()
+        if chat_history:
+            chat_history.messages = ''  # Clear the current chat history
+            db.session.commit()
+    return jsonify({'success': True})
+
+
+@blueprint.route('/get_chat_history', methods=['GET'])
+def get_chat_history():
+    user_id = request.args.get('user_id')
+    if user_id:
+        chat_history = ChatHistory.query.filter_by(user_id=user_id).first()
+        if chat_history:
+            return jsonify({'messages': chat_history.messages})
+    return jsonify({'messages': ''})
+
