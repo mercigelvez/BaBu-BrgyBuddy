@@ -101,3 +101,4 @@ def get_chat_history():
         if chat_history:
             return jsonify({'messages': chat_history.messages})
     return jsonify({'messages': ''})
+
