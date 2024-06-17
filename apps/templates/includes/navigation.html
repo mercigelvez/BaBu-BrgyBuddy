@@ -84,10 +84,10 @@
             <label for="usernameInput" class="col-sm-2 col-form-label">Username</label>
             <div class="col-sm-8">
               <input type="text" class="form-control" id="usernameInput" name="username" value="{{ current_user.username }}" pattern="^[a-zA-Z0-9_]+$" required disabled />
-              <div class="invalid-feedback" id="errorMessageContainer">Username is invalid. Right Format: <br> <ul> 
+              <div class="invalid-feedback">Username is invalid. Right Format: <br> <ul> 
                 <li> Number </li> 
                 <li>Underscore</li>
-                <li> Special Character </l1>
+                <li> Special Character </li>
                 <li> No Spaces </li>
               </div>
             </div>
@@ -95,8 +95,7 @@
           <div class="form-group row">
             <label for="emailInput" class="col-sm-2 col-form-label">Email</label>
             <div class="col-sm-8">
-              <input type="email" class="form-control" id="emailInput" name="email" value="{{ current_user.email }}" pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$" required disabled />
-              <div class="invalid-feedback" id="emailErrorMessage">Please enter a valid email address (no spaces, .c0m, or @test allowed).</div>
+              <input type="email" class="form-control" id="emailInput" name="email" value="{{ current_user.email }}" readonly />
             </div>
           </div>
           <!-- Current Password -->
@@ -104,7 +103,13 @@
             <label for="currentPasswordInput" class="col-sm-2 col-form-label">Current Password</label>
             <div class="col-sm-8">
               <input type="password" class="form-control" id="currentPasswordInput" name="current_password" required disabled />
-              <div class="invalid-feedback" id="currentPasswordErrorMessage">Please enter your current password.</div>
+              <div class="invalid-feedback">Please enter your current password.</div>
+            </div>
+          </div>
+           <!-- Instruction Message -->
+           <div class="form-group row">
+            <div class="col-sm-12">
+              <p class="text-muted" style="margin-left: 15px;">Note: Please enter your current password to save any changes to your profile.</p>
             </div>
           </div>
           <!-- New Password -->
@@ -124,6 +129,8 @@
   </div>
 </div>
 <!-- End Profile Modal -->
+
+
 
   <!-- Logout Modal -->
   <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel" aria-hidden="true">
@@ -190,7 +197,7 @@
   
   $(document).ready(function () {
     $('#editProfileBtn').click(function () {
-      $('#usernameInput, #emailInput, #currentPasswordInput, #newPasswordInput, #saveChangesBtn').removeAttr('disabled')
+      $('#usernameInput, #currentPasswordInput, #newPasswordInput, #saveChangesBtn').removeAttr('disabled')
       $('#saveChangesBtn').show() // Show the "Save Changes" button
       $(this).hide() // Hide the "Edit" button
     })
@@ -198,21 +205,17 @@
     $('#saveChangesBtn').click(function () {
       // Get the updated values
       var name = $('#usernameInput').val()
-      var email = $('#emailInput').val()
       var currentPassword = $('#currentPasswordInput').val()
       var newPassword = $('#newPasswordInput').val()
   
       // TODO: Update the modal with the new values
       // This will depend on how your modal is structured
-  
-      // Close the modal
-      $('#profileModal').modal('hide')
     });
   
       // Re-enable the "Edit" button, hide the "Save Changes" button, and disable the input fields
       $('#editProfileBtn').show()
       $('#saveChangesBtn').hide()
-      $('#usernameInput, #emailInput, #currentPasswordInput, #newPasswordInput').attr('disabled', 'disabled')
+      $('#usernameInput, #currentPasswordInput, #newPasswordInput').attr('disabled', 'disabled')
     })
   
 </script>
