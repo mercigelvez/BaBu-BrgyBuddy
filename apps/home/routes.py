@@ -133,7 +133,6 @@ def update_profile():
     # Check if the provided current password matches the stored hash
     if not verify_pass(current_password, stored_password_hash):
         print("Invalid current password")
-        flash('Invalid current password', 'error')
         return redirect(request.referrer or url_for('home'))
 
     try:
@@ -147,10 +146,35 @@ def update_profile():
         # Save the changes to the database
         db.session.commit()
         print("Profile updated successfully")
-        flash('Profile updated successfully', 'success')
     except IntegrityError:
         db.session.rollback()
         print("Username already exists. Please choose a different username.")
-        flash('Username already exists. Please choose a different username.', 'error')
 
     return redirect(request.referrer or url_for('home'))
+
+
+@blueprint.route('/get_current_user', methods=['GET'])
+def get_current_user():
+    if current_user.is_authenticated:
+        user_data = {
+            'username': current_user.username,
+            'email': current_user.email,
+            # Add any other user information you need
+        }
+        return jsonify(user_data)
+    else:
+        return jsonify({'error': 'User not authenticated'}), 401
+    
+    
+@blueprint.route('/check_current_password', methods=['POST'])
+def check_current_password():
+    # Get the current password from the request data
+    current_password = request.form.get('current_password')
+
+    # Get the current user's stored password hash
+    stored_password_hash = current_user.password
+
+    # Check if the provided current password matches the stored hash
+    is_valid = verify_pass(current_password, stored_password_hash)
+
+    return jsonify({'is_valid': is_valid})
