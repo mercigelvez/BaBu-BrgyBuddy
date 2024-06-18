@@ -3,17 +3,23 @@
     <nav aria-label="breadcrumb">
       <h6 class="text-black mb-0 fs-3">Barangay Buddy - BaBu</h6>
     </nav>
-    <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
+    <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4 justify-content-end" id="navbar" >
       <div class="ms-md-auto pe-md-3 d-flex align-items-center">
         <!-- to make the next icons to stay on right -->
       </div>
-      <ul class="navbar-nav justify-content-end">
-        <li class="nav-item ps-3 d-flex align-items-center text-black">
-          <a href="javascript:;" class="nav-link text-black p-0" data-id="iconNavbarSidenav">
-            <i class="fas fa-bars"></i>
-          </a>
-        </li>
-      </ul>
+      <div class="sidebar-toggler-container">
+        <ul class="navbar-nav">
+          <li class="nav-item ps-3 d-flex align-items-center text-black">
+            <a href="javascript:;" class="nav-link text-black p-0" id="iconNavbarSidenav">
+              <div class="sidenav-toggler-inner text-black">
+                <i class="sidenav-toggler-line bg-black"></i>
+                <i class="sidenav-toggler-line bg-black"></i>
+                <i class="sidenav-toggler-line bg-black"></i>
+              </div>
+            </a>
+          </li>
+        </ul>
+      </div>
       <ul class="navbar-nav ml-auto" style="color: black;">
         <li class="nav-item dropdown" style="color: black;">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: black;"><i class="fa fa-user-circle" style="color: black;"></i></a>
