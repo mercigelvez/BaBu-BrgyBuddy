@@ -1,4 +1,5 @@
 import random
+from flask_login import current_user
 import joblib
 import json
 from nltk.tokenize import word_tokenize
@@ -33,7 +34,9 @@ def preprocess_input(user_input):
     return ' '.join(tokens)
 
 
-# Function to get response from the bot
+from apps.models import ChatHistory, Message
+from apps import db
+
 def get_response(user_input):
     cleaned_input = preprocess_input(user_input)
     intent = model.predict([cleaned_input])[0]
@@ -48,13 +51,31 @@ def get_response(user_input):
     for intent_data in data['intents']:
         if intent_data['tag'] == intent:
             if confidence > 0.2:
-                responses = intent_data['responses']
-                return random.choice(responses)
+                response = random.choice(intent_data['responses'])
             else:
-                return "I'm not quite sure. Can you please rephrase your question?"
+                response = "I'm not quite sure. Can you please rephrase your question?"
+            break
+    else:
+        response = "I'm sorry, I'm not sure how to respond to that."
 
-    return "I'm sorry, I'm not sure how to respond to that."
+    if current_user.is_authenticated:
+        user_id = current_user.id
 
+        # Get or create the chat history for the current user
+        chat_history = ChatHistory.query.filter_by(user_id=user_id).order_by(ChatHistory.id.desc()).first()
+        if not chat_history:
+            chat_history = ChatHistory(user_id=user_id)
+            db.session.add(chat_history)
+            db.session.commit()  # Commit here to get an ID for the new chat history
+
+        # Append the new message to the chat history
+        new_message_user = Message(chat_history_id=chat_history.id, sender='user', message=user_input)
+        new_message_bot = Message(chat_history_id=chat_history.id, sender='bot', message=response)
+        db.session.add(new_message_user)
+        db.session.add(new_message_bot)
+        db.session.commit()
+
+    return response
 
 if __name__ == "__main__":
     print("BaBu: Hi, I'm Babu. How can I assist you today?")

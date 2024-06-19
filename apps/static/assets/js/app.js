@@ -10,6 +10,12 @@ class Chatbox {
     this.messages = [];
   }
 
+  clearChatMessages() {
+    const chatmessages = this.args.chatBox.querySelector(".chatbox__messages");
+    chatmessages.innerHTML = '';
+    this.messages = [];
+  }
+
   display() {
     const { chatBox, sendButton, textInput } = this.args;
 
@@ -91,7 +97,7 @@ $(document).ready(function () {
   chatbox.display();
 
   // Handle "New Chat" click
-  $('a[href="#"]').click(function (e) {
+  $('#newChatButton').click(function (e) {
     e.preventDefault();
     $.ajax({
       type: 'POST',
@@ -100,8 +106,8 @@ $(document).ready(function () {
         user_id: 'current_user_id'  // Replace with the actual user ID
       },
       success: function (data) {
-        // Clear the chat container
-        $('.chatboxmessages').html('');
+        // Clear the chat messages
+        chatbox.clearChatMessages();
       },
       error: function (xhr, status, error) {
         console.error(error);
@@ -120,7 +126,7 @@ $(document).ready(function () {
       },
       success: function (data) {
         // Render the chat history in the chat container
-        var chatContainer = $('.chatboxmessages');
+        var chatContainer = $('.chatbox__messages');
         chatContainer.html('');
         var messages = data.messages;
         $.each(messages, function (index, message) {

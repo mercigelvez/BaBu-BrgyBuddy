@@ -25,6 +25,9 @@ import os
 from email.mime.image import MIMEImage
 import base64
 
+from apps.home.routes import save_current_chat_history
+from apps.models import ChatHistory
+
 s = URLSafeTimedSerializer('Thisisasecret!')
 
 from apps.authentication.util import verify_pass
@@ -124,6 +127,14 @@ def register():
 
 @blueprint.route('/logout')
 def logout():
+    user_id = current_user.id
+    save_current_chat_history(user_id)
+
+    # Create a new chat history for the user
+    chat_history = ChatHistory(user_id=user_id)
+    db.session.add(chat_history)
+    db.session.commit()
+    
     logout_user()
     return redirect(url_for('authentication_blueprint.login')) 
 
