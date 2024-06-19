@@ -61,12 +61,8 @@ def get_response(user_input):
     if current_user.is_authenticated:
         user_id = current_user.id
 
-        # Get or create the chat history for the current user
+        # Get the latest chat history for the user
         chat_history = ChatHistory.query.filter_by(user_id=user_id).order_by(ChatHistory.id.desc()).first()
-        if not chat_history:
-            chat_history = ChatHistory(user_id=user_id)
-            db.session.add(chat_history)
-            db.session.commit()  # Commit here to get an ID for the new chat history
 
         # Append the new message to the chat history
         new_message_user = Message(chat_history_id=chat_history.id, sender='user', message=user_input)

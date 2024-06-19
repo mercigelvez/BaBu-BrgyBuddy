@@ -118,16 +118,18 @@ def new_chat():
         if current_user.is_authenticated:
             user_id = current_user.id
 
-        # Save the current chat history to the database
-        save_current_chat_history(user_id)
+        # Get the user's initial message
+        initial_message = request.form.get('initial_message', '')
+
+        # Set the title to "Untitled" if initial_message is less than 20 characters
+        title = "Untitled" if len(initial_message) < 20 else initial_message[:20]
 
         # Create a new chat history for the user
-        chat_history = ChatHistory(user_id=user_id)
+        chat_history = ChatHistory(user_id=user_id, title=title)
         db.session.add(chat_history)
         db.session.commit()
 
     return jsonify({'success': True})
-
 
 def save_current_chat_history(user_id):
     # Get the current chat history for the user
@@ -144,24 +146,17 @@ def save_current_chat_history(user_id):
 
 @blueprint.route('/get_chat_history', methods=['GET'])
 def get_chat_history():
-    user_id = request.args.get('user_id')
-    if user_id:
-        if current_user.is_authenticated:
-            user_id = current_user.id
-
-        # Save the current chat history to the database
-        save_current_chat_history(user_id)
-
-        chat_history = ChatHistory.query.filter_by(user_id=user_id).order_by(ChatHistory.id.desc()).first()
+    chat_history_id = request.args.get('chat_history_id')
+    if chat_history_id:
+        chat_history = ChatHistory.query.get(chat_history_id)
         if chat_history:
-            # Serialize the Message objects to a list of dictionaries
+            # Serialize the ChatHistory object to a dictionary
             messages = [{'id': message.id, 'text': message.message, 'timestamp': message.timestamp} for message in chat_history.messages]
             return jsonify({'messages': messages})
         else:
             return jsonify({'messages': []})
     else:
-        return jsonify({'error': 'Missing user_id parameter'}), 400
-
+        return jsonify({'error': 'Missing chat_history_id parameter'}), 400
 
 from sqlalchemy.exc import IntegrityError
 import pprint

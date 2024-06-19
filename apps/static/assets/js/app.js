@@ -10,10 +10,10 @@ class Chatbox {
     this.messages = [];
   }
 
-  clearChatMessages() {
-    const chatmessages = this.args.chatBox.querySelector(".chatbox__messages");
-    chatmessages.innerHTML = '';
+  clearChatHistory() {
     this.messages = [];
+    const chatContainer = this.args.chatBox.querySelector(".chatbox__messages");
+    chatContainer.innerHTML = '';
   }
 
   display() {
@@ -34,7 +34,7 @@ class Chatbox {
     if (text1 === "") {
       return;
     }
-  
+
     // Send the message to the server
     fetch($SCRIPT_ROOT + '/predict', {
       method: 'POST',
@@ -68,7 +68,7 @@ class Chatbox {
   updateChatText(userMessage, botResponse) {
     this.messages.push({ name: 'User', message: userMessage });
     this.messages.push({ name: 'Bot', message: botResponse });
-  
+
     var html = "";
     this.messages
       .slice()
@@ -86,7 +86,7 @@ class Chatbox {
             "</div>";
         }
       });
-  
+
     const chatmessages = this.args.chatBox.querySelector(".chatbox__messages");
     chatmessages.innerHTML = html;
   }
@@ -99,15 +99,22 @@ $(document).ready(function () {
   // Handle "New Chat" click
   $('#newChatButton').click(function (e) {
     e.preventDefault();
+    const initialMessage = $('.chatbox__input').val();
+
+    chatbox.clearChatHistory();
+    
     $.ajax({
       type: 'POST',
       url: '/new_chat',
       data: {
-        user_id: 'current_user_id'  // Replace with the actual user ID
+        user_id: 'current_user_id',  // Replace with the actual user ID
+        initial_message: initialMessage
       },
       success: function (data) {
-        // Clear the chat messages
-        chatbox.clearChatMessages();
+        // Clear the chat container
+        $('.chatbox__messages').html('');
+        // Clear the input field
+        $('.chatbox__input').val('');
       },
       error: function (xhr, status, error) {
         console.error(error);
@@ -115,14 +122,15 @@ $(document).ready(function () {
     });
   });
 
-  // Handle chat history title click
-  $('a[href="#"]').click(function (e) {
+  // Handle chat history link click
+  $('a[data-chat-history-id]').click(function (e) {
     e.preventDefault();
+    const chatHistoryId = $(this).data('chat-history-id');
     $.ajax({
       type: 'GET',
       url: '/get_chat_history',
       data: {
-        user_id: 'current_user_id'  // Replace with the actual user ID
+        chat_history_id: chatHistoryId
       },
       success: function (data) {
         // Render the chat history in the chat container
@@ -130,9 +138,7 @@ $(document).ready(function () {
         chatContainer.html('');
         var messages = data.messages;
         $.each(messages, function (index, message) {
-          var sender = message.sender;
-          var content = message.message;
-          var messageElement = $('<div>').text(sender + ': ' + content);
+          var messageElement = $('<div>').text(message.id + ': ' + message.text);
           chatContainer.append(messageElement);
         });
       },

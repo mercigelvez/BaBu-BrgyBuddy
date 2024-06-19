@@ -9,23 +9,53 @@
   <hr class="horizontal dark mt-0 font-weight-bold" />
   <div class="collapse navbar-collapse w-auto" id="sidenav-collapse-main">
     <ul class="navbar-nav">
-      <!--{% if 'index' in segment %}{% endif %}-->
+      <!-- {% if 'index' in segment %}{% endif %} -->
       <li class="nav-item">
-        <button class="btn " id="newChatButton" style="background-color: white; 
+        <button class="btn" id="newChatButton" style="background-color: white; 
           border-radius: 20px; 
           width: 75%;
           box-shadow: #000;
-          margin: 10px;">
-          <span class="nav-link-text ms-1">New Chat</span>
-        </button>
+          margin: 10px;"><span class="nav-link-text ms-1">New Chat</span></button>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#" style="background-color: white; 
-          border-radius: 20px; 
-          width: 75%;
-          box-shadow: #000;
-          margin: 10px;"><span class="nav-link-text ms-1">Chat History</span></a>
-      </li>
+      {% if current_user.is_authenticated %}
+        {% for chat_history in current_user.chat_histories %}
+          <li class="nav-item">
+            <a class="nav-link px-3 py-2 d-flex align-items-center rounded-pill" href="#" data-chat-history-id="{{ chat_history.id }}" style="background-color: #f5f5f5; color: #333; text-decoration: none; transition: background-color 0.3s ease;">
+              {% if chat_history.title %}
+                {{ chat_history.title }}
+              {% else %}
+                Untitled
+              {% endif %}
+            </a>
+          </li>
+        {% endfor %}
+      {% endif %}
+      <!-- In your template -->
+      {% if current_user.chat_histories %}
+        <p>Chat histories:</p>
+        <ul>
+          {% for chat_history in current_user.chat_histories %}
+            <li>{{ chat_history.title }}</li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p>No chat histories found.</p>
+      {% endif %}
+      {% if current_user.is_authenticated %}
+        <!-- Dummy chat history instances -->
+        <li class="nav-item">
+          <a class="nav-link" href="#" data-chat-history-id="1">Dummy Chat 1</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" data-chat-history-id="2">Dummy Chat 2</a>
+        </li>
+      {% endif %}
+      <!-- In your template -->
+      {% if current_user.is_authenticated %}
+        <p>User is authenticated</p>
+      {% else %}
+        <p>User is not authenticated</p>
+      {% endif %}
     </ul>
   </div>
 </aside>
