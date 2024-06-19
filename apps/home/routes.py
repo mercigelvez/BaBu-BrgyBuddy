@@ -7,11 +7,13 @@ from jinja2 import TemplateNotFound
 from apps.chatbot.chat import get_response, preprocess_input
 from flask import Blueprint, jsonify, request, redirect, url_for, flash
 
-from apps.models import ChatHistory
+from apps.models import ChatHistory, Message
 from apps import db
 
 from apps.authentication.models import Users
 from apps.authentication.util import hash_pass, verify_pass
+
+import logging
 
 @blueprint.route('/index')
 @login_required
@@ -58,40 +60,61 @@ def get_segment(request):
         return None
     
 
+import json
+#start of changes
+predict_logger = logging.getLogger(__name__)
+
 @blueprint.route('/predict', methods=['POST'])
 def predict():
+    predict_logger.debug('Entered predict route')
     data = request.get_json()
-    if data is None:
-        return jsonify({'error': 'Invalid JSON data'}), 400
-
     user_input = data.get('message')
     user_id = data.get('user_id')
+
     if not user_input or not user_id:
+        predict_logger.error('Missing message or user_id parameter')
         return jsonify({'error': 'Missing message or user_id parameter'}), 400
+
+    predict_logger.debug(f'User input: {user_input}')
+    predict_logger.debug(f'User ID: {user_id}')
 
     cleaned_input = preprocess_input(user_input)
     response = get_response(cleaned_input)
 
-    # Save the chat history
+    if current_user.is_authenticated:
+        user_id = current_user.id
+
+     # Get or create the chat history for the current user
     chat_history = ChatHistory.query.filter_by(user_id=user_id).first()
-    if chat_history:
-        chat_history.messages += f'User: {user_input}\nBot: {response}\n'
-    else:
-        chat_history = ChatHistory(user_id, f'User: {user_input}\nBot: {response}\n')
+    if not chat_history:
+        predict_logger.debug('Creating new chat history for user')
+        chat_history = ChatHistory(user_id=user_id)
         db.session.add(chat_history)
+        db.session.commit()  # Commit here to get an ID for the new chat history
+
+    # Append the new message to the chat history
+    new_message_user = Message(chat_history_id=chat_history.id, sender='user', message=user_input)
+    new_message_bot = Message(chat_history_id=chat_history.id, sender='bot', message=response)
+    db.session.add(new_message_user)
+    db.session.add(new_message_bot)
     db.session.commit()
 
-    return jsonify({'answer': response})
+    predict_logger.debug(f'Response: {response}')
 
+    return jsonify({'answer': response})
 
 @blueprint.route('/new_chat', methods=['POST'])
 def new_chat():
     user_id = request.form.get('user_id')
     if user_id:
-        chat_history = ChatHistory.query.filter_by(user_id=user_id).first()
-        if chat_history:
-            chat_history.messages = ''  # Clear the current chat history
-            db.session.commit()
+        if current_user.is_authenticated:
+            user_id = current_user.id
+
+        # Create a new chat history for the user
+        chat_history = ChatHistory(user_id)
+        db.session.add(chat_history)
+        db.session.commit()
+
     return jsonify({'success': True})
 
 
@@ -99,10 +122,19 @@ def new_chat():
 def get_chat_history():
     user_id = request.args.get('user_id')
     if user_id:
+        if current_user.is_authenticated:
+            user_id = current_user.id
+
         chat_history = ChatHistory.query.filter_by(user_id=user_id).first()
         if chat_history:
-            return jsonify({'messages': chat_history.messages})
-    return jsonify({'messages': ''})
+            # Serialize the Message objects to a list of dictionaries
+            messages = [{'id': message.id, 'text': message.message, 'timestamp': message.timestamp} for message in chat_history.messages]
+            return jsonify({'messages': messages})
+        else:
+            return jsonify({'messages': []})
+    else:
+        return jsonify({'error': 'Missing user_id parameter'}), 400
+
 
 
 from sqlalchemy.exc import IntegrityError

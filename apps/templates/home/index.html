@@ -17,8 +17,6 @@
       width: 50px;
       height: 50px;
     }
-    
-
   </style>
 {% endblock %}
 
@@ -43,7 +41,7 @@
                 </div>
               </div>
               <div class="chatbox__footer">
-                <input type="text" class="chatbox__input" placeholder="Write a message..." oninput="this.previousElementSibling.style.display='none'" />
+                <input type="text" class="chatbox__input" placeholder="Write a message..." />
                 <button class="chatbox__send--footer send__button">Send</button>
               </div>
             </div>
@@ -51,17 +49,14 @@
         </div>
       </div>
     </div>
-    
   </main>
-
-  
 {% endblock %}
 
 <!-- Specific JS goes HERE -->
 {% block javascripts %}
   <script>
-  $SCRIPT_ROOT = {{ request.script_root|tojson }};
-</script>
+    $SCRIPT_ROOT = {{ request.script_root|tojson }};
+  </script>
   <script type="text/javascript" src="{{ url_for('static', filename='assets/js/app.js') }}"></script>
   <script>
   

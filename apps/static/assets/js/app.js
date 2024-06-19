@@ -28,49 +28,47 @@ class Chatbox {
     if (text1 === "") {
       return;
     }
-
-    let msg1 = { name: "User", message: text1 };
-    this.messages.push(msg1);
-
-    // http://127.0.0.1:5000/predict
+  
+    // Send the message to the server
     fetch($SCRIPT_ROOT + '/predict', {
       method: 'POST',
-      body: JSON.stringify({ message: text1, user_id: 'current_user_id' }),
+      body: JSON.stringify({ message: text1, user_id: 'current_user_id' }), // Replace 'current_user_id' with actual user ID
       mode: 'cors',
       headers: {
         'Content-Type': 'application/json'
       },
     })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(`HTTP error ${response.status}`);
-      }
-      return response.json();
-    })
-    .then(r => {
-      if (r.error) {
-        console.error('Error:', r.error);
-      } else {
-        let msg2 = { name: "Babu", message: r.answer };
-        this.messages.push(msg2);
-        this.updateChatText();
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(r => {
+        if (r.error) {
+          console.error('Error:', r.error);
+        } else {
+          // Update the chat text with the user's message and the bot's response
+          this.updateChatText(text1, r.answer);
+          textInput.value = '';
+        }
+      })
+      .catch((error) => {
+        console.error('Error:', error);
         textInput.value = '';
-      }
-    })
-    .catch((error) => {
-      console.error('Error:', error);
-      this.updateChatText();
-      textInput.value = '';
-    });
+      });
   }
 
-  updateChatText() {
+  updateChatText(userMessage, botResponse) {
+    this.messages.push({ name: 'User', message: userMessage });
+    this.messages.push({ name: 'Bot', message: botResponse });
+  
     var html = "";
     this.messages
       .slice()
       .reverse()
       .forEach(function (item) {
-        if (item.name === "Babu") {
+        if (item.name === "Bot") {
           html +=
             '<div class="messages__item messages__item--visitor">' +
             item.message +
@@ -82,18 +80,18 @@ class Chatbox {
             "</div>";
         }
       });
-
+  
     const chatmessages = this.args.chatBox.querySelector(".chatbox__messages");
     chatmessages.innerHTML = html;
   }
 }
 
-$(document).ready(function() {
+$(document).ready(function () {
   const chatbox = new Chatbox();
   chatbox.display();
 
   // Handle "New Chat" click
-  $('a[href="#"]').click(function(e) {
+  $('a[href="#"]').click(function (e) {
     e.preventDefault();
     $.ajax({
       type: 'POST',
@@ -101,18 +99,18 @@ $(document).ready(function() {
       data: {
         user_id: 'current_user_id'  // Replace with the actual user ID
       },
-      success: function(data) {
+      success: function (data) {
         // Clear the chat container
         $('.chatboxmessages').html('');
       },
-      error: function(xhr, status, error) {
+      error: function (xhr, status, error) {
         console.error(error);
       }
     });
   });
 
   // Handle chat history title click
-  $('a[href="#"]').click(function(e) {
+  $('a[href="#"]').click(function (e) {
     e.preventDefault();
     $.ajax({
       type: 'GET',
@@ -120,17 +118,19 @@ $(document).ready(function() {
       data: {
         user_id: 'current_user_id'  // Replace with the actual user ID
       },
-      success: function(data) {
+      success: function (data) {
         // Render the chat history in the chat container
         var chatContainer = $('.chatboxmessages');
         chatContainer.html('');
-        var messages = data.messages.split('\n');
-        $.each(messages, function(index, message) {
-          var messageElement = $('<div>').text(message);
+        var messages = data.messages;
+        $.each(messages, function (index, message) {
+          var sender = message.sender;
+          var content = message.message;
+          var messageElement = $('<div>').text(sender + ': ' + content);
           chatContainer.append(messageElement);
         });
       },
-      error: function(xhr, status, error) {
+      error: function (xhr, status, error) {
         console.error(error);
       }
     });
