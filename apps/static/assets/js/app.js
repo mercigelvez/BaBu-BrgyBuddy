@@ -38,7 +38,7 @@ class Chatbox {
     // Send the message to the server
     fetch($SCRIPT_ROOT + '/predict', {
       method: 'POST',
-      body: JSON.stringify({ message: text1, user_id: 'current_user_id' }), // Replace 'current_user_id' with actual user ID
+      body: JSON.stringify({ message: text1 }),
       mode: 'cors',
       headers: {
         'Content-Type': 'application/json'
@@ -102,12 +102,11 @@ $(document).ready(function () {
     const initialMessage = $('.chatbox__input').val();
 
     chatbox.clearChatHistory();
-    
+
     $.ajax({
       type: 'POST',
       url: '/new_chat',
       data: {
-        user_id: 'current_user_id',  // Replace with the actual user ID
         initial_message: initialMessage
       },
       success: function (data) {

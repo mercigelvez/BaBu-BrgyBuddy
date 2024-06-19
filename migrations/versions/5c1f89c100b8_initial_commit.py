@@ -1,8 +1,8 @@
-"""initial migration
+"""initial commit
 
-Revision ID: 295c5754a239
+Revision ID: 5c1f89c100b8
 Revises: 
-Create Date: 2024-06-19 09:56:13.850827
+Create Date: 2024-06-19 15:57:25.476038
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '295c5754a239'
+revision = '5c1f89c100b8'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -29,8 +29,10 @@ def upgrade():
     )
     op.create_table('chat_history',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('user_id', sa.String(length=100), nullable=False),
+    sa.Column('title', sa.String(length=100), nullable=False),
+    sa.Column('user_id', sa.Integer(), nullable=False),
     sa.Column('timestamp', sa.DateTime(), nullable=True),
+    sa.ForeignKeyConstraint(['user_id'], ['Users.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('message',

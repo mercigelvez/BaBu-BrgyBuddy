@@ -30,32 +30,6 @@
           </li>
         {% endfor %}
       {% endif %}
-      <!-- In your template -->
-      {% if current_user.chat_histories %}
-        <p>Chat histories:</p>
-        <ul>
-          {% for chat_history in current_user.chat_histories %}
-            <li>{{ chat_history.title }}</li>
-          {% endfor %}
-        </ul>
-      {% else %}
-        <p>No chat histories found.</p>
-      {% endif %}
-      {% if current_user.is_authenticated %}
-        <!-- Dummy chat history instances -->
-        <li class="nav-item">
-          <a class="nav-link" href="#" data-chat-history-id="1">Dummy Chat 1</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#" data-chat-history-id="2">Dummy Chat 2</a>
-        </li>
-      {% endif %}
-      <!-- In your template -->
-      {% if current_user.is_authenticated %}
-        <p>User is authenticated</p>
-      {% else %}
-        <p>User is not authenticated</p>
-      {% endif %}
     </ul>
   </div>
 </aside>

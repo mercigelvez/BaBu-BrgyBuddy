@@ -1,10 +1,11 @@
 from datetime import datetime
 from apps import db
+from .authentication.models import Users
 
 class ChatHistory(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
-    user_id = db.Column(db.String(100), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('Users.id'), nullable=False)
     messages = db.relationship('Message', backref='chat_history', lazy=True)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
 

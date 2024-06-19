@@ -74,9 +74,10 @@ def predict():
     user_input = data.get("message")
     user_id = data.get("user_id")
 
-    if not user_input or not user_id:
-        predict_logger.error("Missing message or user_id parameter")
-        return jsonify({"error": "Missing message or user_id parameter"}), 400
+    if current_user.is_authenticated:
+        user_id = current_user.id
+    else:
+        return jsonify({"error": "User not authenticated"}), 401
 
     predict_logger.debug(f"User input: {user_input}")
     predict_logger.debug(f"User ID: {user_id}")
@@ -87,13 +88,12 @@ def predict():
     if current_user.is_authenticated:
         user_id = current_user.id
 
-    # Get or create the chat history for the current user
-    chat_history = ChatHistory.query.filter_by(user_id=user_id).first()
+   # Get or create the chat history for the current user
+    chat_history = ChatHistory.query.filter_by(user_id=user_id).order_by(ChatHistory.id.desc()).first()
     if not chat_history:
-        predict_logger.debug("Creating new chat history for user")
-        chat_history = ChatHistory(user_id=user_id)
+        chat_history = ChatHistory(user_id=user_id, title="Untitled")
         db.session.add(chat_history)
-        db.session.commit()  # Commit here to get an ID for the new chat history
+        db.session.commit()
 
     # Append the new message to the chat history
     new_message_user = Message(
@@ -113,23 +113,18 @@ def predict():
 
 @blueprint.route('/new_chat', methods=['POST'])
 def new_chat():
-    user_id = request.form.get('user_id')
-    if user_id:
-        if current_user.is_authenticated:
-            user_id = current_user.id
-
-        # Get the user's initial message
+    if current_user.is_authenticated:
+        user_id = current_user.id
         initial_message = request.form.get('initial_message', '')
-
-        # Set the title to "Untitled" if initial_message is less than 20 characters
         title = "Untitled" if len(initial_message) < 20 else initial_message[:20]
 
-        # Create a new chat history for the user
         chat_history = ChatHistory(user_id=user_id, title=title)
         db.session.add(chat_history)
         db.session.commit()
 
-    return jsonify({'success': True})
+        return jsonify({'success': True})
+    else:
+        return jsonify({'error': 'User not authenticated'}), 401
 
 def save_current_chat_history(user_id):
     # Get the current chat history for the user
@@ -150,8 +145,7 @@ def get_chat_history():
     if chat_history_id:
         chat_history = ChatHistory.query.get(chat_history_id)
         if chat_history:
-            # Serialize the ChatHistory object to a dictionary
-            messages = [{'id': message.id, 'text': message.message, 'timestamp': message.timestamp} for message in chat_history.messages]
+            messages = [{'id': message.id, 'text': message.message, 'sender': message.sender, 'timestamp': message.timestamp} for message in chat_history.messages]
             return jsonify({'messages': messages})
         else:
             return jsonify({'messages': []})
