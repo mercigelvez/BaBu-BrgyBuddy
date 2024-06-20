@@ -58,27 +58,7 @@ def get_response(user_input):
     else:
         response = "I'm sorry, I'm not sure how to respond to that."
 
-    if current_user.is_authenticated:
-        user_id = current_user.id
-
-        # Get the latest chat history for the user
-        chat_history = ChatHistory.query.filter_by(user_id=user_id).order_by(ChatHistory.id.desc()).first()
-
-        # If no chat history exists, create a new one
-        if not chat_history:
-            chat_history = ChatHistory(user_id=user_id, title="Untitled")
-            db.session.add(chat_history)
-            db.session.commit()
-
-        # Append the new message to the chat history
-        new_message_user = Message(chat_history_id=chat_history.id, sender='user', message=user_input)
-        new_message_bot = Message(chat_history_id=chat_history.id, sender='bot', message=response)
-        db.session.add(new_message_user)
-        db.session.add(new_message_bot)
-        db.session.commit()
-
     return response
-
 if __name__ == "__main__":
     print("BaBu: Hi, I'm Babu. How can I assist you today?")
     while True:
