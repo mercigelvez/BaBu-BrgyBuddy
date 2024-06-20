@@ -88,23 +88,23 @@ def predict():
     if current_user.is_authenticated:
         user_id = current_user.id
 
-   # Get or create the chat history for the current user
-    chat_history = ChatHistory.query.filter_by(user_id=user_id).order_by(ChatHistory.id.desc()).first()
-    if not chat_history:
-        chat_history = ChatHistory(user_id=user_id, title="Untitled")
-        db.session.add(chat_history)
-        db.session.commit()
+        # Get or create the chat history for the current user
+        chat_history = ChatHistory.query.filter_by(user_id=user_id).order_by(ChatHistory.id.desc()).first()
+        if not chat_history:
+            chat_history = ChatHistory(user_id=user_id, title="Untitled")
+            db.session.add(chat_history)
+            db.session.commit()
 
-    # Append the new message to the chat history
-    new_message_user = Message(
-        chat_history_id=chat_history.id, sender="user", message=user_input
-    )
-    new_message_bot = Message(
-        chat_history_id=chat_history.id, sender="bot", message=response
-    )
-    db.session.add(new_message_user)
-    db.session.add(new_message_bot)
-    db.session.commit()
+        # Append the new message to the chat history
+        new_message_user = Message(
+            chat_history_id=chat_history.id, sender="user", message=user_input
+        )
+        new_message_bot = Message(
+            chat_history_id=chat_history.id, sender="Bot", message=response
+        )
+        db.session.add(new_message_user)
+        db.session.add(new_message_bot)
+        db.session.commit()
 
     predict_logger.debug(f"Response: {response}")
 
@@ -145,13 +145,14 @@ def get_chat_history():
     if chat_history_id:
         chat_history = ChatHistory.query.get(chat_history_id)
         if chat_history:
-            messages = [{'id': message.id, 'text': message.message, 'sender': message.sender, 'timestamp': message.timestamp} for message in chat_history.messages]
+            messages = [{'sender': message.sender, 'message': message.message} for message in chat_history.messages]
             return jsonify({'messages': messages})
         else:
             return jsonify({'messages': []})
     else:
         return jsonify({'error': 'Missing chat_history_id parameter'}), 400
-
+    
+    
 from sqlalchemy.exc import IntegrityError
 import pprint
 

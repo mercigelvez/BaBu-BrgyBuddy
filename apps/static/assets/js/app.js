@@ -18,14 +18,13 @@ class Chatbox {
 
   display() {
     const { chatBox, sendButton, textInput } = this.args;
-
+  
     sendButton.addEventListener("click", () => this.onSendButton());
-
-    textInput.addEventListener("keyup", ({ key }) => {
-      if (key === "Enter") {
-        this.onSendButton();
-      }
-    });
+  
+    // Set the data-event-listener attribute for the textInput
+    const handleUserInputNew = handleUserInput.bind(null);
+    textInput.setAttribute('data-event-listener', handleUserInputNew);
+    textInput.addEventListener("keyup", handleUserInputNew);
   }
 
   onSendButton() {
@@ -66,29 +65,28 @@ class Chatbox {
   }
 
   updateChatText(userMessage, botResponse) {
-    this.messages.push({ name: 'User', message: userMessage });
-    this.messages.push({ name: 'Bot', message: botResponse });
-
-    var html = "";
-    this.messages
-      .slice()
-      .reverse()
-      .forEach(function (item) {
-        if (item.name === "Bot") {
-          html +=
-            '<div class="messages__item messages__item--visitor">' +
-            item.message +
-            "</div>";
-        } else {
-          html +=
-            '<div class="messages__item messages__item--operator">' +
-            item.message +
-            "</div>";
-        }
-      });
-
+    const newUserMessage = { name: 'User', message: userMessage };
+    const newBotMessage = { name: 'Bot', message: botResponse };
+  
+    this.messages.push(newUserMessage);
+    this.messages.push(newBotMessage);
+  
     const chatmessages = this.args.chatBox.querySelector(".chatbox__messages");
-    chatmessages.innerHTML = html;
+    chatmessages.innerHTML = ''; // Clear existing messages
+  
+    this.messages.forEach(function (item) {
+      const messageElement = document.createElement('div');
+      messageElement.classList.add('messages__item');
+  
+      if (item.name === "Bot") {
+        messageElement.classList.add('messages__item--visitor');
+      } else {
+        messageElement.classList.add('messages__item--operator');
+      }
+  
+      messageElement.textContent = item.message;
+      chatmessages.appendChild(messageElement);
+    });
   }
 }
 
@@ -121,29 +119,111 @@ $(document).ready(function () {
     });
   });
 
-  // Handle chat history link click
   $('a[data-chat-history-id]').click(function (e) {
     e.preventDefault();
     const chatHistoryId = $(this).data('chat-history-id');
-    $.ajax({
-      type: 'GET',
-      url: '/get_chat_history',
-      data: {
-        chat_history_id: chatHistoryId
-      },
-      success: function (data) {
-        // Render the chat history in the chat container
-        var chatContainer = $('.chatbox__messages');
-        chatContainer.html('');
-        var messages = data.messages;
-        $.each(messages, function (index, message) {
-          var messageElement = $('<div>').text(message.id + ': ' + message.text);
-          chatContainer.append(messageElement);
-        });
-      },
-      error: function (xhr, status, error) {
-        console.error(error);
-      }
-    });
+
+    // Make an AJAX request to retrieve chat history
+    fetch(`/get_chat_history?chat_history_id=${chatHistoryId}`)
+      .then(response => response.json())
+      .then(data => {
+        if (data.error) {
+          console.error(data.error);
+        } else {
+          // Update the chatbox with the chat history messages
+          updateChatboxWithHistory(data.messages);
+
+          // Set up event listeners for new user input
+          const textInput = document.querySelector('.chatbox__input');
+          textInput.addEventListener('keyup', handleUserInput);
+        }
+      })
+      .catch(error => console.error(error));
   });
+
 });
+
+function updateChatboxWithHistory(messages) {
+  const chatContainer = document.querySelector('.chatbox__messages');
+  chatContainer.innerHTML = ''; // Clear existing messages
+
+  messages.forEach(({ sender, message }) => {
+    const messageElement = document.createElement('div');
+    messageElement.classList.add('messages__item');
+    messageElement.classList.add(sender === 'user' ? 'messages__item--operator' : 'messages__item--visitor');
+    messageElement.textContent = message;
+    chatContainer.appendChild(messageElement);
+  });
+
+  // Remove existing event listener if present
+  const textInput = document.querySelector('.chatbox__input');
+  const handleUserInputExisting = textInput.getAttribute('data-event-listener');
+  if (handleUserInputExisting) {
+    textInput.removeEventListener('keyup', handleUserInputExisting);
+  }
+
+  // Set up event listener for new user input
+  const handleUserInputNew = handleUserInput.bind(null);
+  textInput.setAttribute('data-event-listener', handleUserInputNew);
+  textInput.addEventListener('keyup', handleUserInputNew);
+}
+
+function handleUserInput(event) {
+  if (event.key === 'Enter') {
+    const textInput = event.target;
+    const userMessage = textInput.value.trim();
+
+    if (userMessage) {
+      sendMessageToServer(userMessage);
+      textInput.value = '';
+    }
+  }
+}
+
+function sendMessageToServer(userMessage) {
+  fetch('/predict', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ message: userMessage })
+  })
+    .then(response => response.json())
+    .then(data => {
+      if (data.error) {
+        console.error(data.error);
+      } else {
+        appendMessageToChatbox('user', userMessage);
+        appendMessageToChatbox('bot', data.answer);
+      }
+    })
+    .catch(error => console.error(error));
+}
+
+function appendMessageToChatbox(sender, message) {
+  const chatContainer = document.querySelector('.chatbox__messages');
+  const messageElement = document.createElement('div');
+  messageElement.classList.add('messages__item');
+  messageElement.classList.add(sender === 'user' ? 'messages__item--operator' : 'messages__item--visitor');
+  messageElement.textContent = message;
+  chatContainer.appendChild(messageElement);
+  chatContainer.scrollTop = chatContainer.scrollHeight;
+}
+
+function updateChatboxWithHistory(messages) {
+  const chatContainer = document.querySelector('.chatbox__messages');
+  chatContainer.innerHTML = ''; // Clear existing messages
+
+  messages.forEach(({ sender, message }) => {
+    const messageElement = document.createElement('div');
+    messageElement.classList.add('messages__item');
+    messageElement.classList.add(sender === 'user' ? 'messages__item--operator' : 'messages__item--visitor');
+    messageElement.textContent = message;
+    chatContainer.appendChild(messageElement);
+  });
+
+  // Set up event listener for new user input
+  const textInput = document.querySelector('.chatbox__input');
+  textInput.addEventListener('keyup', handleUserInput);
+}
+
