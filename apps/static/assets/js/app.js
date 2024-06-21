@@ -89,7 +89,7 @@ class Chatbox {
     // Scroll to the top of the chat container
     chatmessages.scrollTop = 0;
   }
-  
+
   updateChatText(userMessage, botResponse) {
     this.addMessage('User', userMessage);
     this.addMessage('Bot', botResponse);
@@ -108,6 +108,7 @@ class Chatbox {
       this.addMessage(sender === 'user' ? 'User' : 'Bot', message);
     });
   }
+  
 }
 
 let chatbox;
@@ -118,22 +119,28 @@ $(document).ready(function () {
   // Handle "New Chat" click
   $('#newChatButton').click(function (e) {
     e.preventDefault();
+    const initialMessage = $('.chatbox__input').val();
+
+    // Clear the chat history in the UI
     chatbox.clearChatHistory();
 
+    // Send request to create a new chat session
     $.ajax({
       type: 'POST',
       url: '/new_chat',
-      data: {
-        initial_message: initialMessage
-      },
+      data: JSON.stringify({ initial_message: initialMessage }),
+      contentType: 'application/json',
       success: function (data) {
-        // Clear the chat container
-        $('.chatbox__messages').html('');
         // Clear the input field
         $('.chatbox__input').val('');
+
+        // If there's an initial message, send it to the new chat
+        if (initialMessage.trim() !== '') {
+          chatbox.sendMessageToServer(initialMessage);
+        }
       },
       error: function (xhr, status, error) {
-        console.error(error);
+        console.error('Error creating new chat:', error);
       }
     });
   });
