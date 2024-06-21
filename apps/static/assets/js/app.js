@@ -8,36 +8,49 @@ class Chatbox {
 
     this.state = false;
     this.messages = [];
+    this.init();
   }
 
-  clearChatHistory() {
-    this.messages = [];
-    const chatContainer = this.args.chatBox.querySelector(".chatbox__messages");
-    chatContainer.innerHTML = '';
+  init() {
+    this.display();
+    this.args.sendButton.addEventListener("click", () => this.onSendButton());
+    this.args.textInput.addEventListener("keyup", (event) => this.onEnterPress(event));
   }
 
   display() {
     const { chatBox, sendButton, textInput } = this.args;
-  
+
+    // Remove any existing event listeners
+    sendButton.removeEventListener("click", () => this.onSendButton());
+    textInput.removeEventListener("keyup", (event) => this.onEnterPress(event));
+
+    // Add new event listeners
     sendButton.addEventListener("click", () => this.onSendButton());
-  
-    // Set the data-event-listener attribute for the textInput
-    const handleUserInputNew = handleUserInput.bind(null);
-    textInput.setAttribute('data-event-listener', handleUserInputNew);
-    textInput.addEventListener("keyup", handleUserInputNew);
+    textInput.addEventListener("keyup", (event) => this.onEnterPress(event));
+  }
+
+  onEnterPress(event) {
+    if (event.keyCode === 13) {
+      this.onSendButton();
+    }
   }
 
   onSendButton() {
     const textInput = this.args.textInput;
-    let text1 = textInput.value;
-    if (text1 === "") {
+    const userMessage = textInput.value.trim();
+    if (userMessage === "") {
       return;
     }
 
-    // Send the message to the server
+    this.addMessage('User', userMessage);
+    this.sendMessageToServer(userMessage);
+    textInput.value = '';
+  }
+
+  sendMessageToServer(userMessage) {
     fetch($SCRIPT_ROOT + '/predict', {
       method: 'POST',
-      body: JSON.stringify({ message: text1 }),
+      body: JSON.stringify({ message: userMessage }),
       mode: 'cors',
       headers: {
         'Content-Type': 'application/json'
@@ -49,56 +62,62 @@ class Chatbox {
         }
         return response.json();
       })
-      .then(r => {
-        if (r.error) {
-          console.error('Error:', r.error);
+      .then(data => {
+        if (data.error) {
+          console.error('Error:', data.error);
         } else {
-          // Update the chat text with the user's message and the bot's response
-          this.updateChatText(text1, r.answer);
-          textInput.value = '';
+          this.addMessage('Bot', data.answer);
         }
       })
       .catch((error) => {
         console.error('Error:', error);
-        textInput.value = '';
       });
   }
 
-  updateChatText(userMessage, botResponse) {
-    const newUserMessage = { name: 'User', message: userMessage };
-    const newBotMessage = { name: 'Bot', message: botResponse };
-  
-    this.messages.push(newUserMessage);
-    this.messages.push(newBotMessage);
-  
+  addMessage(sender, message) {
+    this.messages.push({ sender, message });
+
     const chatmessages = this.args.chatBox.querySelector(".chatbox__messages");
-    chatmessages.innerHTML = ''; // Clear existing messages
+    const messageElement = document.createElement('div');
+    messageElement.classList.add('messages__item');
+    messageElement.classList.add(sender === 'User' ? 'messages__item--operator' : 'messages__item--visitor');
+    messageElement.textContent = message;
+
+    // Insert the new message at the beginning of the chat container
+    chatmessages.insertBefore(messageElement, chatmessages.firstChild);
+
+    // Scroll to the top of the chat container
+    chatmessages.scrollTop = 0;
+  }
   
-    this.messages.forEach(function (item) {
-      const messageElement = document.createElement('div');
-      messageElement.classList.add('messages__item');
-  
-      if (item.name === "Bot") {
-        messageElement.classList.add('messages__item--visitor');
-      } else {
-        messageElement.classList.add('messages__item--operator');
-      }
-  
-      messageElement.textContent = item.message;
-      chatmessages.appendChild(messageElement);
+  updateChatText(userMessage, botResponse) {
+    this.addMessage('User', userMessage);
+    this.addMessage('Bot', botResponse);
+  }
+
+  clearChatHistory() {
+    this.messages = [];
+    const chatContainer = this.args.chatBox.querySelector(".chatbox__messages");
+    chatContainer.innerHTML = '';
+    chatContainer.scrollTop = 0;
+  }
+
+  loadChatHistory(messages) {
+    this.clearChatHistory();
+    messages.forEach(({ sender, message }) => {
+      this.addMessage(sender === 'user' ? 'User' : 'Bot', message);
     });
   }
 }
 
+let chatbox;
+
 $(document).ready(function () {
   const chatbox = new Chatbox();
-  chatbox.display();
 
   // Handle "New Chat" click
   $('#newChatButton').click(function (e) {
     e.preventDefault();
-    const initialMessage = $('.chatbox__input').val();
-
     chatbox.clearChatHistory();
 
     $.ajax({
@@ -119,6 +138,7 @@ $(document).ready(function () {
     });
   });
 
+  // Handle loading chat history
   $('a[data-chat-history-id]').click(function (e) {
     e.preventDefault();
     const chatHistoryId = $(this).data('chat-history-id');
@@ -130,12 +150,7 @@ $(document).ready(function () {
         if (data.error) {
           console.error(data.error);
         } else {
-          // Update the chatbox with the chat history messages
-          updateChatboxWithHistory(data.messages);
-
-          // Set up event listeners for new user input
-          const textInput = document.querySelector('.chatbox__input');
-          textInput.addEventListener('keyup', handleUserInput);
+          chatbox.loadChatHistory(data.messages);
         }
       })
       .catch(error => console.error(error));
@@ -181,6 +196,11 @@ function handleUserInput(event) {
 }
 
 function sendMessageToServer(userMessage) {
+  if (!chatbox) {
+    console.error('Chatbox instance not initialized');
+    return;
+  }
+
   fetch('/predict', {
     method: 'POST',
     headers: {
@@ -193,11 +213,13 @@ function sendMessageToServer(userMessage) {
       if (data.error) {
         console.error(data.error);
       } else {
-        appendMessageToChatbox('user', userMessage);
-        appendMessageToChatbox('bot', data.answer);
+        chatbox.addMessage('User', userMessage);
+        chatbox.addMessage('Bot', data.answer);
       }
     })
-    .catch(error => console.error(error));
+    .catch(error => {
+      console.error('Error:', error);
+    });
 }
 
 function appendMessageToChatbox(sender, message) {
@@ -211,19 +233,19 @@ function appendMessageToChatbox(sender, message) {
 }
 
 function updateChatboxWithHistory(messages) {
+  if (!chatbox) {
+    console.error('Chatbox instance not initialized');
+    return;
+  }
+
   const chatContainer = document.querySelector('.chatbox__messages');
   chatContainer.innerHTML = ''; // Clear existing messages
 
   messages.forEach(({ sender, message }) => {
-    const messageElement = document.createElement('div');
-    messageElement.classList.add('messages__item');
-    messageElement.classList.add(sender === 'user' ? 'messages__item--operator' : 'messages__item--visitor');
-    messageElement.textContent = message;
-    chatContainer.appendChild(messageElement);
+    chatbox.addMessage(sender === 'user' ? 'User' : 'Bot', message);
   });
 
   // Set up event listener for new user input
   const textInput = document.querySelector('.chatbox__input');
   textInput.addEventListener('keyup', handleUserInput);
 }
-
