@@ -25,6 +25,9 @@ import os
 from email.mime.image import MIMEImage
 import base64
 
+from apps.home.routes import save_current_chat_history
+from apps.models import ChatHistory
+
 s = URLSafeTimedSerializer('Thisisasecret!')
 
 from apps.authentication.util import verify_pass

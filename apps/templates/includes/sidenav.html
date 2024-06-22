@@ -9,6 +9,7 @@
   <hr class="horizontal dark mt-0 font-weight-bold" />
   <div class="collapse navbar-collapse w-auto" id="sidenav-collapse-main">
     <ul class="navbar-nav">
+      <!-- {% if 'index' in segment %}{% endif %} -->
       <li class="nav-item">
         <button class="btn" id="newChatButton" style="background-color: white; 
           border-radius: 20px; 
@@ -36,6 +37,19 @@
         {% endfor %}
       {% endif %}
       </li>
+      {% if current_user.is_authenticated %}
+        {% for chat_history in current_user.chat_histories %}
+          <li class="nav-item">
+            <a class="nav-link px-3 py-2 d-flex align-items-center rounded-pill" href="#" data-chat-history-id="{{ chat_history.id }}" style="background-color: #f5f5f5; color: #333; text-decoration: none; transition: background-color 0.3s ease;">
+              {% if chat_history.title %}
+                {{ chat_history.title }}
+              {% else %}
+                Untitled
+              {% endif %}
+            </a>
+          </li>
+        {% endfor %}
+      {% endif %}
     </ul>
   </div>
 </aside>

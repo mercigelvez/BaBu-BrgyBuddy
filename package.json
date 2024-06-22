@@ -1,5 +1,5 @@
 {
-    "name": "BaBu Brgy Buddy",
+    "name": "BaBu-BrgyBuddy",
     "mastertemplate": "BaBu - Brgy. Buddy",
     "version": "2stable.0.1",
     "description": "Assistant Chabot for Brgy",
@@ -9,12 +9,20 @@
     },
     "bugs": {
         "url": "https://github.com/mercigelvez/BaBu-BrgyBuddy/issues",
-        "email": "support@appseed.us"
+        "email": "babu.brgybuddy@gmail.com"
     },
     "author": "Team BaBu",
     "engines": {
         "node": ">=10.0.0"
     },
     "dependencies": {},
-    "devDependencies": {}
+    "devDependencies": {},
+    "release": {
+    "branches": ["dev"],
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/github"
+    ]
+  }
 }
