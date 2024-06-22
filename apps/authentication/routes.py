@@ -127,14 +127,6 @@ def register():
 
 @blueprint.route('/logout')
 def logout():
-    user_id = current_user.id
-    save_current_chat_history(user_id)
-
-    # Create a new chat history for the user
-    chat_history = ChatHistory(user_id=user_id)
-    db.session.add(chat_history)
-    db.session.commit()
-    
     logout_user()
     return redirect(url_for('authentication_blueprint.login')) 
 

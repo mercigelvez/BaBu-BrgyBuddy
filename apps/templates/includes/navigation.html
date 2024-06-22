@@ -1,4 +1,4 @@
-<nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur" data-scroll="false">
+<nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl navbar-dark" id="navbarBlur" data-scroll="false">
   <div class="container-fluid py-1 px-3">
     <nav aria-label="breadcrumb">
       <h6 class="text-black mb-0 fs-3">Barangay Buddy - BaBu</h6>
@@ -8,12 +8,12 @@
         <!-- to make the next icons to stay on right -->
       </div>
       <ul class="navbar-nav justify-content-end">
-        <li class="nav-item ps-3 d-flex align-items-center text-black">
-          <a href="javascript:;" class="nav-link text-black p-0" id="iconNavbarSidenav">
-            <div class="sidenav-toggler-inner text-black">
-              <i class="sidenav-toggler-line bg-white"></i>
-              <i class="sidenav-toggler-line bg-white"></i>
-              <i class="sidenav-toggler-line bg-white"></i>
+        <li class="nav-item ps-3 d-flex align-items-center">
+          <a href="javascript:;" class="nav-linkp-0" id="iconNavbarSidenav">
+            <div class="sidenav-toggler-inner">
+              <i class="sidenav-toggler-line"></i>
+              <i class="sidenav-toggler-line"></i>
+              <i class="sidenav-toggler-line"></i>
             </div>
           </a>
         </li>
@@ -22,7 +22,6 @@
         <li class="nav-item dropdown" style="color: black;">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: black;"><i class="fa fa-user-circle" style="color: black;"></i></a>
           <div class="dropdown-menu dropdown-menu-right custom-dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#feedbackModal"><i class="fas fa-comment-dots"></i> Feedback</a>
             <a class="dropdown-item" href="#" data-target="#profileModal" data-toggle="modal"><i class="fas fa-user"></i> Profile</a>
             <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal"><i class="fas fa-sign-out-alt"></i> Logout</a>
           </div>
@@ -161,29 +160,7 @@
 <script src="{{ config.ASSETS_ROOT }}/js/profile.js"></script>
 
 
-<style>
-  .custom-dropdown-menu {
-    position: absolute !important;
-    left: -100px !important;
-    top: -100px !important; /* Adjust this value to your liking */
-  }
-  
-  /* Small devices (landscape phones, less than 576px) */
-  @media (max-width: 575.98px) {
-    .custom-dropdown-menu {
-      left: auto !important;
-      top: auto !important;
-    }
-  }
-  
-  /* Medium devices (tablets, less than 768px) */
-  @media (max-width: 767.98px) {
-    .custom-dropdown-menu {
-      left: -5px !important;
-      top: -10px !important;
-    }
-  }
-</style>
+
 
 <script>
   $(document).ready(function () {
