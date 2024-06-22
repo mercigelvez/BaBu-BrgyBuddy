@@ -84,7 +84,7 @@
           </div>
         </div>
         <div class="modal-footer ml-auto">
-          <button type="submit" class="btn ml-auto" id="saveChangesBtn" style="background-color: 000; color: white;" disabled>Save Changes</button>
+          <button type="submit" class="btn ml-auto" id="saveChangesBtn" style="background-color: black; color: white;" disabled>Save Changes</button>
         </div>
       </form>
     </div>
@@ -119,7 +119,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="saveChangesModalLabel">Changes Saved</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -188,19 +188,6 @@
 </style>
 
 <script>
-  $(document).ready(function () {
-    // When the Send button is clicked...
-    $('#feedbackModal .btn-primary').click(function () {
-      // Get the feedback type and text
-      var feedbackType = $('input[name="feedbackType"]:checked').val()
-      var feedbackText = $('#feedbackText').val()
-  
-      // TODO: Send the feedback to your server
-      console.log('Feedback type: ' + feedbackType)
-      console.log('Feedback text: ' + feedbackText)
-    })
-  })
-  
   $(document).ready(function () {
     $('#editProfileBtn').click(function () {
       $('#nameInput, #emailInput, #currentPasswordInput, #newPasswordInput, #saveChangesBtn').removeAttr('disabled')
