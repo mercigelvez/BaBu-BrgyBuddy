@@ -1,7 +1,4 @@
 # -*- encoding: utf-8 -*-
-"""
-Copyright (c) 2019 - present AppSeed.us
-"""
 
 from flask_login import UserMixin
 
@@ -17,6 +14,7 @@ class Users(db.Model, UserMixin):
     username = db.Column(db.String(64), unique=True)
     email = db.Column(db.String(64), unique=True)
     password = db.Column(db.LargeBinary)
+    chat_histories = db.relationship('ChatHistory', backref='user', lazy='dynamic')
 
     def __init__(self, **kwargs):
         for property, value in kwargs.items():
