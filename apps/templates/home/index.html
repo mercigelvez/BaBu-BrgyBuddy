@@ -18,7 +18,26 @@
       height: 50px;
     }
     
+    .modal-fullscreen {
+      padding: 0 !important;
+    }
 
+    .modal-fullscreen .modal-dialog {
+      width: 100%;
+      max-width: none;
+      height: 100%;
+      margin: 0;
+    }
+
+    .modal-fullscreen .modal-content {
+      height: 100%;
+      border: 0;
+      border-radius: 0;
+    }
+
+    .modal-fullscreen .modal-body {
+      overflow-y: auto;
+    }
   </style>
 {% endblock %}
 
@@ -72,4 +91,7 @@
     }
   });
 </script>
+
+ 
+
 {% endblock %}

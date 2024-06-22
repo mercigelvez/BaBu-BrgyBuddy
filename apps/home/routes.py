@@ -20,7 +20,6 @@ import logging
 @blueprint.route("/index")
 @login_required
 def index():
-
     return render_template("home/index.html", segment="index")
 
 
@@ -228,3 +227,38 @@ def check_current_password():
     is_valid = verify_pass(current_password, stored_password_hash)
 
     return jsonify({"is_valid": is_valid})
+
+
+@blueprint.route('/rename_chat/<int:chat_id>', methods=['POST'])
+@login_required
+def rename_chat(chat_id):
+    chat = ChatHistory.query.get_or_404(chat_id)
+    if chat.user_id != current_user.id:
+        return jsonify({'success': False, 'message': 'Unauthorized'}), 403
+    
+    new_title = request.json.get('title')
+    chat.title = new_title
+    db.session.commit()
+    return jsonify({'success': True})
+
+from sqlalchemy.exc import SQLAlchemyError
+
+@blueprint.route('/delete_chat/<int:chat_id>', methods=['POST'])
+@login_required
+def delete_chat(chat_id):
+    try:
+        chat = ChatHistory.query.get_or_404(chat_id)
+        if chat.user_id != current_user.id:
+            return jsonify({'success': False, 'message': 'Unauthorized'}), 403
+        
+        # Delete associated messages first
+        Message.query.filter_by(chat_history_id=chat.id).delete()
+        
+        db.session.delete(chat)
+        db.session.commit()
+        return jsonify({'success': True})
+    except SQLAlchemyError as e:
+        db.session.rollback()
+        return jsonify({'success': False, 'message': str(e)}), 500
+    except Exception as e:
+        return jsonify({'success': False, 'message': str(e)}), 500
