@@ -3,7 +3,7 @@
     {% for chat_history in current_user.chat_histories %}
         <!-- Rename Chat Modal -->
         <div class="modal fade" id="renameChatModal{{ chat_history.id }}" tabindex="-1" aria-labelledby="renameChatModalLabel{{ chat_history.id }}" aria-hidden="true">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="renameChatModalLabel{{ chat_history.id }}">Rename Chat</h5>
@@ -23,7 +23,7 @@
         <!-- Delete Chat Modal -->
         <div class="modal fade" id="deleteChatModal{{ chat_history.id }}" tabindex="-1" aria-labelledby="deleteChatModalLabel{{ chat_history.id }}" aria-hidden="true">
             <div class="modal-dialog">
-                <div class="modal-content">
+                <div class="modal-content modal-dialog-centered">
                     <div class="modal-header">
                         <h5 class="modal-title" id="deleteChatModalLabel{{ chat_history.id }}">Delete Chat</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
