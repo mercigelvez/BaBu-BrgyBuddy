@@ -256,4 +256,3 @@ function updateChatboxWithHistory(messages) {
   const textInput = document.querySelector('.chatbox__input');
   textInput.addEventListener('keyup', handleUserInput);
 }
-

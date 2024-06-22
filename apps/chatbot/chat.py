@@ -1,5 +1,4 @@
 import random
-from flask_login import current_user
 import joblib
 import json
 from nltk.tokenize import word_tokenize
@@ -34,9 +33,7 @@ def preprocess_input(user_input):
     return ' '.join(tokens)
 
 
-from apps.models import ChatHistory, Message
-from apps import db
-
+# Function to get response from the bot
 def get_response(user_input):
     cleaned_input = preprocess_input(user_input)
     intent = model.predict([cleaned_input])[0]
@@ -51,14 +48,14 @@ def get_response(user_input):
     for intent_data in data['intents']:
         if intent_data['tag'] == intent:
             if confidence > 0.2:
-                response = random.choice(intent_data['responses'])
+                responses = intent_data['responses']
+                return random.choice(responses)
             else:
-                response = "I'm not quite sure. Can you please rephrase your question?"
-            break
-    else:
-        response = "I'm sorry, I'm not sure how to respond to that."
+                return "I'm not quite sure. Can you please rephrase your question?"
 
-    return response
+    return "I'm sorry, I'm not sure how to respond to that."
+
+
 if __name__ == "__main__":
     print("BaBu: Hi, I'm Babu. How can I assist you today?")
     while True:

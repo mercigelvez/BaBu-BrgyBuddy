@@ -30,7 +30,6 @@
     </div>
   </div>
    <!-- Profile Modal -->
-
 <div class="modal fade" id="profileModal" tabindex="-1" role="dialog" aria-labelledby="profileModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
@@ -85,7 +84,7 @@
           </div>
         </div>
         <div class="modal-footer ml-auto">
-          <button type="submit" class="btn ml-auto" id="saveChangesBtn" style="background-color: #000; color: white;" disabled>Save Changes</button>
+          <button type="submit" class="btn ml-auto" id="saveChangesBtn" style="background-color: 000; color: white;" disabled>Save Changes</button>
         </div>
       </form>
     </div>
@@ -164,6 +163,29 @@
 
 
 
+<style>
+  .custom-dropdown-menu {
+    position: absolute !important;
+    left: -100px !important;
+    top: -100px !important; /* Adjust this value to your liking */
+  }
+  
+  /* Small devices (landscape phones, less than 576px) */
+  @media (max-width: 575.98px) {
+    .custom-dropdown-menu {
+      left: auto !important;
+      top: auto !important;
+    }
+  }
+  
+  /* Medium devices (tablets, less than 768px) */
+  @media (max-width: 767.98px) {
+    .custom-dropdown-menu {
+      left: -5px !important;
+      top: -10px !important;
+    }
+  }
+</style>
 
 <script>
   $(document).ready(function () {
