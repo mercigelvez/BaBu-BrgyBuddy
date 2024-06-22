@@ -17,6 +17,26 @@
           box-shadow: #000;
           margin: 10px;"><span class="nav-link-text ms-1">New Chat</span></button>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#" style="background-color: white; 
+          border-radius: 20px; 
+          width: 75%;
+          box-shadow: #000;
+          margin: 10px;"><span class="nav-link-text ms-1">Chat History</span></a>
+          {% if current_user.is_authenticated %}
+        {% for chat_history in current_user.chat_histories %}
+          <li class="nav-item">
+            <a class="nav-link px-3 py-2 d-flex align-items-center rounded-pill" href="#" data-chat-history-id="{{ chat_history.id }}" style="background-color: #f5f5f5; color: #333; text-decoration: none; transition: background-color 0.3s ease;">
+              {% if chat_history.title %}
+                {{ chat_history.title }}
+              {% else %}
+                Untitled
+              {% endif %}
+            </a>
+          </li>
+        {% endfor %}
+      {% endif %}
+      </li>
       {% if current_user.is_authenticated %}
         {% for chat_history in current_user.chat_histories %}
           <li class="nav-item">
