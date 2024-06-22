@@ -6,7 +6,7 @@ class ChatHistory(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('Users.id'), nullable=False)
-    messages = db.relationship('Message', backref='chat_history', lazy=True)
+    messages = db.relationship('Message', backref='chat_history', lazy=True, cascade="all, delete-orphan")
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
 
     def __repr__(self):
