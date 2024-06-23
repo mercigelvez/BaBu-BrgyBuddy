@@ -10,10 +10,10 @@ $(document).ready(function () {
     if (successMessageTimeout) {
       clearTimeout(successMessageTimeout);
     }
-  
+
     let successMessage = $('<div class="alert alert-success text-white" role="alert">Changes saved successfully!</div>');
     $('.modal-body').prepend(successMessage);
-    
+
     // Set a timeout to remove the success message after 2 seconds
     successMessageTimeout = setTimeout(function() {
       successMessage.remove();
@@ -39,6 +39,7 @@ $(document).ready(function () {
   });
 
 
+  // Update profile form submission
   $('#profileForm').on('submit', function (e) {
     e.preventDefault();
 

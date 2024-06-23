@@ -85,9 +85,8 @@ def login():
             return redirect(url_for('authentication_blueprint.route_default'))
 
         # Something (user or pass) is not ok
-        return render_template('accounts/login.html',
-                               msg='Wrong user or password',
-                               form=login_form)
+        flash('Incorrect username or password', 'danger')
+        return render_template('accounts/login.html', form=login_form)
 
     if not current_user.is_authenticated:
         return render_template('accounts/login.html',
