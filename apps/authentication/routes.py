@@ -1,6 +1,12 @@
 # -*- encoding: utf-8 -*-
 """
-Copyright (c) 2019 - present AppSeed.us
+/*!
+
+=========================================================
+TEAM BABU - BSIT 3-2 OF 23-24
+=========================================================
+
+*/
 """
 
 from flask import render_template, redirect, request, url_for
@@ -152,52 +158,39 @@ def internal_error(error):
 @blueprint.route('/forgot_password', methods=['GET', 'POST'])
 def forgot_password():
     form = ForgotPasswordForm()
-    user = None  # Initialize user variable with None
     if form.validate_on_submit():
         user = Users.query.filter_by(email=form.email.data).first()
         if user:
             token = s.dumps(user.email, salt='email-confirm')
             reset_link = url_for('authentication_blueprint.reset_password', token=token, _external=True)
-            template_path = os.path.join(current_app.root_path, 'templates', 'email', 'email_template.html')
-            with open(template_path, 'r') as f:
-                template_html = f.read()
-
-            # Render the template with data
-            user_agent = request.user_agent
-            operating_system = user_agent.platform
-            browser_name = user_agent.browser
-
-            rendered_html = render_template_string(template_html, user=user, reset_link=reset_link,
-                                                   operating_system=operating_system, browser_name=browser_name)
-            msg = Message('Password Reset Request', sender='noreply@demo.com', recipients=[user.email])
-            msg.html = rendered_html
-            mail.send(msg)
-            flash('If your email is registered, you will receive a password reset email.', 'info')
-        return render_template('accounts/forgot_password.html', form=form)
-    form = ForgotPasswordForm()
-    user = None  # Initialize user variable with None
-    if form.validate_on_submit():
-        user = Users.query.filter_by(email=form.email.data).first()
-        if user:
-            token = s.dumps(user.email, salt='email-confirm')
-            reset_link = url_for('authentication_blueprint.reset_password', token=token, _external=True)
+            
             # Load the HTML template
             template_path = os.path.join(current_app.root_path, 'templates', 'email', 'email_template.html')
             with open(template_path, 'r') as f:
                 template_html = f.read()
-            # Render the template with data
+            
             # Load and embed the logo image
-            logo_path = os.path.join(current_app.config['ASSETS_ROOT'], 'img', 'babu-logo.png')
-            with open(logo_path, 'rb') as f:
-                logo_data = f.read()
-            logo_base64 = base64.b64encode(logo_data).decode('utf-8')
+            logo_base64 = None
+            try:
+                logo_path = os.path.join(current_app.root_path, 'static', 'assets', 'img', 'babu-logo.png')
+                with open(logo_path, 'rb') as f:
+                    logo_data = f.read()
+                logo_base64 = base64.b64encode(logo_data).decode('utf-8')
+            except FileNotFoundError:
+                current_app.logger.warning(f"Logo file not found at {logo_path}")
 
+            # Render the template with data
             rendered_html = render_template_string(template_html, user=user, reset_link=reset_link, logo_base64=logo_base64)
+            
             msg = Message('Password Reset Request', sender='noreply@demo.com', recipients=[user.email])
             msg.html = rendered_html
             mail.send(msg)
-            flash('If your email is registered, you will receive a password reset email.', 'info')
+        
+        flash('If your email is registered, you will receive a password reset email.', 'info')
+        return redirect(url_for('authentication_blueprint.forgot_password'))
+
     return render_template('accounts/forgot_password.html', form=form)
+
 
 
 @blueprint.route('/reset_password/<token>', methods=['GET', 'POST'])
