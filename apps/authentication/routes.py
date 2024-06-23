@@ -9,13 +9,16 @@ TEAM BABU - BSIT 3-2 OF 23-24
 */
 """
 
-from flask import render_template, redirect, request, url_for
+from flask import render_template, redirect, request, url_for, session
 from flask_login import (
     current_user,
     login_user,
     logout_user
 )
-
+from datetime import timedelta
+from functools import wraps
+import time
+from apps.authentication.util import check_timeout, check_session_timeout, update_last_activity
 from apps import db, login_manager
 from apps.authentication import blueprint
 from apps.authentication.forms import LoginForm, CreateAccountForm, ForgotPasswordForm, ResetPasswordForm
@@ -35,9 +38,9 @@ s = URLSafeTimedSerializer('Thisisasecret!')
 
 from apps.authentication.util import verify_pass
 
-@blueprint.route('/')
-def route_default():
-    return redirect(url_for('authentication_blueprint.login'))
+# @blueprint.route('/')
+# def route_default():
+#     return redirect(url_for('authentication_blueprint.login'))
 
 # Login & Registration
 
@@ -75,8 +78,13 @@ def login():
 
         # Check the password
         if user and verify_pass(password, user.password):
-
             login_user(user)
+            session['last_activity'] = time.time()  # Set initial last_activity
+            session.permanent = True  # Make the session permanent, but it will still timeout
+
+            # Optionally, you can set a custom flash message
+            flash('Login successful. Welcome back!', 'success')
+
             return redirect(url_for('authentication_blueprint.route_default'))
 
         # Something (user or pass) is not ok
@@ -197,7 +205,7 @@ def forgot_password():
 def reset_password(token):
     print(f"Received token: {token}")
     try:
-        email = s.loads(token, salt='email-confirm', max_age=3600)
+        email = s.loads(token, salt='email-confirm', max_age=1800)
         print(f"Decoded email: {email}")
     except Exception as e:
         print(f"Error decoding token: {e}")
@@ -215,3 +223,14 @@ def reset_password(token):
             return redirect(url_for('authentication_blueprint.login'))
 
     return render_template('accounts/reset_password.html', form=form)
+
+@blueprint.before_request
+def before_request():
+    if current_user.is_authenticated:
+        check_session_timeout()
+        session['last_activity'] = time.time()
+        
+@blueprint.route('/')
+@update_last_activity
+def route_default():
+    return redirect(url_for('authentication_blueprint.login'))

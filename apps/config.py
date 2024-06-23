@@ -10,9 +10,12 @@ TEAM BABU - BSIT 3-2 OF 23-24
 """
 
 import os, random, string
+from datetime import timedelta
 
 class Config(object):
 
+    PERMANENT_SESSION_LIFETIME = timedelta(minutes=30)
+    
     basedir = os.path.abspath(os.path.dirname(__file__))
 
     # Assets Management

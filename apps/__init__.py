@@ -11,12 +11,14 @@ TEAM BABU - BSIT 3-2 OF 23-24
 
 import os
 
-from flask import Flask
+from flask import Flask, session
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 from importlib import import_module
 from flask_migrate import Migrate
 from flask_mail import Mail
+from datetime import timedelta
+
 
 db = SQLAlchemy()
 login_manager = LoginManager()
@@ -48,7 +50,18 @@ def configure_database(app):
 def create_app(config):
     app = Flask(__name__)
     app.config.from_object(config)
+    
+    # Configure session
+    app.config['SESSION_PERMANENT'] = True
+    app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30)
+    
     register_extensions(app)
     register_blueprints(app)
     configure_database(app)
+    
+    @app.before_request
+    def before_request():
+        session.permanent = True
+        app.permanent_session_lifetime = app.config['PERMANENT_SESSION_LIFETIME']
+    
     return app

@@ -10,7 +10,7 @@ from flask import Blueprint, jsonify, request, redirect, url_for, flash
 
 from apps.models import ChatHistory, Message
 from apps import db
-
+from apps.authentication.util import check_timeout
 from apps.authentication.models import Users
 from apps.authentication.util import hash_pass, verify_pass
 
@@ -19,6 +19,7 @@ import logging
 
 @blueprint.route("/index")
 @login_required
+@check_timeout
 def index():
     return render_template("home/index.html", segment="index")
 
