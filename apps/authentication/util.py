@@ -69,3 +69,13 @@ def update_last_activity(f):
         session['last_activity'] = time.time()
         return f(*args, **kwargs)
     return decorated_function
+
+def validate_remember_token():
+    if current_user.is_authenticated and 'remember_token' in session:
+        token = session['remember_token']
+        if current_user.verify_remember_token(token) != current_user:
+            logout_user()
+            session.pop('remember_token', None)
+            flash('Your session has expired. Please log in again.', 'warning')
+            return False
+    return True

@@ -33,6 +33,7 @@ from flask import render_template_string, current_app
 import os
 from email.mime.image import MIMEImage
 import base64
+from .util import validate_remember_token
 
 s = URLSafeTimedSerializer('Thisisasecret!')
 
@@ -68,31 +69,35 @@ def check_email():
 def login():
     login_form = LoginForm(request.form)
     if 'login' in request.form:
-
-        # read form data
         username = request.form['username']
         password = request.form['password']
+        remember = login_form.remember.data
 
-        # Locate user
         user = Users.query.filter_by(username=username).first()
 
-        # Check the password
         if user and verify_pass(password, user.password):
-            login_user(user)
-            session['last_activity'] = time.time()  # Set initial last_activity
-            session.permanent = True  # Make the session permanent, but it will still timeout
+            login_user(user, remember=remember)
+            session['remember'] = remember
+            session['last_activity'] = time.time()
+            
+            if remember:
+                user.set_remember_token()
+                session['remember_token'] = user.remember_token
+                session.permanent = True
+                session.permanent_session_lifetime = timedelta(days=30)
+            else:
+                user.clear_remember_token()
+                session.permanent = False
+                session.permanent_session_lifetime = timedelta(minutes=30)
 
             return redirect(url_for('authentication_blueprint.route_default'))
 
-        # Something (user or pass) is not ok
         flash('Incorrect username or password', 'danger')
         return render_template('accounts/login.html', form=login_form)
 
     if not current_user.is_authenticated:
-        return render_template('accounts/login.html',
-                               form=login_form)
+        return render_template('accounts/login.html', form=login_form)
     return redirect(url_for('home_blueprint.index'))
-
 
 @blueprint.route('/register', methods=['GET', 'POST'])
 def register():
@@ -134,8 +139,12 @@ def register():
 
 @blueprint.route('/logout')
 def logout():
+    if current_user.is_authenticated:
+        current_user.clear_remember_token()
     logout_user()
-    return redirect(url_for('authentication_blueprint.login')) 
+    session.pop('remember', None)
+    session.pop('remember_token', None)
+    return redirect(url_for('authentication_blueprint.login'))
 
 # Errors
 
