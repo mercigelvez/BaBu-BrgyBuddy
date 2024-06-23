@@ -138,6 +138,7 @@ function fetchCurrentUserData() {
 function validateInput(input) {
   if (input.checkValidity()) {
     $(input).removeClass('is-invalid');
+    $(input).siblings('.invalid-feedback').text('');
   } else {
     $(input).addClass('is-invalid');
   }
@@ -158,12 +159,12 @@ function validateUsername(fetchedCurrentUsername) {
 
   if (/\s/.test(newUsername)) {
     $('#usernameInput').addClass('is-invalid');
-    errorMessageContainer.text('Username cannot contain spaces').addClass('error-message');
+    errorMessageContainer.text('Username cannot contain spaces');
   } else if (newUsername.length >= 4 && newUsername.length <= 25) {
     $.post('/check_username', { username: newUsername }, function (data) {
       if (data.username_exists && newUsername !== currentUsername.toLowerCase()) {
         $('#usernameInput').addClass('is-invalid');
-        errorMessageContainer.text('Username is already taken').addClass('error-message');
+        errorMessageContainer.text('Username is already taken');
       } else {
         $('#usernameInput').removeClass('is-invalid');
         errorMessageContainer.text('');
@@ -171,7 +172,7 @@ function validateUsername(fetchedCurrentUsername) {
     });
   } else {
     $('#usernameInput').addClass('is-invalid');
-    errorMessageContainer.text(newUsername.length === 0 ? 'Username is required' : 'Username must be between 4 and 25 characters').addClass('error-message');
+    errorMessageContainer.text(newUsername.length === 0 ? 'Username is required' : 'Username must be between 4 and 25 characters');
   }
 }
 
