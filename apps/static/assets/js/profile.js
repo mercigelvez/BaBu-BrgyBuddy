@@ -59,7 +59,8 @@ $(document).ready(function () {
     });
   });
 
-  $('#profileModal').on('hidden.bs.modal', function () {
+  $('#profileModal').on('show.bs.modal', function () {
+    fetchCurrentUserData();
     resetModalState();
   });
 
@@ -70,6 +71,7 @@ $(document).ready(function () {
 
   // Handle close button click
   $('#profileModal .close, #profileModal [data-dismiss="modal"]').on('click', function () {
+    fetchCurrentUserData();
     resetModalState();
   });
 });
@@ -108,6 +110,8 @@ function resetModalState() {
     clearTimeout(successMessageTimeout);
     successMessageTimeout = null;
   }
+  // Reset username to current username
+  $('#usernameInput').val(currentUsername);
 }
 
 function fetchCurrentUserData() {
@@ -119,7 +123,7 @@ function fetchCurrentUserData() {
         console.error('Error fetching current user data:', data.error);
       } else {
         currentUsername = data.username;
-        $('#usernameInput').val(data.username);
+        $('#usernameInput').val(currentUsername);
         $('#emailInput').val(data.email);
         validateUsername(currentUsername);
       }
