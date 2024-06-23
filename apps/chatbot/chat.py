@@ -13,7 +13,7 @@ import joblib
 script_dir = os.path.dirname(os.path.abspath(__file__))
 
 # Load intents from JSON file
-with open(os.path.join(script_dir, 'intents.json')) as file:
+with open(os.path.join(script_dir, 'intents2.json')) as file:
     data = json.load(file)
 
 # Load the trained model

@@ -1,20 +1,28 @@
 {
-    "name": "boilerplate-code-flask-dashboard",
-    "mastertemplate": "boilerplate-code-flask-dashboard",
+    "name": "BaBu-BrgyBuddy",
+    "mastertemplate": "BaBu - Brgy. Buddy",
     "version": "2stable.0.1",
-    "description": "Template project - Flask Boilerplate Code",
+    "description": "Assistant Chabot for Brgy",
     "repository": {
         "type": "git",
-        "url": "https://github.com/app-generator/boilerplate-code-flask-dashboard"
+        "url": "https://github.com/mercigelvez/BaBu-BrgyBuddy"
     },
     "bugs": {
-        "url": "https://github.com/app-generator/boilerplate-code-flask-dashboard/issues",
-        "email": "support@appseed.us"
+        "url": "https://github.com/mercigelvez/BaBu-BrgyBuddy/issues",
+        "email": "babu.brgybuddy@gmail.com"
     },
-    "author": "AppSeed App Generator <support@appseed.us> (https://appseed.us)",
+    "author": "Team BaBu",
     "engines": {
         "node": ">=10.0.0"
     },
     "dependencies": {},
-    "devDependencies": {}
+    "devDependencies": {},
+    "release": {
+    "branches": ["dev"],
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/github"
+    ]
+  }
 }

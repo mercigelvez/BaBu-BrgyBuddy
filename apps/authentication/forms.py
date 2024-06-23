@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField
 from wtforms.validators import Email, DataRequired, EqualTo, Length, ValidationError
 import re
 
@@ -7,7 +7,8 @@ import re
 class LoginForm(FlaskForm):
     username = StringField("Username", id="username_login", validators=[DataRequired(),])
     password = PasswordField("Password", id="pwd_login", validators=[DataRequired()])
-
+    remember = BooleanField('Remember Me')
+    
 class PasswordComplexityValidator(object):
     def __init__(self, message=None):
         if not message:
