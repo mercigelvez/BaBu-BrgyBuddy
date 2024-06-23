@@ -21,7 +21,7 @@ $(document).ready(function () {
     } else if (testEmailPattern.test(email)) {
       setInvalid("Email cannot contain @test");
     } else if (invalidDomainPattern.test(email)) {
-      setInvalid("Invalid email format. Please use .com instead of .c0m");
+      setInvalid("Invalid email format. Please use correct format of domain");
     } else if (!emailPattern.test(email)) {
       setInvalid("Invalid email format");
     } else {
