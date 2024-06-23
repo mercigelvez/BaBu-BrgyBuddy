@@ -138,6 +138,8 @@ $(document).ready(function () {
         if (initialMessage.trim() !== '') {
           chatbox.sendMessageToServer(initialMessage);
         }
+
+        window.location.reload();
       },
       error: function (xhr, status, error) {
         console.error('Error creating new chat:', error);

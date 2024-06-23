@@ -1,47 +1,49 @@
-//-----------EMAIL VALIDATION--------//
 $(document).ready(function () {
   $("#email").on("input", function () {
     var input = $(this);
     var email = input.val();
     var errorMessageContainer = $(".email-error-message");
+    var submitButton = $("#submit-btn");
+
     // Regular expression pattern for email validation
-    var emailPattern = /^\[\\w-\\.\]+@(\[\\w-\]+\\.)+\[\\w-\]{2,4}$/;
+    var emailPattern = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+
     // Check for .c0m or .c00m instead of .com
-    var invalidDomainPattern = /\\.(c0m|c00m)$/i;
+    var invalidDomainPattern = /\.(c0m|c00m|cm)$/i;
+
     // Check if email contains @test
     var testEmailPattern = /@test/i;
 
-    // Check if email contains space
-    if (/\\s/.test(email)) {
-      input.removeClass("valid").addClass("invalid");
-      errorMessageContainer
-        .text("Email cannot contain spaces")
-        .addClass("error-message")
-        .removeClass("success-message");
+    if (email.trim() === "") {
+      setInvalid("Email is required");
+    } else if (/\s/.test(email)) {
+      setInvalid("Email cannot contain spaces");
     } else if (testEmailPattern.test(email)) {
-      input.removeClass("valid").addClass("invalid");
-      errorMessageContainer
-        .text("Email cannot contain @test")
-        .addClass("error-message")
-        .removeClass("success-message");
+      setInvalid("Email cannot contain @test");
     } else if (invalidDomainPattern.test(email)) {
+      setInvalid("Invalid email format. Please use correct format of domain");
+    } else if (!emailPattern.test(email)) {
+      setInvalid("Invalid email format");
+    } else {
+      setValid();
+    }
+
+    function setInvalid(message) {
       input.removeClass("valid").addClass("invalid");
       errorMessageContainer
-        .text("Invalid email format. Please use .com instead of .c0m")
+        .text(message)
         .addClass("error-message")
         .removeClass("success-message");
-    } else if (emailPattern.test(email)) {
+      submitButton.prop('disabled', true);
+    }
+
+    function setValid() {
       input.removeClass("invalid").addClass("valid");
       errorMessageContainer
         .text("Valid email address")
         .removeClass("error-message")
         .addClass("success-message");
-    } else if (email === "") {
-      input.removeClass("valid").addClass("invalid");
-      errorMessageContainer
-        .text("Email is required")
-        .addClass("error-message")
-        .removeClass("success-message");
+      submitButton.prop('disabled', false);
     }
   });
 });

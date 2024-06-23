@@ -1,8 +1,12 @@
 # -*- encoding: utf-8 -*-
 
 from flask_login import UserMixin
-
+from flask import Flask
+from itsdangerous import URLSafeTimedSerializer as Serializer, BadSignature, SignatureExpired
 from apps import db, login_manager
+from flask import session, current_app
+from flask_login import logout_user
+import secrets
 
 from apps.authentication.util import hash_pass
 
@@ -15,6 +19,7 @@ class Users(db.Model, UserMixin):
     email = db.Column(db.String(64), unique=True)
     password = db.Column(db.LargeBinary)
     chat_histories = db.relationship('ChatHistory', backref='user', lazy='dynamic')
+    remember_token = db.Column(db.String(100), unique=True)
 
     def __init__(self, **kwargs):
         for property, value in kwargs.items():
@@ -32,11 +37,42 @@ class Users(db.Model, UserMixin):
 
     def __repr__(self):
         return str(self.username)
+    
+    def get_remember_token(self, expires_in=2592000):
+        s = Serializer(current_app.config['SECRET_KEY'])
+        return s.dumps({'user_id': self.id}, salt='remember-salt')
+
+    @staticmethod
+    def verify_remember_token(token):
+        s = Serializer(current_app.config['SECRET_KEY'])
+        try:
+            data = s.loads(token, salt='remember-salt', max_age=2592000)  # 30 days
+        except (BadSignature, SignatureExpired):
+            return None
+        return Users.query.get(data['user_id'])
+
+    def set_remember_token(self):
+        self.remember_token = secrets.token_urlsafe(32)
+        db.session.commit()
+
+    def clear_remember_token(self):
+        self.remember_token = None
+        db.session.commit()
 
 
 @login_manager.user_loader
-def user_loader(id):
-    return Users.query.filter_by(id=id).first()
+def user_loader(user_id):
+    user = Users.query.filter_by(id=user_id).first()
+    if user:
+        if 'remember_token' in session:
+            if user.remember_token != session.get('remember_token'):
+                # Token is invalid, log out the user
+                logout_user()
+                session.pop('remember_token', None)
+                return None
+        return user
+    return None
+
 
 
 @login_manager.request_loader

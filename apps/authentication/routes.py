@@ -1,15 +1,24 @@
 # -*- encoding: utf-8 -*-
 """
-Copyright (c) 2019 - present AppSeed.us
+/*!
+
+=========================================================
+TEAM BABU - BSIT 3-2 OF 23-24
+=========================================================
+
+*/
 """
 
-from flask import render_template, redirect, request, url_for
+from flask import render_template, redirect, request, url_for, session
 from flask_login import (
     current_user,
     login_user,
     logout_user
 )
-
+from datetime import timedelta
+from functools import wraps
+import time
+from apps.authentication.util import check_timeout, check_session_timeout, update_last_activity
 from apps import db, login_manager
 from apps.authentication import blueprint
 from apps.authentication.forms import LoginForm, CreateAccountForm, ForgotPasswordForm, ResetPasswordForm
@@ -24,14 +33,15 @@ from flask import render_template_string, current_app
 import os
 from email.mime.image import MIMEImage
 import base64
+from .util import validate_remember_token
 
 s = URLSafeTimedSerializer('Thisisasecret!')
 
 from apps.authentication.util import verify_pass
 
-@blueprint.route('/')
-def route_default():
-    return redirect(url_for('authentication_blueprint.login'))
+# @blueprint.route('/')
+# def route_default():
+#     return redirect(url_for('authentication_blueprint.login'))
 
 # Login & Registration
 
@@ -59,30 +69,35 @@ def check_email():
 def login():
     login_form = LoginForm(request.form)
     if 'login' in request.form:
-
-        # read form data
         username = request.form['username']
         password = request.form['password']
+        remember = login_form.remember.data
 
-        # Locate user
         user = Users.query.filter_by(username=username).first()
 
-        # Check the password
         if user and verify_pass(password, user.password):
+            login_user(user, remember=remember)
+            session['remember'] = remember
+            session['last_activity'] = time.time()
+            
+            if remember:
+                user.set_remember_token()
+                session['remember_token'] = user.remember_token
+                session.permanent = True
+                session.permanent_session_lifetime = timedelta(days=30)
+            else:
+                user.clear_remember_token()
+                session.permanent = False
+                session.permanent_session_lifetime = timedelta(minutes=30)
 
-            login_user(user)
             return redirect(url_for('authentication_blueprint.route_default'))
 
-        # Something (user or pass) is not ok
-        return render_template('accounts/login.html',
-                               msg='Wrong user or password',
-                               form=login_form)
+        flash('Incorrect username or password', 'danger')
+        return render_template('accounts/login.html', form=login_form)
 
     if not current_user.is_authenticated:
-        return render_template('accounts/login.html',
-                               form=login_form)
+        return render_template('accounts/login.html', form=login_form)
     return redirect(url_for('home_blueprint.index'))
-
 
 @blueprint.route('/register', methods=['GET', 'POST'])
 def register():
@@ -124,8 +139,12 @@ def register():
 
 @blueprint.route('/logout')
 def logout():
+    if current_user.is_authenticated:
+        current_user.clear_remember_token()
     logout_user()
-    return redirect(url_for('authentication_blueprint.login')) 
+    session.pop('remember', None)
+    session.pop('remember_token', None)
+    return redirect(url_for('authentication_blueprint.login'))
 
 # Errors
 
@@ -152,59 +171,46 @@ def internal_error(error):
 @blueprint.route('/forgot_password', methods=['GET', 'POST'])
 def forgot_password():
     form = ForgotPasswordForm()
-    user = None  # Initialize user variable with None
     if form.validate_on_submit():
         user = Users.query.filter_by(email=form.email.data).first()
         if user:
             token = s.dumps(user.email, salt='email-confirm')
             reset_link = url_for('authentication_blueprint.reset_password', token=token, _external=True)
-            template_path = os.path.join(current_app.root_path, 'templates', 'email', 'email_template.html')
-            with open(template_path, 'r') as f:
-                template_html = f.read()
-
-            # Render the template with data
-            user_agent = request.user_agent
-            operating_system = user_agent.platform
-            browser_name = user_agent.browser
-
-            rendered_html = render_template_string(template_html, user=user, reset_link=reset_link,
-                                                   operating_system=operating_system, browser_name=browser_name)
-            msg = Message('Password Reset Request', sender='noreply@demo.com', recipients=[user.email])
-            msg.html = rendered_html
-            mail.send(msg)
-            flash('If your email is registered, you will receive a password reset email.', 'info')
-        return render_template('accounts/forgot_password.html', form=form)
-    form = ForgotPasswordForm()
-    user = None  # Initialize user variable with None
-    if form.validate_on_submit():
-        user = Users.query.filter_by(email=form.email.data).first()
-        if user:
-            token = s.dumps(user.email, salt='email-confirm')
-            reset_link = url_for('authentication_blueprint.reset_password', token=token, _external=True)
+            
             # Load the HTML template
             template_path = os.path.join(current_app.root_path, 'templates', 'email', 'email_template.html')
             with open(template_path, 'r') as f:
                 template_html = f.read()
-            # Render the template with data
+            
             # Load and embed the logo image
-            logo_path = os.path.join(current_app.config['ASSETS_ROOT'], 'img', 'babu-logo.png')
-            with open(logo_path, 'rb') as f:
-                logo_data = f.read()
-            logo_base64 = base64.b64encode(logo_data).decode('utf-8')
+            logo_base64 = None
+            try:
+                logo_path = os.path.join(current_app.root_path, 'static', 'assets', 'img', 'babu-logo.png')
+                with open(logo_path, 'rb') as f:
+                    logo_data = f.read()
+                logo_base64 = base64.b64encode(logo_data).decode('utf-8')
+            except FileNotFoundError:
+                current_app.logger.warning(f"Logo file not found at {logo_path}")
 
+            # Render the template with data
             rendered_html = render_template_string(template_html, user=user, reset_link=reset_link, logo_base64=logo_base64)
+            
             msg = Message('Password Reset Request', sender='noreply@demo.com', recipients=[user.email])
             msg.html = rendered_html
             mail.send(msg)
-            flash('If your email is registered, you will receive a password reset email.', 'info')
+        
+        flash('If your email is registered, you will receive a password reset email.', 'info')
+        return redirect(url_for('authentication_blueprint.forgot_password'))
+
     return render_template('accounts/forgot_password.html', form=form)
+
 
 
 @blueprint.route('/reset_password/<token>', methods=['GET', 'POST'])
 def reset_password(token):
     print(f"Received token: {token}")
     try:
-        email = s.loads(token, salt='email-confirm', max_age=3600)
+        email = s.loads(token, salt='email-confirm', max_age=1800)
         print(f"Decoded email: {email}")
     except Exception as e:
         print(f"Error decoding token: {e}")
@@ -219,5 +225,17 @@ def reset_password(token):
             user.password = hashed_password
             db.session.commit()
             flash('Your password has been updated! You can now login', 'success')
+            return redirect(url_for('authentication_blueprint.login'))
 
     return render_template('accounts/reset_password.html', form=form)
+
+@blueprint.before_request
+def before_request():
+    if current_user.is_authenticated:
+        check_session_timeout()
+        session['last_activity'] = time.time()
+        
+@blueprint.route('/')
+@update_last_activity
+def route_default():
+    return redirect(url_for('authentication_blueprint.login'))

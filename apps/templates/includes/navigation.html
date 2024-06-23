@@ -32,6 +32,23 @@
     </div>
   </div>
 
+    <!-- Logout Modal -->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header ml-auto">
+            <h5 class="modal-title" id="logoutModalLabel"></h5>
+            <button type="button" class="close ml-auto" data-dismiss="modal" aria-label="Close" style="background-color: black; color:white; border-radius: 49%;font-size: 0.5rem;"><span aria-hidden="true"><i class="fas fa-times fa-sm"></i></span></button>
+          </div>
+          <div class="modal-body fs-5 text-center">Are you sure you want to leave BaBu?</div>
+          <div class="modal-footer justify-content-center">
+            <a class="btn black-button" href="{{ url_for('authentication_blueprint.logout') }}">Yes</a>
+            <button type="btn black-button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- End Logout Modal -->
 
 </nav>
 <!-- End Navbar -->

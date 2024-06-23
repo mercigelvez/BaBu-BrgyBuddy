@@ -1,16 +1,23 @@
 # -*- encoding: utf-8 -*-
 """
-Copyright (c) 2019 - present AppSeed.us
+/*!
+
+=========================================================
+TEAM BABU - BSIT 3-2 OF 23-24
+=========================================================
+
+*/
 """
 
 import os
 
-from flask import Flask
-from flask_login import LoginManager
+from flask import Flask, session
+from flask_login import LoginManager, current_user
 from flask_sqlalchemy import SQLAlchemy
 from importlib import import_module
 from flask_migrate import Migrate
 from flask_mail import Mail
+from datetime import timedelta
 
 db = SQLAlchemy()
 login_manager = LoginManager()
@@ -42,7 +49,25 @@ def configure_database(app):
 def create_app(config):
     app = Flask(__name__)
     app.config.from_object(config)
+    
+    # Configure session
+    app.config['SESSION_PERMANENT'] = False  # Change this to False
+    app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=30)
+    
     register_extensions(app)
     register_blueprints(app)
     configure_database(app)
+    
+    # Set remember cookie duration
+    login_manager.remember_cookie_duration = timedelta(days=30)
+    
+    @app.before_request
+    def before_request():
+        if current_user.is_authenticated:
+            session.permanent = session.get('remember', False)
+            if session.permanent:
+                app.permanent_session_lifetime = timedelta(days=30)
+            else:
+                app.permanent_session_lifetime = timedelta(minutes=30)
+    
     return app

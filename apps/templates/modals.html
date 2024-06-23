@@ -53,110 +53,107 @@
         <form id="profileForm" method="POST" action="{{ url_for('home_blueprint.update_profile') }}">
           <div class="modal-body">
             <div class="form-group row">
-              <label for="usernameInput" class="col-sm-2 fs-6 col-form-label">Username:</label>
+              <label for="usernameInput" class="col-sm-3 fs-6 col-form-label">Username:</label>
               <div class="col-sm-8">
                 <input type="text" class="form-control" id="usernameInput" name="username" value="{{ current_user.username }}" pattern="^[a-zA-Z0-9_]+$" disabled />
-                <div class="invalid-feedback">Username is invalid. Right Format: <br> <ul> 
-                  <li> Number </li> 
-                  <li>Underscore</li>
-                  <li> Special Character </li>
-                  <li> No Spaces </li>
-                </div>
+                <div class="invalid-feedback"></div>
               </div>
             </div>
             <div class="form-group row">
-              <label for="emailInput" class="col-sm-2 col-form-label">Email: </label>
+              <label for="emailInput" class="col-sm-3 col-form-label">Email: </label>
               <div class="col-sm-8">
                 <input type="email" class="form-control" id="emailInput" name="email" value="{{ current_user.email }}" readonly />
               </div>
             </div>
             <!-- Current Password -->
             <div class="form-group row" style="margin-bottom: -5px;">
-              <label for="currentPasswordInput" class="col-sm-2 col-form-label">Current Password</label>
-              <div class="col-sm-8">
+              <label for="currentPasswordInput" class="col-sm-3 col-form-label">Current Password</label>
+              <div class="col-sm-8 password-container">
                 <input type="password" class="form-control" id="currentPasswordInput" name="current_password" required disabled />
-                <div class="invalid-feedback">Please enter your current password.</div>
-              </div>
+                <span class="toggle-password" data-target="currentPasswordInput">
+                  <i class="fa fa-eye-slash"></i>
+                </span>
+              <div class="invalid-feedback">Please enter your current password.</div>
             </div>
              <!-- Instruction Message -->
              <div class="form-group row">
               <div class="col-sm-12">
-                <p class="text-muted" style="margin-left: 5px; font-size: small; margin-bottom: 5px;">Note: Please enter your current password to save any changes to your profile.</p>
+                <p class="text-muted" style="font-size: small;">Note: Please enter your current password to save any changes to your profile.</p>
               </div>
             </div>
             <!-- New Password -->
-            <div class="form-group row">
-              <label for="newPasswordInput" class="col-sm-2 col-form-label">New Password</label>
-              <div class="col-sm-8">
-                <input type="password" class="form-control" id="newPasswordInput" name="new_password" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$" disabled />
+            <div class="form-group row" style="margin-top: -20px;">
+              <label for="newPasswordInput" class="col-sm-3 col-form-label">New Password</label>
+              <div class="col-sm-8 password-container">
+                <input type="password" class="form-control custom-new" id="newPasswordInput" name="new_password" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$" disabled />
+                <span class="custom-toggle-password" data-target="newPasswordInput">
+                  <i class="fa fa-eye-slash"></i>
+                </span>
                 <div class="invalid-feedback">Password must be at least 6 characters long, contain at least one uppercase letter, one lowercase letter, one digit, and one special character.</div>
               </div>
             </div>
           </div>
           <div class="modal-footer ml-auto">
-            <button type="button" class="btn ml-auto" id="saveChangesBtn" style="background-color: #000; color: white;">Save Changes</button>
+            <button type="button" class="btn ml-auto" id="saveChangesBtn" style="background-color: black; color: white;">Save Changes</button>
           </div>
         </form>
       </div>
     </div>
 </div>
   <!-- End Profile Modal -->
-  
-  <!-- Confirmation Modal -->
-  <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="confirmationModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="confirmationModalLabel">Confirm Changes</h5>
-          <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          Are you sure you want to save the changes to your profile?
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-          <button type="button" class="btn btn-primary" id="confirmSaveChanges">Yes</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  
-  <!-- Save Changes Modal -->
-  <div class="modal fade" id="saveChangesModal" tabindex="-1" role="dialog" aria-labelledby="saveChangesModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="saveChangesModalLabel">Changes Saved</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          Your profile changes have been saved successfully.
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  
-    <!-- Logout Modal -->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header ml-auto">
-            <h5 class="modal-title" id="logoutModalLabel"></h5>
-            <button type="button" class="close ml-auto" data-dismiss="modal" aria-label="Close" style="background-color: black; color:white; border-radius: 49%;font-size: 0.5rem;"><span aria-hidden="true"><i class="fas fa-times fa-sm"></i></span></button>
-          </div>
-          <div class="modal-body fs-5 text-center">Are you sure you want to leave BaBu?</div>
-          <div class="modal-footer justify-content-center">
-            <a class="btn black-button" href="{{ url_for('authentication_blueprint.logout') }}">Yes</a>
-            <button type="btn black-button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- End Logout Modal -->
+
+    <style>
+      .password-container {
+        position: relative;
+      }
+      
+      .toggle-password {
+        position: absolute;
+        right: 25px;
+        top: 30%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        color: #6c757d;
+      }
+      
+      .toggle-password:hover {
+        color: #495057;
+      }
+
+      .custom-toggle-password {
+        position: absolute;
+        right: 5px;
+        top: 30%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        color: #6c757d;
+      }
+
+      .custom-new{
+        width: 310px;
+      }
+    </style>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const toggleIcons = document.querySelectorAll('.toggle-password, .custom-toggle-password');
+        
+        toggleIcons.forEach(icon => {
+          icon.addEventListener('click', function() {
+            const targetId = this.getAttribute('data-target');
+            const passwordInput = document.getElementById(targetId);
+            const iconElement = this.querySelector('i');
+      
+            if (passwordInput.type === 'password') {
+              passwordInput.type = 'text';
+              iconElement.classList.remove('fa-eye-slash');
+              iconElement.classList.add('fa-eye');
+            } else {
+              passwordInput.type = 'password';
+              iconElement.classList.remove('fa-eye');
+              iconElement.classList.add('fa-eye-slash');
+            }
+          });
+        });
+      });
+    </script>
