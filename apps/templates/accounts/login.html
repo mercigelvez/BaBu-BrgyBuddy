@@ -19,7 +19,7 @@
                     {% if messages %}
                       <div id="flash-messages">
                         {% for category, message in messages %}
-                          <div class="alert alert-success alert-dismissible fade show" role="alert">
+                          <div class="alert alert-{{category}} alert-dismissible fade show" role="alert">
                             {{ message }}
                           </div>
                         {% endfor %}

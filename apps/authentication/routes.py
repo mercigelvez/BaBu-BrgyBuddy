@@ -82,9 +82,6 @@ def login():
             session['last_activity'] = time.time()  # Set initial last_activity
             session.permanent = True  # Make the session permanent, but it will still timeout
 
-            # Optionally, you can set a custom flash message
-            flash('Login successful. Welcome back!', 'success')
-
             return redirect(url_for('authentication_blueprint.route_default'))
 
         # Something (user or pass) is not ok

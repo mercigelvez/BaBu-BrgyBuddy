@@ -162,28 +162,22 @@ import pprint
 @login_required
 def update_profile():
     print("========= update_profile route =========")
-    pprint.pprint(request.form)  # Print the entire request form data
+    pprint.pprint(request.form)
 
     username = request.form.get("username")
-    print(f"username: {username}")
-
     email = request.form.get("email")
-    print(f"email: {email}")
-
     current_password = request.form.get("current_password")
-    print(f"current_password: {current_password}")
-
     new_password = request.form.get("new_password")
-    print(f"new_password: {new_password}")
-
-    # Get the current user's stored password hash
-    stored_password_hash = current_user.password
-    print(f"stored_password_hash: {stored_password_hash}")
 
     # Check if the provided current password matches the stored hash
-    if not verify_pass(current_password, stored_password_hash):
-        print("Invalid current password")
-        return redirect(request.referrer or url_for("home"))
+    if not verify_pass(current_password, current_user.password):
+        flash('Invalid current password', 'error')
+        return jsonify({"success": False, "message": "Invalid current password"}), 400
+
+    # Check if the new username already exists (if username is changed)
+    if username != current_user.username and Users.query.filter_by(username=username).first():
+        flash('Username already exists. Please choose a different username.', 'error')
+        return jsonify({"success": False, "message": "Username already exists"}), 400
 
     try:
         # Update the user's information
@@ -195,13 +189,16 @@ def update_profile():
 
         # Save the changes to the database
         db.session.commit()
-        print("Profile updated successfully")
+        return jsonify({"success": True, "message": "Profile updated successfully"}), 200
+
     except IntegrityError:
         db.session.rollback()
-        print("Username already exists. Please choose a different username.")
+        return jsonify({"success": False, "message": "Database error occurred"}), 500
 
-    return redirect(request.referrer or url_for("home"))
-
+    except Exception as e:
+        db.session.rollback()
+        print(f"Unexpected error: {str(e)}")
+        return jsonify({"success": False, "message": "Unexpected error occurred"}), 500
 
 @blueprint.route("/get_current_user", methods=["GET"])
 def get_current_user():
