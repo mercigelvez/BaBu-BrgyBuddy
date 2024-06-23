@@ -15,19 +15,26 @@
               <div class="card card-plain card-size">
                 <div class="card-header pb-0 text-center">
                   <h4 class="font-weight-bolder fs-1" style="color: black">WELCOME BACK</h4>
-                  <p class="mb-0">
-                    {% if msg %}
-                      <span class="text-danger">{{ msg|safe }}</span>
-                    {% else %}
-                      <span></span>
-                    {% endif %}
-                    {% with messages=get_flashed_messages(with_categories=true) %}
-                      {% if messages %}
+                  {% with messages=get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                      <div id="flash-messages">
                         {% for category, message in messages %}
-                          <div class="{{ category }} custom-flash">{{ message }}</div>
+                          <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            {{ message }}
+                          </div>
                         {% endfor %}
-                      {% endif %}
-                    {% endwith %}
+                      </div>
+                      <script>
+                        setTimeout(function () {
+                          var flashMessages = document.getElementById('flash-messages')
+                          var alerts = flashMessages.getElementsByClassName('alert')
+                          for (var i = 0; i < alerts.length; i++) {
+                            alerts[i].style.display = 'none'
+                          }
+                        }, 5000) // 5000 milliseconds = 5 seconds
+                      </script>
+                    {% endif %}
+                  {% endwith %}
                   </p>
                 </div>
                 <div class="card-body">
