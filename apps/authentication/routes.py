@@ -212,5 +212,6 @@ def reset_password(token):
             user.password = hashed_password
             db.session.commit()
             flash('Your password has been updated! You can now login', 'success')
+            return redirect(url_for('authentication_blueprint.login'))
 
     return render_template('accounts/reset_password.html', form=form)
