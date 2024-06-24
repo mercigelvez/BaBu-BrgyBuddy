@@ -15,6 +15,7 @@ from apps.authentication.models import Users
 from apps.authentication.util import hash_pass, verify_pass, role_required
 from sqlalchemy import func
 import logging
+from flask_paginate import Pagination, get_page_args
 
 
 @blueprint.route("/index")
@@ -30,11 +31,22 @@ def index():
 def admin_only():
     if not current_user.is_authenticated or current_user.role != 'admin':
         abort(403)  # Forbidden
-    users = Users.query.all()
+
+    page, per_page, offset = get_page_args(page_parameter='page', per_page_parameter='per_page')
+    total = Users.query.count()
+    
+    users = Users.query.order_by(Users.id).offset(offset).limit(per_page).all()
+    
+    pagination = Pagination(page=page, per_page=per_page, total=total, css_framework='bootstrap4')
+    
     for user in users:
         user.last_login_str = user.last_login.strftime("%Y-%m-%d %H:%M:%S") if user.last_login else "Never"
         user.avg_session_duration_str = f"{user.avg_session_duration} seconds"
-    return render_template("home/tables.html", segment="tables", users=users)
+    
+    return render_template("home/tables.html", 
+                           segment="tables", 
+                           users=users, 
+                           pagination=pagination)
 
 
 @blueprint.route('/chat_analytics')

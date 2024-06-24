@@ -132,21 +132,33 @@
           document.getElementById('totalMessages').textContent = data.total_messages;
           document.getElementById('avgSessionDuration').textContent = data.avg_session_duration + ' seconds';
 
+          console.log("Messages per day data:", data.messages_per_day);
           // Messages per day chart
+          let labels = data.messages_per_day.map(item => item.date);
+          let counts = data.messages_per_day.map(item => item.count);
+
           new Chart(document.getElementById('messagesPerDayChart').getContext('2d'), {
-            type: 'line',
+            type: 'bar',
             data: {
-              labels: data.messages_per_day.map(item => item.date),
+              labels: labels,
               datasets: [{
                 label: 'Messages per Day',
-                data: data.messages_per_day.map(item => item.count),
+                data: counts,
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',  // Add this for bar color
                 borderColor: 'rgb(75, 192, 192)',
-                tension: 0.1
+                borderWidth: 1
               }]
             },
             options: {
               responsive: true,
               scales: {
+                x: {
+                  type: 'time',
+                  time: {
+                    unit: 'day',
+                    parser: 'yyyy-MM-dd'
+                  }
+                },
                 y: {
                   beginAtZero: true
                 }
