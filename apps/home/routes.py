@@ -6,15 +6,16 @@ from flask import render_template, request
 from flask_login import login_required, current_user
 from jinja2 import TemplateNotFound
 from apps.chatbot.chat import get_response, preprocess_input
-from flask import Blueprint, jsonify, request, redirect, url_for, flash
-
+from flask import Blueprint, jsonify, request, redirect, url_for, flash, abort, make_response
+from datetime import datetime, timedelta
 from apps.models import ChatHistory, Message
 from apps import db
 from apps.authentication.util import check_timeout
 from apps.authentication.models import Users
-from apps.authentication.util import hash_pass, verify_pass
-
+from apps.authentication.util import hash_pass, verify_pass, role_required
+from sqlalchemy import func
 import logging
+from flask_paginate import Pagination, get_page_args
 
 
 @blueprint.route("/index")
@@ -23,12 +24,44 @@ import logging
 def index():
     return render_template("home/index.html", segment="index")
 
+@blueprint.route("/admin_only")
+@blueprint.route("/tables.html")
+@login_required
+@role_required('admin')
+def admin_only():
+    if not current_user.is_authenticated or current_user.role != 'admin':
+        abort(403)  # Forbidden
+
+    page, per_page, offset = get_page_args(page_parameter='page', per_page_parameter='per_page')
+    total = Users.query.count()
+    
+    users = Users.query.order_by(Users.id).offset(offset).limit(per_page).all()
+    
+    pagination = Pagination(page=page, per_page=per_page, total=total, css_framework='bootstrap4')
+    
+    for user in users:
+        user.last_login_str = user.last_login.strftime("%Y-%m-%d %H:%M:%S") if user.last_login else "Never"
+        user.avg_session_duration_str = f"{user.avg_session_duration} seconds"
+    
+    return render_template("home/tables.html", 
+                           segment="tables", 
+                           users=users, 
+                           pagination=pagination)
+
+
+@blueprint.route('/chat_analytics')
+@login_required
+@role_required('admin')
+def chat_analytics():
+    return render_template('home/chat_analytics.html', segment='chat_analytics')
+
 
 @blueprint.route("/<template>")
 @login_required
 def route_template(template):
-
     try:
+        if template in ['tables', 'tables.html'] or template.startswith('admin'):
+            abort(403)  # Forbidden for non-admin users trying to access admin pages
 
         if not template.endswith(".html"):
             template += ".html"
@@ -171,12 +204,10 @@ def update_profile():
 
     # Check if the provided current password matches the stored hash
     if not verify_pass(current_password, current_user.password):
-        flash('Invalid current password', 'error')
-        return jsonify({"success": False, "message": "Invalid current password"}), 400
+        return jsonify({"success": False, "error": "incorrect_password", "message": "Invalid current password"}), 400
 
     # Check if the new username already exists (if username is changed)
     if username != current_user.username and Users.query.filter_by(username=username).first():
-        flash('Username already exists. Please choose a different username.', 'error')
         return jsonify({"success": False, "message": "Username already exists"}), 400
 
     try:
@@ -260,3 +291,91 @@ def delete_chat(chat_id):
         return jsonify({'success': False, 'message': str(e)}), 500
     except Exception as e:
         return jsonify({'success': False, 'message': str(e)}), 500
+    
+    
+@blueprint.route('/api/chat_analytics')
+@login_required
+@role_required('admin')
+def api_chat_analytics():
+    # Get data for the last 30 days
+    end_date = datetime.utcnow()
+    start_date = end_date - timedelta(days=30)
+
+    # Total users
+    total_users = Users.query.count()
+
+    # Total messages
+    total_messages = Message.query.filter(Message.timestamp >= start_date).count()
+
+    # Messages per day
+    messages_per_day = db.session.query(
+        func.date(Message.timestamp).label('date'),
+        func.count(Message.id).label('count')
+    ).filter(Message.timestamp >= start_date).group_by(func.date(Message.timestamp)).all()
+
+    # Average session duration
+    users_with_sessions = Users.query.filter(Users.total_sessions > 0).all()
+    if users_with_sessions:
+        avg_session_duration = sum(user.avg_session_duration for user in users_with_sessions) / len(users_with_sessions)
+    else:
+        avg_session_duration = 0
+
+    # Active users per day (users who sent a message)
+    active_users_per_day = db.session.query(
+        func.date(Message.timestamp).label('date'),
+        func.count(func.distinct(ChatHistory.user_id)).label('count')
+    ).join(ChatHistory).filter(Message.timestamp >= start_date).group_by(func.date(Message.timestamp)).all()
+
+    return jsonify({
+        'total_users': total_users,
+        'total_messages': total_messages,
+        'messages_per_day': [{'date': str(m.date), 'count': m.count} for m in messages_per_day],
+        'avg_session_duration': round(avg_session_duration, 2),
+        'active_users_per_day': [{'date': str(u.date), 'count': u.count} for u in active_users_per_day]
+    })
+    
+
+import csv
+from io import StringIO
+
+@blueprint.route('/api/chat_analytics_download')
+@login_required
+@role_required('admin')
+def api_chat_analytics_download():
+    # Get the analytics data
+    analytics_data = api_chat_analytics().get_json()
+
+    # Create a StringIO object to write our CSV to
+    si = StringIO()
+    cw = csv.writer(si)
+
+    # Write the headers
+    cw.writerow(['Metric', 'Value'])
+
+    # Write the simple metrics
+    cw.writerow(['Total Users', analytics_data['total_users']])
+    cw.writerow(['Total Messages', analytics_data['total_messages']])
+    cw.writerow(['Average Session Duration', analytics_data['avg_session_duration']])
+
+    # Write a blank row
+    cw.writerow([])
+
+    # Write the Messages per Day data
+    cw.writerow(['Date', 'Messages'])
+    for day in analytics_data['messages_per_day']:
+        cw.writerow([day['date'], day['count']])
+
+    # Write a blank row
+    cw.writerow([])
+
+    # Write the Active Users per Day data
+    cw.writerow(['Date', 'Active Users'])
+    for day in analytics_data['active_users_per_day']:
+        cw.writerow([day['date'], day['count']])
+
+    # Create the response
+    output = make_response(si.getvalue())
+    output.headers["Content-Disposition"] = "attachment; filename=chat_analytics.csv"
+    output.headers["Content-type"] = "text/csv"
+
+    return output

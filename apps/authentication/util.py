@@ -12,7 +12,7 @@ TEAM BABU - BSIT 3-2 OF 23-24
 import os
 import hashlib
 import binascii
-from flask import session, current_app, redirect, url_for, flash
+from flask import session, current_app, redirect, url_for, flash, abort
 from flask_login import logout_user, current_user
 from functools import wraps
 import time
@@ -79,3 +79,13 @@ def validate_remember_token():
             flash('Your session has expired. Please log in again.', 'warning')
             return False
     return True
+
+def role_required(role):
+    def decorator(f):
+        @wraps(f)
+        def decorated_function(*args, **kwargs):
+            if not current_user.is_authenticated or current_user.role != role:
+                abort(403)
+            return f(*args, **kwargs)
+        return decorated_function
+    return decorator

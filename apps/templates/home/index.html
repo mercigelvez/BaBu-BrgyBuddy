@@ -21,20 +21,20 @@
     .modal-fullscreen {
       padding: 0 !important;
     }
-
+    
     .modal-fullscreen .modal-dialog {
       width: 100%;
       max-width: none;
       height: 100%;
       margin: 0;
     }
-
+    
     .modal-fullscreen .modal-content {
       height: 100%;
       border: 0;
       border-radius: 0;
     }
-
+    
     .modal-fullscreen .modal-body {
       overflow-y: auto;
     }
@@ -42,6 +42,7 @@
 {% endblock %}
 
 {% block content %}
+  <div class="min-height-300 bg-white position-absolute w-100"></div>
   {% include 'includes/sidenav.html' %}
 
   <main class="main-content position-relative border-radius-lg">
@@ -56,7 +57,7 @@
               <p>Welcome to BaBu -your Barangay Buddy! How can I assist you?</p>
             </div>
             <div class="chatbox__support col-md-12">
-              <div class="chatbox__messages">
+              <div class="chatbox__messages" id="chatbox-messages">
                 <div></div>
               </div>
             </div>
@@ -73,25 +74,44 @@
 
 <!-- Specific JS goes HERE -->
 {% block javascripts %}
-  <script>
+<script>
   $SCRIPT_ROOT = {{ request.script_root|tojson }};
 </script>
-  <script type="text/javascript" src="{{ url_for('static', filename='assets/js/app.js') }}"></script>
-  <script>
-  
-  var input = document.querySelector('.chatbox__input');
+<script type="text/javascript" src="{{ url_for('static', filename='assets/js/app.js') }}"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var input = document.querySelector('.chatbox__input');
+    var logoDescription = document.querySelector('.logo-description');
+    var chatboxMessages = document.querySelector('.chatbox__messages');
 
-  var logoDescription = document.querySelector('.logo-description');
-
-   input.addEventListener('input', function() {
-     if (input.value.length > 0) {
-      logoDescription.style.display = 'none';
-    } else {
-      logoDescription.style.display = 'block';
+    function updateLogoVisibility() {
+      if (input.value.length > 0 || (chatboxMessages && chatboxMessages.children.length > 1)) {
+        logoDescription.style.display = 'none';
+      } else {
+        logoDescription.style.display = 'block';
+      }
     }
+
+    // Initial check on page load
+    updateLogoVisibility();
+
+    // Add event listener for input changes
+    input.addEventListener('input', updateLogoVisibility);
+
+    // Add a MutationObserver to watch for changes in the chatbox messages
+    var observer = new MutationObserver(updateLogoVisibility);
+    observer.observe(chatboxMessages, { childList: true, subtree: true });
+
+    // Function to handle chat history selection
+    function handleChatHistorySelection(event) {
+      if (event.target.closest('[data-chat-history-id]')) {
+        // Simulate a delay for the chat history to load
+        setTimeout(updateLogoVisibility, 500);
+      }
+    }
+
+    // Add event listener for chat history selection
+    document.addEventListener('click', handleChatHistorySelection);
   });
 </script>
-
- 
-
 {% endblock %}

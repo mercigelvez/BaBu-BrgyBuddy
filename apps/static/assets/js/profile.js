@@ -15,7 +15,7 @@ $(document).ready(function () {
     $('.modal-body').prepend(successMessage);
 
     // Set a timeout to remove the success message after 2 seconds
-    successMessageTimeout = setTimeout(function() {
+    successMessageTimeout = setTimeout(function () {
       successMessage.remove();
       // Force a repaint to ensure the removal is visually updated
       $('.modal-body')[0].offsetHeight;
@@ -47,14 +47,43 @@ $(document).ready(function () {
       url: $(this).attr('action'),
       type: 'POST',
       data: $(this).serialize(),
+      dataType: 'json',
       success: function (response) {
-        disableEditMode();
-        showSuccessMessage();
-        fetchCurrentUserData();
+        console.log('Server response:', response);
+        if (response.success) {
+          console.log('Profile updated successfully');
+          disableEditMode();
+          showSuccessMessage();
+          fetchCurrentUserData();
+
+          // Clear password fields
+          $('#currentPasswordInput').val('');
+          $('#newPasswordInput').val('');
+        } else {
+          console.log('Error:', response.error);
+          if (response.error === 'incorrect_password') {
+            $('#currentPasswordInput').addClass('is-invalid');
+            $('#currentPasswordInput').siblings('.invalid-feedback').text('Incorrect password');
+          } else {
+            alert(response.message || 'An unexpected error occurred. Please try again.');
+          }
+        }
       },
       error: function (xhr, status, error) {
         console.error('Error updating profile:', error);
-        alert('An error occurred while updating your profile. Please try again.');
+        console.log('XHR status:', status);
+        console.log('XHR response:', xhr.responseText);
+        try {
+          var response = JSON.parse(xhr.responseText);
+          if (response.error === 'incorrect_password') {
+            $('#currentPasswordInput').addClass('is-invalid');
+            $('#currentPasswordInput').siblings('.invalid-feedback').text('Incorrect password');
+          } else {
+            alert(response.message || 'An error occurred while updating your profile. Please try again.');
+          }
+        } catch (e) {
+          alert('An error occurred while updating your profile. Please try again.');
+        }
       }
     });
   });

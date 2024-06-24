@@ -1,0 +1,211 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Chat Analytics {% endblock %}
+
+{% block stylesheets %}
+  {{ super() }}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.css">
+{% endblock stylesheets %}
+
+{% block content %}
+<div class="min-height-300 bg-gradient-success position-absolute w-100"></div>
+      
+  {% include "includes/admin_sidenav.html" %}
+
+  <main class="main-content position-relative border-radius-lg ">
+
+    {% include 'includes/navigation.html' %}
+
+<div class="container-fluid py-4">
+  <h2 class="text-white">Chat Analytics</h2>
+  <div class="row">
+    <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+      <div class="card">
+        <div class="card-body p-3">
+          <div class="row">
+            <div class="col-8">
+              <div class="numbers">
+                <p class="text-sm mb-0 text-capitalize font-weight-bold">Total Users</p>
+                <h5 class="font-weight-bolder mb-0" id="totalUsers">
+                  Loading...
+                </h5>
+              </div>
+            </div>
+            <div class="col-4 text-end">
+              <div class="icon icon-shape bg-success shadow text-center border-radius-md">
+                <i class="ni ni-single-02 text-lg opacity-10" aria-hidden="true"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+      <div class="card">
+        <div class="card-body p-3">
+          <div class="row">
+            <div class="col-8">
+              <div class="numbers">
+                <p class="text-sm mb-0 text-capitalize font-weight-bold">Total Messages</p>
+                <h5 class="font-weight-bolder mb-0" id="totalMessages">
+                  Loading...
+                </h5>
+              </div>
+            </div>
+            <div class="col-4 text-end">
+              <div class="icon icon-shape bg-success shadow text-center border-radius-md">
+                <i class="ni ni-chat-round text-lg opacity-10" aria-hidden="true"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+      <div class="card">
+        <div class="card-body p-3">
+          <div class="row">
+            <div class="col-8">
+              <div class="numbers">
+                <p class="text-sm mb-0 text-capitalize font-weight-bold">Avg Session Duration</p>
+                <h5 class="font-weight-bolder mb-0" id="avgSessionDuration">
+                  Loading...
+                </h5>
+              </div>
+            </div>
+            <div class="col-4 text-end">
+              <div class="icon icon-shape bg-success shadow text-center border-radius-md">
+                <i class="ni ni-watch-time text-lg opacity-10" aria-hidden="true"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-3 mb-4 mt-4">
+      <div class="row">
+        <div class="col-8">
+          <div class="numbers">
+            <button id="downloadAnalytics" class="btn btn-success mb-3">Download Analytics</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-4">
+    <div class="col-lg-6 mb-lg-0 mb-4">
+      <div class="card">
+        <div class="card-body p-3">
+          <h5 class="mb-3">Messages per Day</h5>
+          <div class="chart">
+            <canvas id="messagesPerDayChart" class="chart-canvas" height="300"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="card">
+        <div class="card-body p-3">
+          <h5 class="mb-3">Active Users per Day</h5>
+          <div class="chart">
+            <canvas id="activeUsersPerDayChart" class="chart-canvas" height="300"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}
+
+{% block javascripts %}
+  {{ super() }}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+  <script>
+    function fetchAnalytics() {
+      fetch('/api/chat_analytics')
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById('totalUsers').textContent = data.total_users;
+          document.getElementById('totalMessages').textContent = data.total_messages;
+          document.getElementById('avgSessionDuration').textContent = data.avg_session_duration + ' seconds';
+
+          console.log("Messages per day data:", data.messages_per_day);
+          // Messages per day chart
+          let labels = data.messages_per_day.map(item => item.date);
+          let counts = data.messages_per_day.map(item => item.count);
+
+          new Chart(document.getElementById('messagesPerDayChart').getContext('2d'), {
+            type: 'bar',
+            data: {
+              labels: labels,
+              datasets: [{
+                label: 'Messages per Day',
+                data: counts,
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',  // Add this for bar color
+                borderColor: 'rgb(75, 192, 192)',
+                borderWidth: 1
+              }]
+            },
+            options: {
+              responsive: true,
+              scales: {
+                x: {
+                  type: 'time',
+                  time: {
+                    unit: 'day',
+                    parser: 'yyyy-MM-dd'
+                  }
+                },
+                y: {
+                  beginAtZero: true
+                }
+              }
+            }
+          });
+
+          // Active users per day chart
+          new Chart(document.getElementById('activeUsersPerDayChart').getContext('2d'), {
+            type: 'bar',
+            data: {
+              labels: data.active_users_per_day.map(item => item.date),
+              datasets: [{
+                label: 'Active Users per Day',
+                data: data.active_users_per_day.map(item => item.count),
+                backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                borderColor: 'rgb(153, 102, 255)',
+                borderWidth: 1
+              }]
+            },
+            options: {
+              responsive: true,
+              scales: {
+                y: {
+                  beginAtZero: true
+                }
+              }
+            }
+          });
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', fetchAnalytics);
+
+    document.getElementById('downloadAnalytics').addEventListener('click', function() {
+      fetch('/api/chat_analytics_download')
+        .then(response => response.blob())
+        .then(blob => {
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.style.display = 'none';
+          a.href = url;
+          a.download = 'chat_analytics.csv';
+          document.body.appendChild(a);
+          a.click();
+          window.URL.revokeObjectURL(url);
+        });
+    });
+  </script>
+{% endblock javascripts %}
