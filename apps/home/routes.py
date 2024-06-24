@@ -6,7 +6,7 @@ from flask import render_template, request
 from flask_login import login_required, current_user
 from jinja2 import TemplateNotFound
 from apps.chatbot.chat import get_response, preprocess_input
-from flask import Blueprint, jsonify, request, redirect, url_for, flash, abort
+from flask import Blueprint, jsonify, request, redirect, url_for, flash, abort, make_response
 from datetime import datetime, timedelta
 from apps.models import ChatHistory, Message
 from apps import db
@@ -321,3 +321,49 @@ def api_chat_analytics():
         'avg_session_duration': round(avg_session_duration, 2),
         'active_users_per_day': [{'date': str(u.date), 'count': u.count} for u in active_users_per_day]
     })
+    
+
+import csv
+from io import StringIO
+
+@blueprint.route('/api/chat_analytics_download')
+@login_required
+@role_required('admin')
+def api_chat_analytics_download():
+    # Get the analytics data
+    analytics_data = api_chat_analytics().get_json()
+
+    # Create a StringIO object to write our CSV to
+    si = StringIO()
+    cw = csv.writer(si)
+
+    # Write the headers
+    cw.writerow(['Metric', 'Value'])
+
+    # Write the simple metrics
+    cw.writerow(['Total Users', analytics_data['total_users']])
+    cw.writerow(['Total Messages', analytics_data['total_messages']])
+    cw.writerow(['Average Session Duration', analytics_data['avg_session_duration']])
+
+    # Write a blank row
+    cw.writerow([])
+
+    # Write the Messages per Day data
+    cw.writerow(['Date', 'Messages'])
+    for day in analytics_data['messages_per_day']:
+        cw.writerow([day['date'], day['count']])
+
+    # Write a blank row
+    cw.writerow([])
+
+    # Write the Active Users per Day data
+    cw.writerow(['Date', 'Active Users'])
+    for day in analytics_data['active_users_per_day']:
+        cw.writerow([day['date'], day['count']])
+
+    # Create the response
+    output = make_response(si.getvalue())
+    output.headers["Content-Disposition"] = "attachment; filename=chat_analytics.csv"
+    output.headers["Content-type"] = "text/csv"
+
+    return output
