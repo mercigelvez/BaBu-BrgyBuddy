@@ -55,6 +55,10 @@ $(document).ready(function () {
           disableEditMode();
           showSuccessMessage();
           fetchCurrentUserData();
+
+          // Clear password fields
+          $('#currentPasswordInput').val('');
+          $('#newPasswordInput').val('');
         } else {
           console.log('Error:', response.error);
           if (response.error === 'incorrect_password') {
