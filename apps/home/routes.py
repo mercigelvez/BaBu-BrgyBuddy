@@ -6,13 +6,13 @@ from flask import render_template, request
 from flask_login import login_required, current_user
 from jinja2 import TemplateNotFound
 from apps.chatbot.chat import get_response, preprocess_input
-from flask import Blueprint, jsonify, request, redirect, url_for, flash
-
+from flask import Blueprint, jsonify, request, redirect, url_for, flash, abort
+from datetime import datetime, timedelta
 from apps.models import ChatHistory, Message
 from apps import db
 from apps.authentication.util import check_timeout
 from apps.authentication.models import Users
-from apps.authentication.util import hash_pass, verify_pass
+from apps.authentication.util import hash_pass, verify_pass, role_required
 
 import logging
 
@@ -23,12 +23,25 @@ import logging
 def index():
     return render_template("home/index.html", segment="index")
 
+@blueprint.route("/admin_only")
+@blueprint.route("/tables.html")
+@login_required
+@role_required('admin')
+def admin_only():
+    if not current_user.is_authenticated or current_user.role != 'admin':
+        abort(403)  # Forbidden
+    users = Users.query.all()
+    for user in users:
+        user.last_login_str = user.last_login.strftime("%Y-%m-%d %H:%M:%S") if user.last_login else "Never"
+        user.avg_session_duration_str = f"{user.avg_session_duration} seconds"
+    return render_template("home/tables.html", segment="tables", users=users)
 
 @blueprint.route("/<template>")
 @login_required
 def route_template(template):
-
     try:
+        if template in ['tables', 'tables.html'] or template.startswith('admin'):
+            abort(403)  # Forbidden for non-admin users trying to access admin pages
 
         if not template.endswith(".html"):
             template += ".html"

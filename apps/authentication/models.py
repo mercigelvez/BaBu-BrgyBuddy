@@ -7,6 +7,7 @@ from apps import db, login_manager
 from flask import session, current_app
 from flask_login import logout_user
 import secrets
+from datetime import datetime, timezone
 
 from apps.authentication.util import hash_pass
 
@@ -20,6 +21,10 @@ class Users(db.Model, UserMixin):
     password = db.Column(db.LargeBinary)
     chat_histories = db.relationship('ChatHistory', backref='user', lazy='dynamic')
     remember_token = db.Column(db.String(100), unique=True)
+    role = db.Column(db.String(20), nullable=False, default='user')
+    last_login = db.Column(db.DateTime)
+    total_sessions = db.Column(db.Integer, default=0, nullable=False)
+    total_session_duration = db.Column(db.Integer, default=0, nullable=False) 
 
     def __init__(self, **kwargs):
         for property, value in kwargs.items():
@@ -58,6 +63,25 @@ class Users(db.Model, UserMixin):
     def clear_remember_token(self):
         self.remember_token = None
         db.session.commit()
+        
+    def update_login_info(self):
+        self.last_login = datetime.utcnow().replace(tzinfo=timezone.utc)
+        if self.total_sessions is None:
+            self.total_sessions = 0
+        self.total_sessions += 1
+        db.session.commit()
+
+    def update_session_duration(self, duration):
+        if self.total_session_duration is None:
+            self.total_session_duration = 0
+        self.total_session_duration += duration
+        db.session.commit()
+
+    @property
+    def avg_session_duration(self):
+        if self.total_sessions and self.total_sessions > 0:
+            return self.total_session_duration // self.total_sessions
+        return 0
 
 
 @login_manager.user_loader
