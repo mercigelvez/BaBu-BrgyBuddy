@@ -7,7 +7,7 @@
       <div class="ms-md-auto pe-md-3 d-flex align-items-center">
         <!-- to make the next icons to stay on right -->
       </div>
-      <div class="sidebar-toggler-container">
+      <div class="sidebar-toggler-container d-xl-none">
         <ul class="navbar-nav">
           <li class="nav-item ps-3 d-flex align-items-center">
             <a href="javascript:;" class="nav-link text-black p-0" id="iconNavbarSidenav">
@@ -79,6 +79,13 @@
     .custom-dropdown-menu {
       left: -5px !important;
       top: -10px !important;
+    }
+  }
+
+  /* Hide sidebar toggler on screens larger than 1200px */
+  @media (min-width: 1200px) {
+    .sidebar-toggler-container {
+      display: none !important;
     }
   }
 </style>
