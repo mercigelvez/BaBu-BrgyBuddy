@@ -1,7 +1,7 @@
 {
   "name": "babu",
-  "version": "2.0.4",
-  "description": "Freebie Dashboard for Bootstrap 5",
+  "version": "0.1.0",
+  "description": "Babu-Barangay Buddy",
   "main": "pages/dashboard.html",
   "directories": {
     "example": "root"
@@ -14,27 +14,27 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/creativetimofficial/babu.git"
+    "url": "git+https://github.com/mercigelvez/BaBu-BrgyBuddy"
   },
   "keywords": [
-    "argon dashboard",
+    "naive bayes",
     "bootstrap 5",
-    "dashboard",
-    "creative tim",
-    "html dashboard",
-    "html css dashboard",
-    "web dashboard",
-    "freebie",
-    "free bootstrap dashboard",
+    "algo",
+    "NLP",
+    "buddy",
+    "bot",
+    "chat",
+    "chatbot",
+    "babu",
     "css3 dashboard",
-    "bootstrap dashboard",
+    "barangay buddy",
     "frontend",
-    "responsive bootstrap dashboard"
+    "flask"
   ],
-  "author": "Creative Tim <hello@creative-tim.com> (https://www.creative-tim.com/)",
+  "author": "Team BaBu",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/creativetimofficial/babu/issues"
+    "url": "https://github.com/mercigelvez/BaBu-BrgyBuddy/issues"
   },
   "devDependencies": {
     "gulp": "^4.0.2",
@@ -46,5 +46,5 @@
     "gulp-open": "^3.0.1",
     "sass": "^1.49.9"
   },
-  "homepage": "http://creative-tim.com/product/babu"
+  "homepage": "#"
 }

@@ -6,8 +6,15 @@
         "Hi",
         "Hey",
         "Hello",
+        "Hi there",
+        "Hello there",
         "Good morning",
-        "Good evening"
+        "Good afternoon",
+        "Good evening",
+        "Good day",
+        "Good afternoon",
+        "Good evening",
+        "Good day"
       ],
       "responses": [
         "Hey, Babu is here to help you",
@@ -24,7 +31,14 @@
         "See you later",
         "Goodbye",
         "I have to go",
-        "That's it for now"
+        "That's it for now",
+        "See you",
+        "Catch you later",
+        "Talk to you soon",
+        "That's it for now",
+        "See you",
+        "Catch you later",
+        "Talk to you soon"
       ],
       "responses": [
         "See you later, thanks for chatting with Babu",
@@ -41,7 +55,10 @@
         "Thank you",
         "Thank's a lot!",
         "Thank you so much",
-        "Salamat"
+        "Salamat",
+        "Thanks a bunch",
+        "Many thanks",
+        "Appreciate it"
       ],
       "responses": [
         "Happy to help!",
@@ -52,169 +69,271 @@
       ]
     },
     {
+      "tag": "gratitude_response",
+      "patterns": [
+        "You're welcome",
+        "No problem",
+        "My pleasure"
+      ],
+      "responses": [
+        "You're very welcome!",
+        "I'm glad I could help!",
+        "It was my pleasure to assist you."
+      ]
+    },
+    {
+      "tag": "barangay_clearance",
+      "patterns": [
+        "What documents do I need for a barangay clearance?",
+        "How do I get a barangay clearance?",
+        "Can you tell me about barangay clearance requirements?",
+        "What is needed for a barangay clearance?"
+      ],
+      "responses": [
+        "To get a barangay clearance, you typically need to provide a valid ID, proof of residency, and a barangay certificate. Please visit the barangay office for more details.",
+        "The requirements for a barangay clearance usually include a valid ID, proof of address, and a barangay certificate. You can inquire at the barangay office for the specific documents needed.",
+        "For a barangay clearance, you'll need to bring a valid government-issued ID, proof of residency in the barangay, and any other documents specified by the barangay office. I recommend checking with them for the complete list of requirements."
+      ]
+    },
+    {
+      "tag": "barangay_indigency",
+      "patterns": [
+        "What is a barangay indigency certificate?",
+        "How do I get a barangay indigency certificate?",
+        "What documents are needed for a barangay indigency certificate?",
+        "Can you explain the barangay indigency certificate?"
+      ],
+      "responses": [
+        "A barangay indigency certificate is a document that certifies an individual or family's low-income status within the barangay. It is typically required for various government assistance programs. You can inquire at the barangay office for the specific requirements to obtain this certificate.",
+        "The barangay indigency certificate is issued to residents who are considered indigent or living below the poverty line. It is often required for availing government subsidies or discounts. Visit the barangay office and provide the necessary documents to apply for this certificate.",
+        "The barangay indigency certificate confirms that an individual or family is financially disadvantaged within the barangay. To obtain this certificate, you'll need to present proof of income, residency, and other supporting documents as required by the barangay office."
+      ]
+    },
+    {
+      "tag": "certificate_of_residency",
+      "patterns": [
+        "What is a certificate of residency?",
+        "How do I get a certificate of residency?",
+        "What documents do I need for a certificate of residency?",
+        "Can you explain the requirements for a certificate of residency?"
+      ],
+      "responses": [
+        "A certificate of residency is a document that confirms your residence within the barangay. It is often required for various purposes, such as school enrollment or government transactions. Visit the barangay office and provide proof of address, valid ID, and any other required documents to obtain this certificate.",
+        "The certificate of residency is issued by the barangay to certify that an individual resides within the barangay boundaries. To get this certificate, you'll typically need to submit a valid ID, proof of address (e.g., utility bills), and any other documents specified by the barangay office.",
+        "The certificate of residency serves as proof that you are a resident of the barangay. To apply for this certificate, you'll need to present a valid government-issued ID, documents showing your address within the barangay (e.g., utility bills, lease agreement), and any other requirements set by the barangay office."
+      ]
+    },
+    {
+      "tag": "solo_parents_certificate",
+      "patterns": [
+        "What is a solo parents certificate?",
+        "How do I get a solo parents certificate?",
+        "What documents are needed for a solo parents certificate?",
+        "Can you explain the solo parents certificate?"
+      ],
+      "responses": [
+        "A solo parents certificate is a document that certifies an individual's status as a solo parent, which entitles them to certain benefits and assistance programs. To obtain this certificate, you'll need to provide proof of being a solo parent, such as a birth certificate of your child, and any other required documents specified by the barangay office.",
+        "The solo parents certificate is issued to individuals who are raising a child or children without the support of a spouse or partner. To apply for this certificate, you'll typically need to submit your child's birth certificate, proof of your solo parent status, valid ID, and any other requirements set by the barangay office.",
+        "The solo parents certificate recognizes individuals who are solely responsible for raising their child or children. To obtain this certificate, you must provide documents such as your child's birth certificate, proof of your marital status or separation, valid ID, and any additional requirements specified by the barangay office."
+      ]
+    },
+    {
+      "tag": "no_fix_income",
+      "patterns": [
+        "What is a no fix income certificate?",
+        "How do I get a no fix income certificate?",
+        "What documents are needed for a no fix income certificate?",
+        "Can you explain the no fix income certificate?"
+      ],
+      "responses": [
+        "A no fix income certificate is a document that certifies an individual or family does not have a regular or fixed source of income. This certificate is often required for various government assistance programs or discounts. To obtain this certificate, you'll need to provide proof of your financial situation, valid ID, and any other required documents specified by the barangay office.",
+        "The no fix income certificate is issued to individuals or families who do not have a stable or regular income source. To apply for this certificate, you'll typically need to submit documents such as proof of unemployment, financial statements, valid ID, and any additional requirements set by the barangay office.",
+        "The no fix income certificate confirms that an individual or family does not have a fixed or regular source of income. To obtain this certificate, you must provide documents that demonstrate your financial situation, such as proof of unemployment, lack of income sources, valid ID, and any other requirements specified by the barangay office."
+      ]
+    },
+    {
+      "tag": "business_closure",
+      "patterns": [
+        "What do I need to report a business closure?",
+        "How do I report that my business has closed?",
+        "What are the requirements for reporting a business closure?",
+        "Can you explain the process for reporting a business closure?"
+      ],
+      "responses": [
+        "To report a business closure in the barangay, you'll typically need to provide your business permit or license, a written notice of closure, and any other required documents specified by the barangay office. Visit them or inquire about the complete process.",
+        "Reporting a business closure involves submitting your business permit or license, a formal notice stating the closure date, and any additional documents required by the barangay office. I recommend visiting them in person to ensure you have all the necessary paperwork.",
+        "The process for reporting a business closure usually involves providing your business permit or license, a written notice indicating the closure date and reason, valid ID, and any other requirements set by the barangay office. Check with them for the specific steps to follow."
+      ]
+    },
+    {
+      "tag": "unable_to_vote",
+      "patterns": [
+        "How do I get a certificate for being unable to vote?",
+        "What documents do I need for an unable to vote certificate?",
+        "Can you explain the unable to vote certificate?",
+        "What is required to get an unable to vote certificate?"
+      ],
+      "responses": [
+        "An unable to vote certificate is issued to individuals who are unable to participate in elections due to various reasons, such as disability or being out of the country. To obtain this certificate, you'll need to provide valid identification, proof of your inability to vote, and any other documents required by the barangay office.",
+        "The unable to vote certificate is given to residents who cannot exercise their right to vote due to specific circumstances. To apply for this certificate, you'll typically need to submit a valid ID, documents proving your inability to vote (e.g., medical certificate, travel documents), and any additional requirements set by the barangay office.",
+        "If you are unable to vote due to reasons such as illness, disability, or being abroad, you can request an unable to vote certificate from the barangay office. To obtain this certificate, you'll need to provide a valid ID, evidence supporting your inability to vote (e.g., medical records, travel documents), and any other documents specified by the barangay."
+      ]
+    },
+    {
+      "tag": "business_permit",
+      "patterns": [
+        "How do I get a business permit?",
+        "What are the requirements for a business permit?",
+        "Can you explain the process for obtaining a business permit?",
+        "What documents do I need to apply for a business permit?"
+      ],
+      "responses": [
+        "To obtain a business permit in the barangay, you'll typically need to provide valid identification, proof of business registration, tax documents, and any other requirements specified by the barangay office. Visit them or inquire about the complete process and necessary documents.",
+        "The process for getting a business permit usually involves submitting your valid ID, business registration documents, tax records, and any additional documents required by the barangay office. I recommend visiting or contacting them directly to ensure you have all the necessary paperwork.",
+        "To apply for a business permit, you'll need to prepare the following documents: valid ID, business registration certificates, tax records, and any other requirements set by the barangay office. Check with them for the specific steps and documents needed to obtain a business permit in the barangay."
+      ]
+    },
+    {
+      "tag": "health_certificate",
+      "patterns": [
+        "How do I get a health certificate?",
+        "What are the requirements for a health certificate?",
+        "Can you explain the process for obtaining a health certificate?",
+        "What documents do I need to apply for a health certificate?"
+      ],
+      "responses": [
+        "To obtain a health certificate from the barangay, you'll typically need to provide a valid ID, medical records or clearance from a healthcare facility, and any other requirements specified by the barangay office. Visit them or inquire about the complete process and necessary documents.",
+        "The process for getting a health certificate usually involves submitting your valid ID, medical records or clearance from a clinic or hospital, and any additional documents required by the barangay office. I recommend visiting or contacting them directly to ensure you have all the necessary paperwork.",
+        "To apply for a health certificate, you'll need to prepare the following documents: valid ID, medical records or clearance from a healthcare facility, and any other requirements set by the barangay office. Check with them for the specific steps and documents needed to obtain a health certificate in the barangay."
+      ]
+    },
+    {
+      "tag": "first_time_job_seeker",
+      "patterns": [
+        "What is a first-time job seeker certificate?",
+        "How do I get a first-time job seeker certificate?",
+        "What are the requirements for a first-time job seeker certificate?",
+        "Can you explain the first-time job seeker certificate?"
+      ],
+      "responses": [
+        "A first-time job seeker certificate is a document issued to individuals who are seeking employment for the first time. To obtain this certificate, you'll typically need to provide a valid ID, proof of residency, and any other documents required by the barangay office.",
+        "The first-time job seeker certificate is given to residents who are entering the workforce for the first time. To apply for this certificate, you'll need to submit a valid ID, proof of your residency in the barangay, and any additional requirements set by the barangay office.",
+        "The first-time job seeker certificate is issued to individuals who are looking for their first job or employment opportunity. To obtain this certificate, you must provide a valid ID, documents proving your residency in the barangay, and any other requirements specified by the barangay office."
+      ]
+    },
+    {
+      "tag": "late_registration",
+      "patterns": [
+        "What is a late registration certificate?",
+        "How do I get a late registration certificate?",
+        "What are the requirements for a late registration certificate?",
+        "Can you explain the late registration certificate?"
+      ],
+      "responses": [
+        "A late registration certificate is a document issued to individuals who need to register or process documents after the prescribed deadline. To obtain this certificate, you'll typically need to provide a valid ID, proof of the reason for late registration, and any other documents required by the barangay office.",
+        "The late registration certificate is given to residents who need to register or submit documents after the designated deadline due to specific circumstances. To apply for this certificate, you'll need to submit a valid ID, evidence supporting the reason for late registration (e.g., medical records, travel documents), and any additional requirements set by the barangay office.",
+        "The late registration certificate is issued to individuals who need to register or process documents beyond the specified deadline. To obtain this certificate, you must provide a valid ID, documents justifying the reason for late registration (e.g., medical certificates, travel documents), and any other requirements specified by the barangay office."
+      ]
+    },
+    {
+      "tag": "barangay_id",
+      "patterns": [
+        "How do I get a barangay ID?",
+        "What are the requirements for a barangay ID?",
+        "Can you explain the process for obtaining a barangay ID?",
+        "What documents do I need to apply for a barangay ID?"
+      ],
+      "responses": [
+        "To obtain a barangay ID, you'll typically need to provide a valid government-issued ID, proof of residency in the barangay, and any other requirements specified by the barangay office. Visit them or inquire about the complete process and necessary documents.",
+        "The process for getting a barangay ID usually involves submitting your valid government-issued ID, documents proving your residency in the barangay (e.g., utility bills, lease agreement), and any additional documents required by the barangay office. I recommend visiting or contacting them directly to ensure you have all the necessary paperwork.",
+        "To apply for a barangay ID, you'll need to prepare the following documents: valid government-issued ID, proof of residency in the barangay (e.g., utility bills, lease agreement), and any other requirements set by the barangay office. Check with them for the specific steps and documents needed to obtain a barangay ID."
+      ]
+    },
+    {
+      "tag": "services_summary",
+      "patterns": [
+        "Can you summarize the services offered by the barangay?",
+        "What are the main services provided by the barangay?",
+        "Give me an overview of the different services available in the barangay.",
+        "What kinds of documents and services can I get from the barangay?"
+      ],
+      "responses": [
+        "The barangay offers a range of services and documents, including barangay clearance, barangay indigency certificate, certificate of residency, solo parents certificate, no fix income certificate, no garage certificate, business closure certification, unable to vote certificate, business permit, health certificate, first-time job seeker certificate, late registration certificate, and barangay ID. Visit the barangay office for more details on each service.",
+        "Some of the main services provided by the barangay include issuance of barangay clearances, certificates of residency, indigency certificates, solo parent certificates, business permits, health certificates, and barangay IDs. The barangay also assists with processes like business closure reporting, late registration, and certification for those unable to vote or first-time job seekers.",
+        "The barangay offers various services to its residents, such as barangay clearances, certificates of residency, indigency certifications, solo parent certificates, business permits and closures, health certificates, late registration assistance, certifications for unable to vote or first-time job seekers, and issuance of barangay IDs. I recommend visiting the barangay office to inquire about the specific requirements for each service."
+      ]
+    },
+    {
+      "tag": "community_events",
+      "patterns": [
+        "Are there any community events happening in the barangay?",
+        "What kind of events or activities are organized in the barangay?",
+        "How can I learn about upcoming events in the barangay?",
+        "Does the barangay host any special events or celebrations?"
+      ],
+      "responses": [
+        "The barangay organizes various community events and activities throughout the year, such as festivals, sports tournaments, health campaigns, and environmental initiatives. You can inquire at the barangay office or check their social media pages for updates on upcoming events.",
+        "Yes, the barangay hosts several community events and celebrations. These may include cultural festivals, holiday celebrations, sports tournaments, health and wellness programs, and environmental awareness campaigns. Visit the barangay office or follow their online channels to stay informed about upcoming events.",
+        "The barangay regularly organizes different types of community events and activities for its residents. These can range from cultural festivals and holiday celebrations to sports tournaments, health campaigns, and environmental initiatives. I suggest checking with the barangay office or following their social media pages to learn about upcoming events."
+      ]
+    },
+    {
+      "tag": "emergency_services",
+      "patterns": [
+        "What should I do in case of an emergency in the barangay?",
+        "Who should I contact for emergency assistance in the barangay?",
+        "Are there any emergency services provided by the barangay?",
+        "How can I report an emergency situation in the barangay?"
+      ],
+      "responses": [
+        "In case of an emergency in the barangay, you should immediately contact the Barangay Captain or the designated emergency response team. The barangay also coordinates with local law enforcement, fire department, and medical services to assist in emergency situations. Do not hesitate to report any emergencies to the barangay office.",
+        "For emergency assistance in the barangay, you can directly contact the Barangay Captain or the emergency response team. The barangay works closely with the local authorities, such as the police, fire department, and medical services, to handle emergency situations. Report any emergencies to the barangay office as soon as possible.",
+        "The barangay provides emergency services and coordinates with local authorities to assist residents in emergency situations. If you encounter an emergency, you should immediately report it to the Barangay Captain or the designated emergency response team. The barangay will then work with the appropriate agencies, such as law enforcement, fire department, or medical services, to address the emergency."
+      ]
+    },
+    {
+      "tag": "barangay_programs",
+      "patterns": [
+        "What kind of programs does the barangay offer?",
+        "Are there any special programs or initiatives in the barangay?",
+        "How can I learn about the different programs available in the barangay?",
+        "Does the barangay have any programs for specific groups or communities?"
+      ],
+      "responses": [
+        "The barangay offers various programs and initiatives aimed at serving the needs of its residents. These may include social welfare programs, livelihood and skills training, youth development programs, senior citizen assistance, and environmental conservation efforts. You can inquire at the barangay office or check their website for more information on specific programs.",
+        "Yes, the barangay has several programs and initiatives in place. These can range from social welfare programs for underprivileged families, livelihood and skills training programs, youth development and sports programs, assistance for senior citizens, and environmental conservation initiatives. Visit the barangay office or check their online channels to learn more about the available programs.",
+        "The barangay implements various programs and initiatives to serve the needs of its community. These may include social welfare programs, livelihood and skills training, youth development programs, assistance for senior citizens, environmental conservation efforts, and programs targeting specific groups or communities within the barangay. I suggest checking with the barangay office or their website for more detailed information on the different programs offered."
+      ]
+    },
+    {
+      "tag": "complaint_or_concern",
+      "patterns": [
+        "How can I file a complaint or report a concern to the barangay?",
+        "What is the process for raising an issue or concern with the barangay?",
+        "Is there a way to submit a formal complaint to the barangay?",
+        "Who should I talk to if I have a concern or issue related to the barangay?"
+      ],
+      "responses": [
+        "If you have a complaint or concern to report to the barangay, you can visit the barangay office and submit a written or verbal complaint. The barangay staff will assist you in properly documenting your concern and taking the necessary actions to address it.",
+        "To file a complaint or raise an issue with the barangay, you can visit the barangay office and speak to the designated staff or officials. They will guide you through the process of submitting a formal complaint or concern, which may involve filling out forms or providing supporting documents.",
+        "The barangay has a process in place for residents to submit complaints or report concerns. You can visit the barangay office and request to file a formal complaint. The barangay staff will assist you in documenting your complaint and taking the appropriate steps to address your concern."
+      ]
+    },
+    {
       "tag": "services",
       "patterns": [
-        "Can you list all available services can i get?",
+        "Can you list all available services can I get?",
         "What are the services?",
-        "what documents can i get?",
+        "What documents can I get?",
         "What can I request?",
         "What services do you offer?"
       ],
       "responses": [
-        "Barangay Market Area offers: Barangay Clearance \n Barangay Indigency \n Certificate of Residency \n Solo Parents Certificate\n No Fix Income \n No Garage \n Business Closure \n Unable to Vote \n Business Permit \n Health Certificate \n First Time Job Seeker \n Late Registration \n Barangay ID",
-        "The following documents are: Barangay Clearance \n Barangay Indigency \n Certificate of Residency \n Solo Parents Certificate\n No Fix Income \n No Garage \n Business Closure \n Unable to Vote \n Business Permit \n Health Certificate \n First Time Job Seeker \n Late Registration \n Barangay ID",
-        "The documents you can get in the brgy are: Barangay Clearance \n Barangay Indigency \n Certificate of Residency \n Solo Parents Certificate\n No Fix Income \n No Garage \n Business Closure \n Unable to Vote \n Business Permit \n Health Certificate \n First Time Job Seeker \n Late Registration \n Barangay ID",
-        "You can get these on the brgy: Barangay Clearance \n Barangay Indigency \n Certificate of Residency \n Solo Parents Certificate\n No Fix Income \n No Garage \n Business Closure \n Unable to Vote \n Business Permit \n Health Certificate \n First Time Job Seeker \n Late Registration \n Barangay ID",
-        "Barangay Market Area has the following: Barangay Clearance \n Barangay Indigency \n Certificate of Residency \n Solo Parents Certificate\n No Fix Income \n No Garage \n Business Closure \n Unable to Vote \n Business Permit \n Health Certificate \n First Time Job Seeker \n Late Registration \n Barangay ID"
-      ]
-    },
-    {
-      "tag": "payments",
-      "patterns": [
-        "how much is the payment for each document?",
-        "Are you cash only?",
-        "how much?",
-        "how much is a document?",
-        "What's the price for a document?"
-      ],
-      "responses": [
-        "Document ranges from 60 to 80 pesos. You can pay with cash or gcash through the brgy treasurer",
-        "Document can range from 60 to 80 pesos. Can be paid using cash or gcash through the brgy premises",
-        "Each document costs between 60 to 80 pesos. Payment can be made via cash or Gcash  through the brgy treasurer",
-        "Document payment can be via cash or gcash through the brgy premises",
-        "A document can costs between 60 to 80 pesos. You can pay cash or through gcash in the brgy treasurer"
-      ]
-    },
-    {
-      "tag": "long",
-      "patterns": [
-        "How long before I can get my document?",
-        "How long does the document to be finished?",
-        "When do I get my document?",
-        "What is the processing time for a document?",
-        "How long do i need to wait?"
-      ],
-      "responses": [
-        "You can comeback for your document after 2-3 days",
-        "You can go back to the brgy after 2-3 days",
-        "Your document will be ready for pickup in 2-3 days",
-        "You can get your document after 2-3 days",
-        "The document will be ready after 2-3 days"
-      ]
-    },
-    {
-      "tag": "hours_of_operation",
-      "patterns": [
-        "What time can i request the document?",
-        "When are you open?",
-        "What time do you close?",
-        "When can I visit?",
-        "What days you are open?"
-      ],
-      "responses": [
-        "Our hours of operation are from 8:00 AM to 5:00 PM, Monday to Friday.",
-        "We're open from 8:00 AM to 5:00 PM on weekdays.",
-        "You can visit us anytime between 8:00 AM and 5:00 PM from Monday to Friday.",
-        "You can visit the barangay from Monday to Friday between 8:00am to 5:00pm.",
-        "You can go to the barangay on weekdays only between 8:00am to 5:00pm"
-      ]
-    },
-    {
-      "tag": "contact",
-      "patterns": [
-        "What is the brgy number?",
-        "How to contact the brgy?",
-        "brgy have an email?",
-        "brgy contact information?",
-        "What is the brgy contact details?"
-      ],
-      "responses": [
-        "You can contact the brgy at 0000 or email us at --- .",
-        "The brgy phone number is 00000 and our email is ---.",
-        "You can reach the brgy at 0000 or --- .",
-        "You can contact this phone numer 00000 or email at ---- .",
-        "This is the brgy contact details: 0000 or ---"
-      ]
-    },
-    {
-      "tag": "unknown",
-      "patterns": [
-        ""
-      ],
-      "responses": [
-        "I'm sorry, I didn't understand that. Could you please rephrase or provide more information?",
-        "I'm not sure I understand. Could you clarify?",
-        "I'm sorry, could you please provide more details?",
-        "Im not sure, could you repeat that please?",
-        "Sorry I didn't quite understand, could you please rephrase?"
-      ]
-    },
-    {
-      "tag": "who_to_talk",
-      "patterns": [
-        "Who can I talk about the document request?",
-        "Who is the person can I ask about document request?",
-        "Who can I ask about my concern?",
-        "Who can I ask during emergency?",
-        "Who will aide me on my document request?"
-      ],
-      "responses": [
-        "The barangay secretary will handle your request, Barangay Treasurer for your payment, and Barangay Captain for your emergency",
-        "You can talk to the barangay secretary for yur request, Barangay Treasurer for your payment, and Barangay Captain for your emergency ",
-        "For your request you can talk to the barangay secretary, Barangay Treasurer for your payment, and Barangay Captain for your emergency",
-        "The document request will be handled by the barangay secretary, Barangay Treasurer for your payment, and Barangay Captain for your emergency",
-        "Barangay Secretary will aide you in your document, Barangay Treasurer for your payment, and Barangay Captain for your emergency"
-      ]
-    },
-    {
-      "tag": "lost_and_found",
-      "patterns": [
-        "I lost something in the barangay area. Can you help me?",
-        "Is there a lost and found service in the barangay?",
-        "Where can I inquire about lost items within the barangay?",
-        "I misplaced an item in the barangay. What should I do?",
-        "How can I report a lost item in the barangay?"
-      ],
-      "responses": [
-        "If you've lost something in the barangay area, you can inquire at the barangay office for our lost and found service.",
-        "Yes, we have a lost and found service available at the barangay office. Please visit or contact us for assistance.",
-        "For inquiries about lost items within the barangay, please contact the barangay office or visit us directly.",
-        "In case you misplaced an item in the barangay, please report it to the barangay office so we can assist you.",
-        "To report a lost item in the barangay, please visit the barangay office or contact us via phone or email."
-      ]
-    },
-    {
-      "tag": "volunteer_opportunities",
-      "patterns": [
-        "Are there volunteer opportunities in the barangay?",
-        "Can I volunteer for community service in the barangay?",
-        "Where can I sign up for volunteer work in the barangay?",
-        "Is there a way to contribute as a volunteer in the barangay?",
-        "Do you accept volunteers for barangay programs?"
-      ],
-      "responses": [
-        "Yes, we welcome volunteers for various community initiatives and programs in the barangay. Please inquire at the barangay office for available opportunities.",
-        "Volunteer opportunities for community service are available in the barangay. Contact us to learn more about how you can contribute.",
-        "To sign up for volunteer work in the barangay, please visit the barangay office or reach out to us via phone or email.",
-        "Contributing as a volunteer in the barangay is highly encouraged. Get involved by contacting the barangay office for volunteer opportunities.",
-        "Yes, we accept volunteers for barangay programs and activities. Feel free to inquire about available opportunities at the barangay office."
-      ]
-    },
-    {
-      "tag": "environmental_concerns",
-      "patterns": [
-        "I have concerns about environmental issues in the barangay.",
-        "Where can I report environmental problems in the barangay?",
-        "Is there a way to address environmental issues within the barangay?",
-        "How can I contribute to environmental conservation efforts in the barangay?",
-        "Are there programs in place to address environmental concerns in the barangay?"
-      ],
-      "responses": [
-        "If you have concerns about environmental issues in the barangay, please report them to the barangay office for proper action and resolution.",
-        "To report environmental problems in the barangay, please contact the barangay office or visit us to discuss the issue.",
-        "Yes, we have mechanisms in place to address environmental issues within the barangay. Feel free to share your concerns with us for action.",
-        "You can contribute to environmental conservation efforts in the barangay by participating in our clean-up drives and tree-planting activities. Contact us to get involved.",
-        "The barangay has programs dedicated to addressing environmental concerns such as waste management, greening projects, and pollution control initiatives."
+        "Barangay Market Area offers the following services and documents: \n\n- Barangay Clearance\n- Barangay Indigency Certificate\n- Certificate of Residency\n- Solo Parents Certificate\n- No Fix Income Certificate\n- No Garage Certificate\n- Business Closure Certification\n- Unable to Vote Certificate\n- Business Permit\n- Health Certificate\n- First-Time Job Seeker Certificate\n- Late Registration Certificate\n- Barangay ID",
+        "The services and documents available in the barangay are: \n\n- Barangay Clearance\n- Barangay Indigency Certificate\n- Certificate of Residency\n- Solo Parents Certificate\n- No Fix Income Certificate\n- No Garage Certificate\n- Business Closure Certification\n- Unable to Vote Certificate\n- Business Permit\n- Health Certificate\n- First-Time Job Seeker Certificate\n- Late Registration Certificate\n- Barangay ID",
+        "You can request the following services and documents from the barangay: \n\n- Barangay Clearance\n- Barangay Indigency Certificate\n- Certificate of Residency\n- Solo Parents Certificate\n- No Fix Income Certificate\n- No Garage Certificate\n- Business Closure Certification\n- Unable to Vote Certificate\n- Business Permit\n- Health Certificate\n- First-Time Job Seeker Certificate\n- Late Registration Certificate\n- Barangay ID",
+        "The barangay offers these services and documents: \n\n- Barangay Clearance\n- Barangay Indigency Certificate\n- Certificate of Residency\n- Solo Parents Certificate\n- No Fix Income Certificate\n- No Garage Certificate\n- Business Closure Certification\n- Unable to Vote Certificate\n- Business Permit\n- Health Certificate\n- First-Time Job Seeker Certificate\n- Late Registration Certificate\n- Barangay ID",
+        "Here are the services and documents you can get from the barangay: \n\n- Barangay Clearance\n- Barangay Indigency Certificate\n- Certificate of Residency\n- Solo Parents Certificate\n- No Fix Income Certificate\n- No Garage Certificate\n- Business Closure Certification\n- Unable to Vote Certificate\n- Business Permit\n- Health Certificate\n- First-Time Job Seeker Certificate\n- Late Registration Certificate\n- Barangay ID"
       ]
     }
   ]
