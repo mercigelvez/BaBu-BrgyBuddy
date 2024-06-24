@@ -84,14 +84,16 @@
             <!-- New Password -->
             <div class="form-group row" style="margin-top: -20px;">
               <label for="newPasswordInput" class="col-sm-3 col-form-label">New Password</label>
-              <div class="col-sm-8 password-container">
-                <input type="password" class="form-control custom-new" id="newPasswordInput" name="new_password" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$" disabled />
-                <span class="custom-toggle-password" data-target="newPasswordInput">
-                  <i class="fa fa-eye-slash"></i>
-                </span>
-                <div class="invalid-feedback">Password must be at least 6 characters long, contain at least one uppercase letter, one lowercase letter, one digit, and one special character.</div>
-              </div>
+                <div class="col-sm-8 password-container">
+                  <input type="password" class="form-control custom-new" id="newPasswordInput" name="new_password" disabled />
+                  <span class="custom-toggle-password" data-target="newPasswordInput">
+                    <i class="fa fa-eye-slash"></i>
+                  </span>
+                  <div class="invalid-feedback"></div>
+                </div>
+              
             </div>
+
           </div>
           <div class="modal-footer ml-auto">
             <button type="button" class="btn ml-auto" id="saveChangesBtn" style="background-color: black; color: white;">Save Changes</button>
@@ -122,9 +124,9 @@
 
       .custom-toggle-password {
         position: absolute;
-        right: 5px;
-        top: 30%;
-        transform: translateY(-50%);
+        right: 1px;
+        top: -13%;
+        transform: translateY(83%);
         cursor: pointer;
         color: #6c757d;
       }
