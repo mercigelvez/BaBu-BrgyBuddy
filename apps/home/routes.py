@@ -192,12 +192,10 @@ def update_profile():
 
     # Check if the provided current password matches the stored hash
     if not verify_pass(current_password, current_user.password):
-        flash('Invalid current password', 'error')
-        return jsonify({"success": False, "message": "Invalid current password"}), 400
+        return jsonify({"success": False, "error": "incorrect_password", "message": "Invalid current password"}), 400
 
     # Check if the new username already exists (if username is changed)
     if username != current_user.username and Users.query.filter_by(username=username).first():
-        flash('Username already exists. Please choose a different username.', 'error')
         return jsonify({"success": False, "message": "Username already exists"}), 400
 
     try:
