@@ -13,7 +13,7 @@ from apps import db
 from apps.authentication.util import check_timeout
 from apps.authentication.models import Users
 from apps.authentication.util import hash_pass, verify_pass, role_required
-
+from sqlalchemy import func
 import logging
 
 
@@ -35,6 +35,14 @@ def admin_only():
         user.last_login_str = user.last_login.strftime("%Y-%m-%d %H:%M:%S") if user.last_login else "Never"
         user.avg_session_duration_str = f"{user.avg_session_duration} seconds"
     return render_template("home/tables.html", segment="tables", users=users)
+
+
+@blueprint.route('/chat_analytics')
+@login_required
+@role_required('admin')
+def chat_analytics():
+    return render_template('home/chat_analytics.html', segment='chat_analytics')
+
 
 @blueprint.route("/<template>")
 @login_required
@@ -273,3 +281,45 @@ def delete_chat(chat_id):
         return jsonify({'success': False, 'message': str(e)}), 500
     except Exception as e:
         return jsonify({'success': False, 'message': str(e)}), 500
+    
+    
+@blueprint.route('/api/chat_analytics')
+@login_required
+@role_required('admin')
+def api_chat_analytics():
+    # Get data for the last 30 days
+    end_date = datetime.utcnow()
+    start_date = end_date - timedelta(days=30)
+
+    # Total users
+    total_users = Users.query.count()
+
+    # Total messages
+    total_messages = Message.query.filter(Message.timestamp >= start_date).count()
+
+    # Messages per day
+    messages_per_day = db.session.query(
+        func.date(Message.timestamp).label('date'),
+        func.count(Message.id).label('count')
+    ).filter(Message.timestamp >= start_date).group_by(func.date(Message.timestamp)).all()
+
+    # Average session duration
+    users_with_sessions = Users.query.filter(Users.total_sessions > 0).all()
+    if users_with_sessions:
+        avg_session_duration = sum(user.avg_session_duration for user in users_with_sessions) / len(users_with_sessions)
+    else:
+        avg_session_duration = 0
+
+    # Active users per day (users who sent a message)
+    active_users_per_day = db.session.query(
+        func.date(Message.timestamp).label('date'),
+        func.count(func.distinct(ChatHistory.user_id)).label('count')
+    ).join(ChatHistory).filter(Message.timestamp >= start_date).group_by(func.date(Message.timestamp)).all()
+
+    return jsonify({
+        'total_users': total_users,
+        'total_messages': total_messages,
+        'messages_per_day': [{'date': str(m.date), 'count': m.count} for m in messages_per_day],
+        'avg_session_duration': round(avg_session_duration, 2),
+        'active_users_per_day': [{'date': str(u.date), 'count': u.count} for u in active_users_per_day]
+    })

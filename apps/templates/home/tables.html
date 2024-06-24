@@ -1,22 +1,22 @@
 {% extends 'layouts/base.html' %}
 
-{% block title %} Tables {% endblock title %}
+{% block title %}
+  Tables
+{% endblock %}
 
 <!-- Specific CSS goes HERE -->
-{% block stylesheets %}{% endblock stylesheets %}
+{% block stylesheets %}
+{% endblock %}
 
 {% block content %}
-
   <div class="min-height-300 bg-gradient-success position-absolute w-100"></div>
-      
-  {% include "includes/admin_sidenav.html" %}
 
-  <main class="main-content position-relative border-radius-lg ">
+  {% include 'includes/admin_sidenav.html' %}
 
+  <main class="main-content position-relative border-radius-lg">
     {% include 'includes/navigation.html' %}
 
     <div class="container-fluid py-4">
-
       <div class="row">
         <div class="col-12">
           <div class="card mb-4">
@@ -37,29 +37,28 @@
                   </thead>
                   <tbody>
                     {% for user in users %}
-                    <tr>
-                      <td>
-                        <div class="d-flex px-2 py-1">
-                          <div class="d-flex flex-column justify-content-center">
-                            <h6 class="mb-0 text-sm">{{ user.username }}</h6>
-                            <p class="text-s text-secondary mb-0">{{ user.email }}</p>
+                      <tr>
+                        <td>
+                          <div class="d-flex px-2 py-1">
+                            <div class="d-flex flex-column justify-content-center">
+                              <h6 class="mb-0 text-sm">{{ user.username }}</h6>
+                              <p class="text-s text-secondary mb-0">{{ user.email }}</p>
+                            </div>
                           </div>
-                        </div>
-                      </td>
-                      <td>
-                        <p class="text-s font-weight-bold mb-0">{{ user.role }}</p>
-                      </td>
-                      <td class="align-middle text-center text-sm">
-                        <span class="text-secondary text-s font-weight-bold">{{ user.last_login }}</span>
-                      </td>
-                      <td class="align-middle text-center">
-                        <span class="text-secondary text-s font-weight-bold">{{ user.total_sessions }}</span>
-                      </td>
-                      <td class="align-middle text-center">
-                        <span class="text-secondary text-s font-weight-bold">{{ user.avg_session_duration }}</span>
-                      </td>
-                      
-                    </tr>
+                        </td>
+                        <td>
+                          <p class="text-s font-weight-bold mb-0">{{ user.role }}</p>
+                        </td>
+                        <td class="align-middle text-center text-sm">
+                          <span class="text-secondary text-s font-weight-bold">{{ user.last_login }}</span>
+                        </td>
+                        <td class="align-middle text-center">
+                          <span class="text-secondary text-s font-weight-bold">{{ user.total_sessions }}</span>
+                        </td>
+                        <td class="align-middle text-center">
+                          <span class="text-secondary text-s font-weight-bold">{{ user.avg_session_duration }}</span>
+                        </td>
+                      </tr>
                     {% endfor %}
                   </tbody>
                 </table>
@@ -70,8 +69,8 @@
       </div>
     </div>
   </main>
+{% endblock %}
 
-{% endblock content %}
-
-<!-- Specific JS goes HERE --> 
-{% block javascripts %}{% endblock javascripts %}
+<!-- Specific JS goes HERE -->
+{% block javascripts %}
+{% endblock %}
