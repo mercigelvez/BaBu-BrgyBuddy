@@ -25,18 +25,17 @@ def preprocess_input(user_input):
     tokens = [lemmatizer.lemmatize(token.lower()) for token in tokens if token not in string.punctuation]
     return ' '.join(tokens)
 
-def get_response(user_input, language_preference):
-    cleaned_input = preprocess_input(user_input)
-    
-    if language_preference == 'english':
-        model = english_model
-        data = english_data
-    else:  # Assuming 'tagalog' is the other option
+def get_response(user_input, language):
+    # Choose the appropriate model based on the language
+    if language == 'tagalog':
         model = tagalog_model
         data = tagalog_data
+    else:  # default to English
+        model = english_model
+        data = english_data
 
-    intent = model.predict([cleaned_input])[0]
-    confidence_scores = model.predict_proba([cleaned_input])
+    intent = model.predict([user_input])[0]
+    confidence_scores = model.predict_proba([user_input])
     confidence = confidence_scores.max()
 
     for intent_data in data['intents']:
@@ -45,9 +44,9 @@ def get_response(user_input, language_preference):
                 responses = intent_data['responses']
                 return random.choice(responses)
             else:
-                return "I'm not quite sure. Can you please rephrase your question?" if language_preference == 'english' else "Hindi ako sigurado. Pwede mo bang ulitin ang tanong mo?"
+                return "I'm not quite sure. Can you please rephrase your question?" if language == 'english' else "Hindi ako sigurado. Pwede mo bang ulitin ang tanong mo?"
 
-    return "I'm sorry, I'm not sure how to respond to that." if language_preference == 'english' else "Paumanhin, hindi ko alam kung paano sasagutin 'yan."
+    return "I'm sorry, I'm not sure how to respond to that." if language == 'english' else "Paumanhin, hindi ko alam kung paano sasagutin 'yan."
 
 if __name__ == "__main__":
     # For testing purposes, you can set the language preference here

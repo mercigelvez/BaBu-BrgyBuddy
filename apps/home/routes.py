@@ -106,39 +106,37 @@ def predict():
     predict_logger.debug("Entered predict route")
     data = request.get_json()
     user_input = data.get("message")
-    user_id = data.get("user_id")
 
-    if current_user.is_authenticated:
-        user_id = current_user.id
-    else:
+    if not current_user.is_authenticated:
         return jsonify({"error": "User not authenticated"}), 401
+
+    user_id = current_user.id
+    user_language = current_user.language_preference  # Assuming you have this field in your User model
 
     predict_logger.debug(f"User input: {user_input}")
     predict_logger.debug(f"User ID: {user_id}")
+    predict_logger.debug(f"User Language: {user_language}")
 
     cleaned_input = preprocess_input(user_input)
-    response = get_response(cleaned_input)
+    response = get_response(cleaned_input, user_language)  # Pass language to get_response
 
-    if current_user.is_authenticated:
-        user_id = current_user.id
-
-        # Get or create the chat history for the current user
-        chat_history = ChatHistory.query.filter_by(user_id=user_id).order_by(ChatHistory.id.desc()).first()
-        if not chat_history:
-            chat_history = ChatHistory(user_id=user_id, title="Untitled")
-            db.session.add(chat_history)
-            db.session.commit()
-
-        # Append the new message to the chat history
-        new_message_user = Message(
-            chat_history_id=chat_history.id, sender="user", message=user_input
-        )
-        new_message_bot = Message(
-            chat_history_id=chat_history.id, sender="Bot", message=response
-        )
-        db.session.add(new_message_user)
-        db.session.add(new_message_bot)
+    # Get or create the chat history for the current user
+    chat_history = ChatHistory.query.filter_by(user_id=user_id).order_by(ChatHistory.id.desc()).first()
+    if not chat_history:
+        chat_history = ChatHistory(user_id=user_id, title="Untitled")
+        db.session.add(chat_history)
         db.session.commit()
+
+    # Append the new message to the chat history
+    new_message_user = Message(
+        chat_history_id=chat_history.id, sender="user", message=user_input
+    )
+    new_message_bot = Message(
+        chat_history_id=chat_history.id, sender="Bot", message=response
+    )
+    db.session.add(new_message_user)
+    db.session.add(new_message_bot)
+    db.session.commit()
 
     predict_logger.debug(f"Response: {response}")
 

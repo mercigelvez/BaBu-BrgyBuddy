@@ -56,7 +56,7 @@
               <img src="{{ config.ASSETS_ROOT }}/img/babu-logo.png" alt="Logo" />
               <p>Welcome to BaBu -your Barangay Buddy! How can I assist you?</p>
             </div>
-            <div class="chatbox__support col-md-12">
+            <div class="chatbox__support col-md-12" data-language-preference="{{ current_user.language_preference }}">
               <div class="chatbox__messages" id="chatbox-messages">
                 <div></div>
               </div>
