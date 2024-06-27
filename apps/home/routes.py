@@ -16,13 +16,43 @@ from apps.authentication.util import hash_pass, verify_pass, role_required
 from sqlalchemy import func
 import logging
 from flask_paginate import Pagination, get_page_args
+from datetime import datetime, timedelta
 
 
 @blueprint.route("/index")
 @login_required
 @check_timeout
 def index():
-    return render_template("home/index.html", segment="index")
+    # Get the current date
+    today = datetime.utcnow().date()
+    yesterday = today - timedelta(days=1)
+    week_ago = today - timedelta(days=7)
+
+    # Group chat histories
+    today_chats = []
+    yesterday_chats = []
+    last_week_chats = []
+    older_chats = []
+
+    for chat in current_user.chat_histories:
+        chat_date = chat.timestamp.date()
+        if chat_date == today:
+            today_chats.append(chat)
+        elif chat_date == yesterday:
+            yesterday_chats.append(chat)
+        elif week_ago < chat_date < yesterday:
+            last_week_chats.append(chat)
+        else:
+            older_chats.append(chat)
+
+    grouped_chats = {
+        'Today': today_chats,
+        'Yesterday': yesterday_chats,
+        'Last 7 Days': last_week_chats,
+        'Older': older_chats
+    }
+    
+    return render_template("home/index.html", segment="index", grouped_chats=grouped_chats)
 
 @blueprint.route("/admin_only")
 @blueprint.route("/tables.html")
