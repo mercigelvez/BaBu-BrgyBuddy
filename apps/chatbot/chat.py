@@ -4,46 +4,40 @@ import json
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
 import string
-
 import os
-
-# Get the current script directory
-import joblib
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
 
-# Load intents from JSON file
+# Load both intent files
 with open(os.path.join(script_dir, 'intents2.json')) as file:
-    data = json.load(file)
+    english_data = json.load(file)
+with open(os.path.join(script_dir, 'intents3.json')) as file:
+    tagalog_data = json.load(file)
 
-# Load the trained model
-try:
-    model = joblib.load(os.path.join(script_dir, 'chatmodel.joblib'))
-except FileNotFoundError:
-    print("Model file not found. Please ensure chatmodel.joblib exists.")
-    exit()
+# Load both models
+english_model = joblib.load(os.path.join(script_dir, 'chatmodel.joblib'))
+tagalog_model = joblib.load(os.path.join(script_dir, 'chatmodeltagalog.joblib'))
 
-# NLP Preprocessing
 lemmatizer = WordNetLemmatizer()
-
 
 def preprocess_input(user_input):
     tokens = word_tokenize(user_input)
     tokens = [lemmatizer.lemmatize(token.lower()) for token in tokens if token not in string.punctuation]
     return ' '.join(tokens)
 
-
-# Function to get response from the bot
-def get_response(user_input):
+def get_response(user_input, language_preference):
     cleaned_input = preprocess_input(user_input)
+    
+    if language_preference == 'english':
+        model = english_model
+        data = english_data
+    else:  # Assuming 'tagalog' is the other option
+        model = tagalog_model
+        data = tagalog_data
+
     intent = model.predict([cleaned_input])[0]
-
-    print("Predicted intent:", intent)
-
     confidence_scores = model.predict_proba([cleaned_input])
     confidence = confidence_scores.max()
-
-    print("Confidence:", confidence)
 
     for intent_data in data['intents']:
         if intent_data['tag'] == intent:
@@ -51,17 +45,20 @@ def get_response(user_input):
                 responses = intent_data['responses']
                 return random.choice(responses)
             else:
-                return "I'm not quite sure. Can you please rephrase your question?"
+                return "I'm not quite sure. Can you please rephrase your question?" if language_preference == 'english' else "Hindi ako sigurado. Pwede mo bang ulitin ang tanong mo?"
 
-    return "I'm sorry, I'm not sure how to respond to that."
-
+    return "I'm sorry, I'm not sure how to respond to that." if language_preference == 'english' else "Paumanhin, hindi ko alam kung paano sasagutin 'yan."
 
 if __name__ == "__main__":
-    print("BaBu: Hi, I'm Babu. How can I assist you today?")
+    # For testing purposes, you can set the language preference here
+    language_preference = input("Choose language (english/tagalog): ").lower()
+    
+    print("BaBu: Hi, I'm Babu. How can I assist you today?" if language_preference == 'english' else "BaBu: Kumusta, ako si Babu. Paano kita matutulungan ngayon?")
+    
     while True:
         user_input = input("You: ")
         if user_input.lower() == 'exit':
-            print("BaBu: Goodbye!")
+            print("BaBu: Goodbye!" if language_preference == 'english' else "BaBu: Paalam!")
             break
-        response = get_response(user_input)
+        response = get_response(user_input, language_preference)
         print("BaBu:", response)
