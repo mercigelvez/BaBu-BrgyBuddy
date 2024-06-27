@@ -24,7 +24,8 @@ class Users(db.Model, UserMixin):
     role = db.Column(db.String(20), nullable=False, default='user')
     last_login = db.Column(db.DateTime)
     total_sessions = db.Column(db.Integer, default=0, nullable=False)
-    total_session_duration = db.Column(db.Integer, default=0, nullable=False) 
+    total_session_duration = db.Column(db.Integer, default=0, nullable=False)
+    language_preference = db.Column(db.String(10), nullable=False, default='english') 
 
     def __init__(self, **kwargs):
         for property, value in kwargs.items():

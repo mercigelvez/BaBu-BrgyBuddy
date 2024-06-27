@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, SelectField
 from wtforms.validators import Email, DataRequired, EqualTo, Length, ValidationError
 import re
 
@@ -25,6 +25,7 @@ class CreateAccountForm(FlaskForm):
     email = StringField("Email", id="email_create", validators=[DataRequired(), Email()])
     password = PasswordField("Password", id="pwd_create", validators=[DataRequired(), PasswordComplexityValidator()])
     confirm_password = PasswordField("Confirm Password", id="confirm_pwd_create", validators=[DataRequired(), EqualTo("password", message="Passwords must match")])
+    language = SelectField('Preferred Language', choices=[('english', 'English'), ('tagalog', 'Tagalog')], validators=[DataRequired()])
 
 class ForgotPasswordForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])

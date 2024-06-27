@@ -104,6 +104,7 @@ def login():
         return render_template('accounts/login.html', form=login_form)
     return redirect(url_for('home_blueprint.index'))
 
+
 @blueprint.route('/register', methods=['GET', 'POST'])
 def register():
     create_account_form = CreateAccountForm(request.form)
@@ -112,6 +113,7 @@ def register():
         email = request.form['email']
         password = request.form['password']
         confirm_password = request.form['confirm_password']
+        language = request.form['language']
 
         # Check if passwords match
         if password != confirm_password:
@@ -129,7 +131,7 @@ def register():
             return render_template('accounts/register.html', msg='Email already registered', success=False, form=create_account_form, check_username_url=check_username_url)
 
         # Create the user
-        user = Users(username=username, email=email, password=password)
+        user = Users(username=username, email=email, password=password, language_preference=language)
         db.session.add(user)
         db.session.commit()
 
@@ -140,7 +142,6 @@ def register():
         return redirect(url_for('authentication_blueprint.login'))
     else:
         return render_template('accounts/register.html', form=create_account_form)
-
 
 
 @blueprint.route('/logout')
