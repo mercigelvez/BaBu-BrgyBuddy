@@ -70,7 +70,7 @@
               <label for="currentPasswordInput" class="col-sm-3 col-form-label">Current Password</label>
               <div class="col-sm-8 password-container">
                 <input type="password" class="form-control" id="currentPasswordInput" name="current_password" required disabled />
-                <span class="toggle-password" data-target="currentPasswordInput">
+                <span class="toggle-password eye-toggle" data-target="currentPasswordInput">
                   <i class="fa fa-eye-slash"></i>
                 </span>
               <div class="invalid-feedback">Please enter your current password.</div>
@@ -86,7 +86,7 @@
               <label for="newPasswordInput" class="col-sm-3 col-form-label">New Password</label>
                 <div class="col-sm-8 password-container">
                   <input type="password" class="form-control custom-new" id="newPasswordInput" name="new_password" disabled />
-                  <span class="custom-toggle-password" data-target="newPasswordInput">
+                  <span class="custom-toggle-password eye-toggle" data-target="newPasswordInput">
                     <i class="fa fa-eye-slash"></i>
                   </span>
                   <div class="invalid-feedback"></div>
@@ -133,6 +133,10 @@
 
       .custom-new{
         width: 310px;
+      }
+
+      .eye-toggle {
+        display: none;
       }
     </style>
 
