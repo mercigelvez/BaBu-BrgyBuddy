@@ -8,10 +8,10 @@ function validateConfirmPassword(password, confirmPassword) {
 }
 
 function updateSubmitButtonState() {
-  var password = $("#new_pass").val();
+  var newPassword = $("#new_pass").val();
   var confirmPassword = $("#confirm_new_pass").val();
-  var isPasswordValid = validatePassword(password);
-  var isConfirmPasswordValid = validateConfirmPassword(password, confirmPassword);
+  var isPasswordValid = validatePassword(newPassword);
+  var isConfirmPasswordValid = validateConfirmPassword(newPassword, confirmPassword);
   
   $("#submit-btn").prop("disabled", !(isPasswordValid && isConfirmPasswordValid));
 }
@@ -23,10 +23,10 @@ $(document).ready(function () {
 
   $("#new_pass").on("input", function () {
       var input = $(this);
-      var password = input.val();
+      var newPassword = input.val();
       var errorMessageContainer = $(".password-error-message");
 
-      if (validatePassword(password)) {
+      if (validatePassword(newPassword)) {
           input.removeClass("invalid").addClass("valid");
           errorMessageContainer
               .text("Valid Password")
@@ -50,6 +50,7 @@ $(document).ready(function () {
       
       updateSubmitButtonState();
   });
+  
 
   $("#confirm_new_pass").on("input", function () {
       var input = $(this);

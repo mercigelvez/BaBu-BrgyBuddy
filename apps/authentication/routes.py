@@ -170,7 +170,7 @@ def logout():
 
 @login_manager.unauthorized_handler
 def unauthorized_handler():
-    flash('Session Expired. Please log in.', 'danger')
+    flash('Session Expired. Please log in.', 'warning')
     return redirect(url_for('authentication_blueprint.login'))
 
 
@@ -229,12 +229,9 @@ def forgot_password():
 
 @blueprint.route('/reset_password/<token>', methods=['GET', 'POST'])
 def reset_password(token):
-    print(f"Received token: {token}")
     try:
         email = s.loads(token, salt='email-confirm', max_age=1800)
-        print(f"Decoded email: {email}")
     except Exception as e:
-        print(f"Error decoding token: {e}")
         flash('The reset link is invalid or has expired.', 'warning')
         return redirect(url_for('authentication_blueprint.forgot_password'))
 
@@ -242,6 +239,10 @@ def reset_password(token):
     if form.validate_on_submit():
         user = Users.query.filter_by(email=email).first()
         if user:
+            if verify_pass(form.password.data, user.password):
+                flash('New password must be different from the current password', 'danger')
+                return render_template('accounts/reset_password.html', form=form)
+            
             hashed_password = util.hash_pass(form.password.data)
             user.password = hashed_password
             db.session.commit()
