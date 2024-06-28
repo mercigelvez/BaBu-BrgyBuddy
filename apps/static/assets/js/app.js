@@ -6,6 +6,7 @@ class Chatbox {
       textInput: document.querySelector(".chatbox__input"),
     };
 
+    this.userLanguagePreference = this.args.chatBox.dataset.languagePreference;
     this.state = false;
     this.messages = [];
     this.init();
@@ -50,7 +51,9 @@ class Chatbox {
   sendMessageToServer(userMessage) {
     fetch($SCRIPT_ROOT + '/predict', {
       method: 'POST',
-      body: JSON.stringify({ message: userMessage }),
+      body: JSON.stringify({
+        message: userMessage
+      }),
       mode: 'cors',
       headers: {
         'Content-Type': 'application/json'
@@ -108,7 +111,7 @@ class Chatbox {
       this.addMessage(sender === 'user' ? 'User' : 'Bot', message);
     });
   }
-  
+
 }
 
 let chatbox;
@@ -215,7 +218,10 @@ function sendMessageToServer(userMessage) {
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ message: userMessage })
+    body: JSON.stringify({
+      message: userMessage,
+      language: chatbox.userLanguagePreference 
+    })
   })
     .then(response => response.json())
     .then(data => {

@@ -15,14 +15,43 @@ from apps.authentication.models import Users
 from apps.authentication.util import hash_pass, verify_pass, role_required
 from sqlalchemy import func
 import logging
-from flask_paginate import Pagination, get_page_args
+from datetime import datetime, timedelta
 
 
 @blueprint.route("/index")
 @login_required
 @check_timeout
 def index():
-    return render_template("home/index.html", segment="index")
+    # Get the current date
+    today = datetime.utcnow().date()
+    yesterday = today - timedelta(days=1)
+    week_ago = today - timedelta(days=7)
+
+    # Group chat histories
+    today_chats = []
+    yesterday_chats = []
+    last_week_chats = []
+    older_chats = []
+
+    for chat in current_user.chat_histories:
+        chat_date = chat.timestamp.date()
+        if chat_date == today:
+            today_chats.append(chat)
+        elif chat_date == yesterday:
+            yesterday_chats.append(chat)
+        elif week_ago < chat_date < yesterday:
+            last_week_chats.append(chat)
+        else:
+            older_chats.append(chat)
+
+    grouped_chats = {
+        'Today': today_chats,
+        'Yesterday': yesterday_chats,
+        'Last 7 Days': last_week_chats,
+        'Older': older_chats
+    }
+    
+    return render_template("home/index.html", segment="index", grouped_chats=grouped_chats)
 
 @blueprint.route("/admin_only")
 @blueprint.route("/tables.html")
@@ -106,39 +135,37 @@ def predict():
     predict_logger.debug("Entered predict route")
     data = request.get_json()
     user_input = data.get("message")
-    user_id = data.get("user_id")
 
-    if current_user.is_authenticated:
-        user_id = current_user.id
-    else:
+    if not current_user.is_authenticated:
         return jsonify({"error": "User not authenticated"}), 401
+
+    user_id = current_user.id
+    user_language = current_user.language_preference  # Assuming you have this field in your User model
 
     predict_logger.debug(f"User input: {user_input}")
     predict_logger.debug(f"User ID: {user_id}")
+    predict_logger.debug(f"User Language: {user_language}")
 
     cleaned_input = preprocess_input(user_input)
-    response = get_response(cleaned_input)
+    response = get_response(cleaned_input, user_language)  # Pass language to get_response
 
-    if current_user.is_authenticated:
-        user_id = current_user.id
-
-        # Get or create the chat history for the current user
-        chat_history = ChatHistory.query.filter_by(user_id=user_id).order_by(ChatHistory.id.desc()).first()
-        if not chat_history:
-            chat_history = ChatHistory(user_id=user_id, title="Untitled")
-            db.session.add(chat_history)
-            db.session.commit()
-
-        # Append the new message to the chat history
-        new_message_user = Message(
-            chat_history_id=chat_history.id, sender="user", message=user_input
-        )
-        new_message_bot = Message(
-            chat_history_id=chat_history.id, sender="Bot", message=response
-        )
-        db.session.add(new_message_user)
-        db.session.add(new_message_bot)
+    # Get or create the chat history for the current user
+    chat_history = ChatHistory.query.filter_by(user_id=user_id).order_by(ChatHistory.id.desc()).first()
+    if not chat_history:
+        chat_history = ChatHistory(user_id=user_id, title="Untitled")
+        db.session.add(chat_history)
         db.session.commit()
+
+    # Append the new message to the chat history
+    new_message_user = Message(
+        chat_history_id=chat_history.id, sender="user", message=user_input
+    )
+    new_message_bot = Message(
+        chat_history_id=chat_history.id, sender="Bot", message=response
+    )
+    db.session.add(new_message_user)
+    db.session.add(new_message_bot)
+    db.session.commit()
 
     predict_logger.debug(f"Response: {response}")
 
@@ -216,6 +243,9 @@ def update_profile():
         current_user.email = email
 
         if new_password:
+            # Check if the new password is the same as the current password
+            if verify_pass(new_password, current_user.password):
+                return jsonify({"success": False, "error": "same_password", "message": "New password cannot be the same as the current password"}), 400
             current_user.password = hash_pass(new_password)
 
         # Save the changes to the database
@@ -230,7 +260,8 @@ def update_profile():
         db.session.rollback()
         print(f"Unexpected error: {str(e)}")
         return jsonify({"success": False, "message": "Unexpected error occurred"}), 500
-
+    
+    
 @blueprint.route("/get_current_user", methods=["GET"])
 def get_current_user():
     if current_user.is_authenticated:

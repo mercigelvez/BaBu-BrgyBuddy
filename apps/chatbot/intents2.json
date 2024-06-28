@@ -166,22 +166,6 @@
             ]
         },
         {
-            "tag": "business_closure",
-            "patterns": [
-                "What do I need to report a business closure?",
-                "How do I report that my business has closed?",
-                "What are the requirements for reporting a business closure?",
-                "Can you explain the process for reporting a business closure?",
-                "I need to report the closure of my business",
-                "My business has closed down, what should I do?"
-            ],
-            "responses": [
-                "To report a business closure in the barangay, you'll typically need to provide your business permit or license, a written notice of closure, and any other required documents specified by the barangay office. Visit them or inquire about the complete process.",
-                "Reporting a business closure involves submitting your business permit or license, a formal notice stating the closure date, and any additional documents required by the barangay office. I recommend visiting them in person to ensure you have all the necessary paperwork.",
-                "The process for reporting a business closure usually involves providing your business permit or license, a written notice indicating the closure date and reason, valid ID, and any other requirements set by the barangay office. Check with them for the specific steps to follow."
-            ]
-        },
-        {
             "tag": "unable_to_vote",
             "patterns": [
                 "How do I get a certificate for being unable to vote?",
@@ -195,38 +179,6 @@
                 "An unable to vote certificate is issued to individuals who are unable to participate in elections due to various reasons, such as disability or being out of the country. To obtain this certificate, you'll need to provide valid identification, proof of your inability to vote, and any other documents required by the barangay office.",
                 "The unable to vote certificate is given to residents who cannot exercise their right to vote due to specific circumstances. To apply for this certificate, you'll typically need to submit a valid ID, documents proving your inability to vote (e.g., medical certificate, travel documents), and any additional requirements set by the barangay office.",
                 "If you are unable to vote due to reasons such as illness, disability, or being abroad, you can request an unable to vote certificate from the barangay office. To obtain this certificate, you'll need to provide a valid ID, evidence supporting your inability to vote (e.g., medical records, travel documents), and any other documents specified by the barangay."
-            ]
-        },
-        {
-            "tag": "business_permit",
-            "patterns": [
-                "How do I get a business permit?",
-                "What are the requirements for a business permit?",
-                "Can you explain the process for obtaining a business permit?",
-                "What documents do I need to apply for a business permit?",
-                "I want to apply for a business permit",
-                "What do I need to submit for a business permit application?"
-            ],
-            "responses": [
-                "To obtain a business permit in the barangay, you'll typically need to provide valid identification, proof of business registration, tax documents, and any other requirements specified by the barangay office. Visit them or inquire about the complete process and necessary documents.",
-                "The process for getting a business permit usually involves submitting your valid ID, business registration documents, tax records, and any additional documents required by the barangay office. I recommend visiting or contacting them directly to ensure you have all the necessary paperwork.",
-                "To apply for a business permit, you'll need to prepare the following documents: valid ID, business registration certificates, tax records, and any other requirements set by the barangay office. Check with them for the specific steps and documents needed to obtain a business permit in the barangay."
-            ]
-        },
-        {
-            "tag": "health_certificate",
-            "patterns": [
-                "How do I get a health certificate?",
-                "What are the requirements for a health certificate?",
-                "Can you explain the process for obtaining a health certificate?",
-                "What documents do I need to apply for a health certificate?",
-                "I need to apply for a health certificate",
-                "What do I need to submit for a health certificate application?"
-            ],
-            "responses": [
-                "To obtain a health certificate from the barangay, you'll typically need to provide a valid ID, medical records or clearance from a healthcare facility, and any other requirements specified by the barangay office. Visit them or inquire about the complete process and necessary documents.",
-                "The process for getting a health certificate usually involves submitting your valid ID, medical records or clearance from a clinic or hospital, and any additional documents required by the barangay office. I recommend visiting or contacting them directly to ensure you have all the necessary paperwork.",
-                "To apply for a health certificate, you'll need to prepare the following documents: valid ID, medical records or clearance from a healthcare facility, and any other requirements set by the barangay office. Check with them for the specific steps and documents needed to obtain a health certificate in the barangay."
             ]
         },
         {
@@ -294,22 +246,6 @@
             ]
         },
         {
-            "tag": "unable_to_vote",
-            "patterns": [
-                "How do I get a certificate for being unable to vote?",
-                "What documents do I need for an unable to vote certificate?",
-                "Can you explain the unable to vote certificate?",
-                "What is required to get an unable to vote certificate?",
-                "I won't be able to vote, how do I get a certificate for that?",
-                "I need an unable to vote certificate, what do I need to provide?"
-            ],
-            "responses": [
-                "An unable to vote certificate is issued to individuals who are unable to participate in elections due to various reasons, such as disability or being out of the country. To obtain this certificate, you'll need to provide valid identification, proof of your inability to vote, and any other documents required by the barangay office.",
-                "The unable to vote certificate is given to residents who cannot exercise their right to vote due to specific circumstances. To apply for this certificate, you'll typically need to submit a valid ID, documents proving your inability to vote (e.g., medical certificate, travel documents), and any additional requirements set by the barangay office.",
-                "If you are unable to vote due to reasons such as illness, disability, or being abroad, you can request an unable to vote certificate from the barangay office. To obtain this certificate, you'll need to provide a valid ID, evidence supporting your inability to vote (e.g., medical records, travel documents), and any other documents specified by the barangay."
-            ]
-        },
-        {
             "tag": "business_permit",
             "patterns": [
                 "How do I get a business permit?",
@@ -339,54 +275,6 @@
                 "To obtain a health certificate from the barangay, you'll typically need to provide a valid ID, medical records or clearance from a healthcare facility, and any other requirements specified by the barangay office. Visit them or inquire about the complete process and necessary documents.",
                 "The process for getting a health certificate usually involves submitting your valid ID, medical records or clearance from a clinic or hospital, and any additional documents required by the barangay office. I recommend visiting or contacting them directly to ensure you have all the necessary paperwork.",
                 "To apply for a health certificate, you'll need to prepare the following documents: valid ID, medical records or clearance from a healthcare facility, and any other requirements set by the barangay office. Check with them for the specific steps and documents needed to obtain a health certificate in the barangay."
-            ]
-        },
-        {
-            "tag": "first_time_job_seeker",
-            "patterns": [
-                "What is a first-time job seeker certificate?",
-                "How do I get a first-time job seeker certificate?",
-                "What are the requirements for a first-time job seeker certificate?",
-                "Can you explain the first-time job seeker certificate?",
-                "I need to apply for a first-time job seeker certificate",
-                "What do I need to submit for a first-time job seeker certificate application?"
-            ],
-            "responses": [
-                "A first-time job seeker certificate is a document issued to individuals who are seeking employment for the first time. To obtain this certificate, you'll typically need to provide a valid ID, proof of residency, and any other documents required by the barangay office.",
-                "The first-time job seeker certificate is given to residents who are entering the workforce for the first time. To apply for this certificate, you'll need to submit a valid ID, proof of your residency in the barangay, and any additional requirements set by the barangay office.",
-                "The first-time job seeker certificate is issued to individuals who are looking for their first job or employment opportunity. To obtain this certificate, you must provide a valid ID, documents proving your residency in the barangay, and any other requirements specified by the barangay office."
-            ]
-        },
-        {
-            "tag": "late_registration",
-            "patterns": [
-                "What is a late registration certificate?",
-                "How do I get a late registration certificate?",
-                "What are the requirements for a late registration certificate?",
-                "Can you explain the late registration certificate?",
-                "I need to apply for a late registration certificate",
-                "What do I need to submit for a late registration certificate application?"
-            ],
-            "responses": [
-                "A late registration certificate is a document issued to individuals who need to register or process documents after the prescribed deadline. To obtain this certificate, you'll typically need to provide a valid ID, proof of the reason for late registration, and any other documents required by the barangay office.",
-                "The late registration certificate is given to residents who need to register or submit documents after the designated deadline due to specific circumstances. To apply for this certificate, you'll need to submit a valid ID, evidence supporting the reason for late registration (e.g., medical records, travel documents), and any additional requirements set by the barangay office.",
-                "The late registration certificate is issued to individuals who need to register or process documents beyond the specified deadline. To obtain this certificate, you must provide a valid ID, documents justifying the reason for late registration (e.g., medical certificates, travel documents), and any other requirements specified by the barangay office."
-            ]
-        },
-        {
-            "tag": "barangay_id",
-            "patterns": [
-                "How do I get a barangay ID?",
-                "What are the requirements for a barangay ID?",
-                "Can you explain the process for obtaining a barangay ID?",
-                "What documents do I need to apply for a barangay ID?",
-                "I need to apply for a barangay ID",
-                "What do I need to submit for a barangay ID application?"
-            ],
-            "responses": [
-                "To obtain a barangay ID, you'll typically need to provide a valid government-issued ID, proof of residency in the barangay, and any other requirements specified by the barangay office. Visit them or inquire about the complete process and necessary documents.",
-                "The process for getting a barangay ID usually involves submitting your valid government-issued ID, documents proving your residency in the barangay (e.g., utility bills, lease agreement), and any additional documents required by the barangay office. I recommend visiting or contacting them directly to ensure you have all the necessary paperwork.",
-                "To apply for a barangay ID, you'll need to prepare the following documents: valid government-issued ID, proof of residency in the barangay (e.g., utility bills, lease agreement), and any other requirements set by the barangay office. Check with them for the specific steps and documents needed to obtain a barangay ID."
             ]
         },
         {

@@ -46,6 +46,10 @@ $(document).ready(function () {
   });
 });
 
+function isLanguageSelected() {
+  return $("#language-select").val() !== "";
+}
+
 
 //-----------EMAIL VALIDATION--------//
 $(document).ready(function () {
@@ -198,13 +202,13 @@ function checkFormValidity() {
   var emailIsValid = $("#email_create").hasClass("valid");
   var passwordIsValid = $("#pwd_create").hasClass("valid");
   var confirmPasswordIsValid = $("#confirm_pwd_create").hasClass("valid");
+  var languageIsSelected = isLanguageSelected();
 
-  return usernameIsValid && emailIsValid && passwordIsValid && confirmPasswordIsValid;
+  return usernameIsValid && emailIsValid && passwordIsValid && confirmPasswordIsValid && languageIsSelected;
 }
 
 $(document).ready(function () {
-
-  $("#username_create, #email_create, #pwd_create, #confirm_pwd_create").on("input", function () {
+  $("#username_create, #email_create, #pwd_create, #confirm_pwd_create, #language-select").on("input change", function () {
     if (checkFormValidity()) {
       $("#signup-button").prop("disabled", false);
     } else {
