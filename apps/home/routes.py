@@ -15,7 +15,6 @@ from apps.authentication.models import Users
 from apps.authentication.util import hash_pass, verify_pass, role_required
 from sqlalchemy import func
 import logging
-from flask_paginate import Pagination, get_page_args
 from datetime import datetime, timedelta
 
 
