@@ -38,7 +38,6 @@ $(document).ready(function () {
     }
   });
 
-  // Update profile form submission
   $('#profileForm').on('submit', function (e) {
     e.preventDefault();
 
@@ -63,6 +62,9 @@ $(document).ready(function () {
           if (response.error === 'incorrect_password') {
             $('#currentPasswordInput').addClass('is-invalid');
             $('#currentPasswordInput').siblings('.invalid-feedback').text('Incorrect password');
+          } else if (response.error === 'same_password') {
+            $('#newPasswordInput').addClass('is-invalid');
+            $('#newPasswordInput').siblings('.invalid-feedback').text('New password cannot be the same as the current password');
           } else {
             alert(response.message || 'An unexpected error occurred. Please try again.');
           }
@@ -77,6 +79,9 @@ $(document).ready(function () {
           if (response.error === 'incorrect_password') {
             $('#currentPasswordInput').addClass('is-invalid');
             $('#currentPasswordInput').siblings('.invalid-feedback').text('Incorrect password');
+          } else if (response.error === 'same_password') {
+            $('#newPasswordInput').addClass('is-invalid');
+            $('#newPasswordInput').siblings('.invalid-feedback').text('New password cannot be the same as the current password');
           } else {
             alert(response.message || 'An error occurred while updating your profile. Please try again.');
           }

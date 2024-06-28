@@ -244,6 +244,9 @@ def update_profile():
         current_user.email = email
 
         if new_password:
+            # Check if the new password is the same as the current password
+            if verify_pass(new_password, current_user.password):
+                return jsonify({"success": False, "error": "same_password", "message": "New password cannot be the same as the current password"}), 400
             current_user.password = hash_pass(new_password)
 
         # Save the changes to the database
@@ -258,7 +261,8 @@ def update_profile():
         db.session.rollback()
         print(f"Unexpected error: {str(e)}")
         return jsonify({"success": False, "message": "Unexpected error occurred"}), 500
-
+    
+    
 @blueprint.route("/get_current_user", methods=["GET"])
 def get_current_user():
     if current_user.is_authenticated:
