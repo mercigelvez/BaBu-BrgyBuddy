@@ -56,20 +56,15 @@
               <img src="{{ config.ASSETS_ROOT }}/img/babu-logo.png" alt="Logo" />
               <p>Welcome to BaBu -your Barangay Buddy! How can I assist you?</p>
             </div>
-              <div class="chatbox__support col-md-12" data-language-preference="{{ current_user.language_preference }}">
-                <div class="chatbox__messages" id="chatbox-messages">
-                  <div></div>
-                </div>
-                <div class="chatbox__bottom">
-                  <div class="chatbox__choices">
-                    <!-- Choices will be dynamically added here -->
-                  </div>
-                  <div class="chatbox__footer">
-                    <input type="text" class="chatbox__input" placeholder="Write a message..." oninput="this.previousElementSibling.style.display='none'" />
-                    <button class="chatbox__send--footer send__button">Send</button>
-                  </div>
-                </div>
+            <div class="chatbox__support col-md-12" data-language-preference="{{ current_user.language_preference }}">
+              <div class="chatbox__messages" id="chatbox-messages">
+                <div></div>
               </div>
+            </div>
+            <div class="chatbox__footer">
+              <input type="text" class="chatbox__input" placeholder="Write a message..." oninput="this.previousElementSibling.style.display='none'" />
+              <button class="chatbox__send--footer send__button">Send</button>
+            </div>
           </div>
         </div>
       </div>
