@@ -21,30 +21,37 @@
       <li class="nav-item">
         <a class="nav-link" href="#" style="background-color: white; 
           border-radius: 20px; 
-          width: 100%;
+          width: 75%;
           box-shadow: #000;
-          margin: 0px;"><span class="nav-link-text ms-1">Chat History List</span></a>
+          margin: 10px;"><span class="nav-link-text ms-1">Chat History List</span></a>
       </li>
       <li class="nav-item">
         {% if current_user.is_authenticated %}
-          {% for chat_history in current_user.chat_histories %}
-            <div class="d-flex align-items-center justify-content-between px-3 py-2" style="background-color: white; 
-            border-radius: 20px; 
-            width: 90%;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            margin: 10px;">
-              <a class="nav-link flex-grow-1 text-truncate" href="#" data-chat-history-id="{{ chat_history.id }}" style="color: #333; text-decoration: none;">
-                {% if chat_history.title %}
-                  {{ chat_history.title }}
-                {% else %}
-                  Untitled
-                {% endif %}
-              </a>
-              <div class="d-flex justify-content-end me-3">
-                <button class="btn btn-sm btn-link text-primary p-0 me-2 rename-chat" data-chat-history-id="{{ chat_history.id }}"><i class="fas fa-edit"></i></button>
-                <button class="btn btn-sm btn-link text-danger p-0 delete-chat" data-chat-history-id="{{ chat_history.id }}"><i class="fas fa-trash"></i></button>
-              </div>
-            </div>
+          {% for group, chats in grouped_chats.items() %}
+            {% if chats %}
+              <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1" style="color: black; font-weight: bold; font-size: 14px;">
+                <span>{{ group }}</span>
+              </h6>
+              {% for chat_history in chats %}
+                <div class="d-flex align-items-center justify-content-between px-3 py-2" style="background-color: white; 
+                border-radius: 20px; 
+                width: 90%;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                margin: 10px;">
+                  <a class="nav-link flex-grow-1 text-truncate" href="#" data-chat-history-id="{{ chat_history.id }}">
+                    {% if chat_history.title %}
+                      {{ chat_history.title }}
+                    {% else %}
+                      Untitled
+                    {% endif %}
+                  </a>
+                  <div class="d-flex justify-content-end me-3">
+                    <button class="btn btn-sm btn-link text-primary p-0 me-2 rename-chat" data-chat-history-id="{{ chat_history.id }}"><i class="fas fa-edit"></i></button>
+                    <button class="btn btn-sm btn-link text-danger p-0 delete-chat" data-chat-history-id="{{ chat_history.id }}"><i class="fas fa-trash"></i></button>
+                  </div>
+                </div>
+              {% endfor %}
+            {% endif %}
           {% endfor %}
         {% endif %}
       </li>

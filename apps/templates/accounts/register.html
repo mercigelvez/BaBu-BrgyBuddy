@@ -4,20 +4,35 @@ endblock title %}
 <!-- Specific CSS goes HERE -->
 {% block stylesheets %}
   <style>
-    .valid {
-      border-color: green;
+    .valid { border-color: green; }
+    .invalid { border-color: red; }
+    .success-message { color: green; }
+    .error-message { color: red; }
+    
+    /* Reduce the minimum viewport height */
+    .page-header {
+      min-height: 80vh !important;
     }
 
-    .invalid {
-      border-color: red;
+    /* Adjust card size */
+    .card-size {
+      max-height: 80vh;
+      overflow-y: auto;
     }
 
-    .success-message {
-      color: green;
+    /* Reduce vertical margins and paddings */
+    .card-body {
+      padding-top: 1rem;
+      padding-bottom: 1rem;
     }
 
-    .error-message {
-      color: red;
+    .mb-3 {
+      margin-bottom: 0.5rem !important;
+    }
+
+    /* Adjust image container height */
+    .position-relative.bg-gradient-success {
+      height: 80vh !important;
     }
   </style>
 {% endblock stylesheets %} 
@@ -53,7 +68,7 @@ endblock title %}
                       <a
                         href="{{ url_for('authentication_blueprint.login') }}"
                         class="btn bg-gradient-dark w-100 my-4 mb-2"
-                        >Sign IN</a
+                        >Sign In</a
                       >
                     </div>
                   </div>
@@ -64,7 +79,7 @@ endblock title %}
                   {{ form.hidden_tag() }}
 
                   <div class="mb-3 col-md-12">
-                    <label for="input">Username<span style="color: red;">*</span></label>
+                    <label for="input"style="font-size: 16px;">Username<span style="color: red;">*</span></label>
                       <div class="input-field">
                         {{ form.username(placeholder="Enter Username", class='custom-input', id="username_create") }}
                       </div>
@@ -72,7 +87,7 @@ endblock title %}
                   </div>
                   
                   <div class="mb-3 col-md-12">
-                    <label for="input">Email<span style="color: red;">*</span></label>
+                    <label for="input"style="font-size: 16px;">Email<span style="color: red;">*</span></label>
                       <div class="input-field">
                         {{ form.email(placeholder="Enter Email", class='custom-input', id="email_create", maxlength="70") }}
                       </div>
@@ -80,7 +95,7 @@ endblock title %}
                   </div>
 
                   <div class="mb-3 col-md-12">
-                    <label for="password-input">Password<span style="color: red;">*</span></label>
+                    <label for="password-input"style="font-size: 16px;">Password<span style="color: red;">*</span></label>
                       <div class="input-field">
                         {{ form.password(id="pwd_create", placeholder="Enter Password", class='custom-input', type="password") }}
                         <span class="input" onclick="togglePasswordVisibility('pwd_create', 'eye-icon-pwd')">
@@ -91,7 +106,7 @@ endblock title %}
                   </div>
                 
                   <div class="mb-3 col-md-12">
-                    <label for="confirm-password-input">Confirm Password<span style="color: red;">*</span></label>
+                    <label for="confirm-password-input"style="font-size: 16px;">Confirm Password<span style="color: red;">*</span></label>
                       <div class="input-field">
                         {{ form.confirm_password(id="confirm_pwd_create", placeholder="Confirm Password", class='custom-input', type="password") }}
                         <span class="input" onclick="togglePasswordVisibility('confirm_pwd_create', 'eye-icon-confirm')">
@@ -99,7 +114,18 @@ endblock title %}
                         </span>
                       </div>
                       <div class="confirm-password-error-message"></div>
-                  </div>                
+                  </div>    
+                  
+                  <div class="mb-3 col-md-12">
+                    <label for="language-select"style="font-size: 16px;">Preferred Bot Reply Language<span style="color: red;">*</span></label>
+                    <div class="input-field">
+                      <select name="language" id="language-select" class="custom-input" required>
+                        <option value="" class="text-muted">Select a language</option>
+                        <option value="english">English</option>
+                        <option value="tagalog">Tagalog</option>
+                      </select>
+                    </div>
+                  </div>
 
                   <div class="text-center">
                     <button type="submit" name="register" class="btn btn-lg btn-success btn-lg w-70 mt-4 mb-0" id="signup-button" disabled>

@@ -1,4 +1,4 @@
-<nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur" data-scroll="false">
+<nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl navbar-dark" id="navbarBlur" data-scroll="false">
   <div class="container-fluid py-1 px-3">
     <nav aria-label="breadcrumb">
       <h6 class="text-black mb-0 fs-3">Barangay Buddy - BaBu</h6>
@@ -7,14 +7,14 @@
       <div class="ms-md-auto pe-md-3 d-flex align-items-center">
         <!-- to make the next icons to stay on right -->
       </div>
-      <div class="sidebar-toggler-container">
+      <div class="sidebar-toggler-container d-xl-none">
         <ul class="navbar-nav">
-          <li class="nav-item ps-3 d-flex align-items-center text-black">
+          <li class="nav-item ps-3 d-flex align-items-center">
             <a href="javascript:;" class="nav-link text-black p-0" id="iconNavbarSidenav">
-              <div class="sidenav-toggler-inner text-black">
-                <i class="sidenav-toggler-line bg-black"></i>
-                <i class="sidenav-toggler-line bg-black"></i>
-                <i class="sidenav-toggler-line bg-black"></i>
+              <div class="sidenav-toggler-inner">
+                <i class="sidenav-toggler-line"></i>
+                <i class="sidenav-toggler-line"></i>
+                <i class="sidenav-toggler-line"></i>
               </div>
             </a>
           </li>
@@ -58,6 +58,7 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="{{ config.ASSETS_ROOT }}/js/profile.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <style>
   .custom-dropdown-menu {
@@ -79,6 +80,13 @@
     .custom-dropdown-menu {
       left: -5px !important;
       top: -10px !important;
+    }
+  }
+
+  /* Hide sidebar toggler on screens larger than 1200px */
+  @media (min-width: 1200px) {
+    .sidebar-toggler-container {
+      display: none !important;
     }
   }
 </style>

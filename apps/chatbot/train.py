@@ -18,7 +18,7 @@ import os
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
 
-with open(os.path.join(script_dir, 'intents2.json')) as file:
+with open(os.path.join(script_dir, 'intents3.json')) as file:
     data = json.load(file)
 
 
@@ -93,4 +93,4 @@ print("Best Score:", grid_search.best_score_)
 from joblib import dump
 
 # Save the best model to a file
-dump(grid_search.best_estimator_, 'chatmodel.joblib')
+dump(grid_search.best_estimator_, 'chatmodeltagalog.joblib')

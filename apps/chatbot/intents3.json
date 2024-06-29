@@ -1,0 +1,395 @@
+{
+    "intents": [
+        {
+            "tag": "greeting",
+            "patterns": [
+                "Hi",
+                "Hey",
+                "Hello",
+                "Hi there",
+                "Hello there",
+                "Good morning",
+                "Good afternoon",
+                "Good evening",
+                "Good day",
+                "Greetings",
+                "Hey there",
+                "Kamusta"
+            ],
+            "responses": [
+                "Kumusta, si Babu ay nandito para tumulong sa iyo",
+                "Hello, ako si Babu. Ano ang maitutulong ko sa iyo?",
+                "Kumusta, ano ang maaari kong gawin para sa iyo?",
+                "Kumusta, paano kita matutulungan?",
+                "Hello! Paano kita matutulungan ngayong araw?"
+            ]
+        },
+        {
+            "tag": "goodbye",
+            "patterns": [
+                "Bye",
+                "See you later",
+                "Goodbye",
+                "I have to go",
+                "That's it for now",
+                "See you",
+                "Catch you later",
+                "Talk to you soon",
+                "Gotta run",
+                "I'll be back",
+                "Take care"
+            ],
+            "responses": [
+                "Paalam, salamat sa pakikipag-usap kay Babu",
+                "Magandang araw sa iyo",
+                "Paalam! Bumalik ka ulit sa susunod.",
+                "Paalam! Huwag mag-atubiling bumalik kung may mga katanungan ka pa.",
+                "Hanggang sa muli, salamat sa pakikipag-usap"
+            ]
+        },
+        {
+            "tag": "thanks",
+            "patterns": [
+                "Thanks",
+                "Thank you",
+                "Thank's a lot!",
+                "Thank you so much",
+                "Salamat",
+                "Thanks a bunch",
+                "Many thanks",
+                "Appreciate it",
+                "I appreciate your help",
+                "You've been very helpful"
+            ],
+           "responses": [
+                "Masaya akong makatulong!",
+                "Walang anuman!",
+                "Kaluguran ko",
+                "Masaya akong nakatulong!",
+                "Anumang oras!"
+            ]
+        },
+        {
+            "tag": "gratitude_response",
+            "patterns": [
+                "You're welcome",
+                "No problem",
+                "My pleasure",
+                "No worries",
+                "It's nothing",
+                "Anytime"
+            ],
+            "responses": [
+                "Walang anuman!",
+                "Masaya akong nakatulong!",
+                "Kasiyahan kong matulungan ka."
+            ]
+        },
+        {
+            "tag": "barangay_clearance",
+            "patterns": [
+                "What documents do I need for a barangay clearance?",
+                "How do I get a barangay clearance?",
+                "Can you tell me about barangay clearance requirements?",
+                "What is needed for a barangay clearance?",
+                "I want to apply for a barangay clearance",
+                "What do I need to submit for a barangay clearance application?"
+            ],
+            "responses": [
+                "Para makakuha ng barangay clearance, kadalasang kailangan mo ng valid ID, at ang iyong personal na detalye tulad ng pangalan, edad, at kaarawan. Ang presyo ng sertipiko ay mula 60 hanggang 80 piso. Mangyaring bumisita sa barangay para iproseso ang iyong dokumento.",
+                "Ang mga kinakailangan para sa barangay clearance ay karaniwang kinabibilangan ng valid ID, patunay ng tirahan, at ang iyong personal na detalye tulad ng pangalan, edad, at kaarawan. Ang presyo ng sertipiko ay mula 60 hanggang 80 piso. Mangyaring bumisita sa barangay para iproseso ang iyong dokumento.",
+                "Para sa barangay clearance, kailangan mong magdala ng valid na government-issued ID, at ang iyong personal na detalye tulad ng pangalan, edad, at kaarawan. Ang presyo ng sertipiko ay mula 60 hanggang 80 piso. Mangyaring bumisita sa barangay para iproseso ang iyong dokumento."
+            ]
+        },
+        {
+            "tag": "barangay_indigency",
+            "patterns": [
+                "What is a barangay indigency certificate?",
+                "How do I get a barangay indigency certificate?",
+                "What documents are needed for a barangay indigency certificate?",
+                "Can you explain the barangay indigency certificate?",
+                "I need to apply for a barangay indigency certificate",
+                "What are the requirements for a barangay indigency certificate?"
+            ],
+            "responses": [
+                "Ang barangay indigency certificate ay isang dokumento na nagpapatunay sa mababang kita ng isang indibidwal o pamilya sa loob ng barangay. Ito ay kadalasang kinakailangan para sa iba't ibang programa ng tulong ng gobyerno. Maaari kang magtanong sa barangay office para makuha ang sertipikong ito.",
+                "Ang barangay indigency certificate ay ibinibigay sa mga residente na itinuturing na mahirap o nabubuhay sa ibaba ng poverty line. Ito ay kadalasang kinakailangan para sa mga subsidyo o diskwento ng gobyerno. Pumunta sa barangay office para mag-apply para sa sertipikong ito.",
+                "Ang barangay indigency certificate ay nagpapatunay na ang isang indibidwal o pamilya ay may kahirapan sa pananalapi sa loob ng barangay. Para makuha ang sertipikong ito, kailangan mong magpakita ng patunay ng kita, paninirahan, at iba pang suportang dokumento na hinihingi ng barangay office."
+            ]
+        },
+        {
+            "tag": "certificate_of_residency",
+            "patterns": [
+                "What is a certificate of residency?",
+                "How do I get a certificate of residency?",
+                "What documents do I need for a certificate of residency?",
+                "Can you explain the requirements for a certificate of residency?",
+                "I want to apply for a certificate of residency",
+                "What do I need to submit for a certificate of residency application?"
+            ],
+            "responses": [
+                "Ang certificate of residency ay isang dokumento na nagpapatunay ng iyong paninirahan sa loob ng barangay. Ito ay kadalasang kinakailangan para sa iba't ibang layunin, tulad ng pag-enroll sa paaralan o mga transaksyon sa gobyerno, at ang iyong personal na detalye tulad ng pangalan, edad, at kaarawan. Ang presyo ng sertipiko ay mula 60 hanggang 80 piso. Mangyaring bumisita sa barangay para makuha ang sertipikong ito.",
+                "Ang certificate of residency ay ibinibigay ng barangay para patunayan na ang isang indibidwal ay naninirahan sa loob ng hangganan ng barangay. Para makuha ang sertipikong ito, kadalasang kailangan mong magsumite ng valid ID, patunay ng address (hal., bayarin sa kuryente), at ang iyong personal na detalye tulad ng pangalan, edad, at kaarawan. Ang presyo ng sertipiko ay mula 60 hanggang 80 piso. Mangyaring bumisita sa barangay para iproseso ang iyong dokumento.",
+                "Ang certificate of residency ay nagsisilbing patunay na ikaw ay residente ng barangay. Para mag-apply para sa sertipikong ito, kailangan mong magpakita ng valid na government-issued ID, mga dokumentong nagpapakita ng iyong address sa loob ng barangay (hal., bayarin sa kuryente, kasunduan sa pag-upa), at ang iyong personal na detalye tulad ng pangalan, edad, at kaarawan. Ang presyo ng sertipiko ay mula 60 hanggang 80 piso. Mangyaring bumisita sa barangay para iproseso ang iyong dokumento."
+            ]
+        },
+        {
+            "tag": "solo_parents_certificate",
+            "patterns": [
+                "What is a solo parents certificate?",
+                "How do I get a solo parents certificate?",
+                "What documents are needed for a solo parents certificate?",
+                "Can you explain the solo parents certificate?",
+                "I need to apply for a solo parents certificate",
+                "What are the requirements for a solo parents certificate?"
+            ],
+            "responses": [
+                "Ang solo parents certificate ay isang dokumento na nagpapatunay sa katayuan ng isang indibidwal bilang solo parent, na nagbibigay sa kanila ng ilang benepisyo at programa ng tulong. Para makuha ang sertipikong ito, kailangan mong magbigay ng patunay na ikaw ay solo parent, tulad ng birth certificate ng iyong anak, at ang iyong personal na detalye tulad ng pangalan, edad, at kaarawan. Ang presyo ng sertipiko ay mula 60 hanggang 80 piso. Mangyaring bumisita sa barangay para iproseso ang iyong dokumento.",
+                "Ang solo parents certificate ay ibinibigay sa mga indibidwal na nag-aalaga ng anak o mga anak nang walang tulong ng asawa o kapareha. Para mag-apply para sa sertipikong ito, kadalasang kailangan mong magsumite ng birth certificate ng iyong anak, patunay ng iyong katayuan bilang solo parent, valid ID, at ang iyong personal na detalye tulad ng pangalan, edad, at kaarawan. Ang presyo ng sertipiko ay mula 60 hanggang 80 piso. Mangyaring bumisita sa barangay para iproseso ang iyong dokumento.",
+                "Ang solo parents certificate ay kumikilala sa mga indibidwal na nag-iisang responsable sa pag-aalaga ng kanilang anak o mga anak. Para makuha ang sertipikong ito, kailangan mong magbigay ng mga dokumento tulad ng birth certificate ng iyong anak, patunay ng iyong katayuan sa pag-aasawa o paghihiwalay, valid ID, at ang iyong personal na detalye tulad ng pangalan, edad, at kaarawan. Ang presyo ng sertipiko ay mula 60 hanggang 80 piso. Mangyaring bumisita sa barangay para iproseso ang iyong dokumento."
+            ]
+        },
+        {
+            "tag": "no_fix_income",
+            "patterns": [
+                "What is a no fix income certificate?",
+                "How do I get a no fix income certificate?",
+                "What documents are needed for a no fix income certificate?",
+                "Can you explain the no fix income certificate?",
+                "I need to apply for a no fix income certificate",
+                "What are the requirements for a no fix income certificate?"
+            ],
+            "responses": [
+                "Ang no fix income certificate ay isang dokumento na nagpapatunay na ang isang indibidwal o pamilya ay walang regular o nakasaad na pinagkukunan ng kita. Ang sertipikong ito ay kadalasang kinakailangan para sa iba't ibang programa ng tulong ng gobyerno o mga diskwento. Para makuha ang sertipikong ito, kailangan mong magbigay ng patunay ng iyong sitwasyon sa pananalapi, valid ID, at ang iyong personal na detalye tulad ng pangalan, edad, at kaarawan. Ang presyo ng sertipiko ay mula 60 hanggang 80 piso. Mangyaring bumisita sa barangay para iproseso ang iyong dokumento.",
+                "Ang no fix income certificate ay ibinibigay sa mga indibidwal o pamilya na walang matatag o regular na pinagkukunan ng kita. Para mag-apply para sa sertipikong ito, kadalasang kailangan mong magsumite ng mga dokumento tulad ng patunay ng kawalan ng trabaho, financial statements, valid ID, at ang iyong personal na detalye tulad ng pangalan, edad, at kaarawan. Ang presyo ng sertipiko ay mula 60 hanggang 80 piso. Mangyaring bumisita sa barangay para iproseso ang iyong dokumento.",
+                "Ang no fix income certificate ay nagpapatunay na ang isang indibidwal o pamilya ay walang nakasaad o regular na pinagkukunan ng kita. Para makuha ang sertipikong ito, kailangan mong magbigay ng mga dokumento na nagpapakita ng iyong sitwasyon sa pananalapi, tulad ng patunay ng kawalan ng trabaho, kawalan ng pinagkukunan ng kita, valid ID, at ang iyong personal na detalye tulad ng pangalan, edad, at kaarawan. Ang presyo ng sertipiko ay mula 60 hanggang 80 piso. Mangyaring bumisita sa barangay para iproseso ang iyong dokumento."
+            ]
+        },
+        {
+            "tag": "unable_to_vote",
+            "patterns": [
+                "How do I get a certificate for being unable to vote?",
+                "What documents do I need for an unable to vote certificate?",
+                "Can you explain the unable to vote certificate?",
+                "What is required to get an unable to vote certificate?",
+                "I won't be able to vote, how do I get a certificate for that?",
+                "I need an unable to vote certificate, what do I need to provide?"
+            ],
+           "responses": [
+                "Ang unable to vote certificate ay ibinibigay sa mga indibidwal na hindi makakalahok sa mga halalan dahil sa iba't ibang dahilan, tulad ng kapansanan o pag-alis ng bansa. Para makuha ang sertipikong ito, kailangan mong magbigay ng valid na pagkakakilanlan, patunay ng iyong kawalan ng kakayahang bumoto, at anumang iba pang dokumentong hinihingi ng barangay office.",
+                "Ang unable to vote certificate ay ibinibigay sa mga residente na hindi magagamit ang kanilang karapatang bumoto dahil sa mga partikular na dahilan. Para mag-apply para sa sertipikong ito, kadalasang kailangan mong magsumite ng valid na ID, mga dokumentong nagpapatunay ng iyong kawalan ng kakayahang bumoto (hal., medikal na sertipiko, dokumento ng paglalakbay), at anumang karagdagang kahilingan ng barangay office.",
+                "Kung hindi ka makakaboto dahil sa mga dahilan tulad ng sakit, kapansanan, o paglalakbay sa ibang bansa, maaari kang humiling ng unable to vote certificate mula sa barangay office. Para makuha ang sertipikong ito, kailangan mong magbigay ng valid na ID, ebidensya na sumusuporta sa iyong kawalan ng kakayahang bumoto (hal., medikal na rekord, dokumento ng paglalakbay), at anumang iba pang dokumentong tinukoy ng barangay."
+            ]
+        },
+        {
+            "tag": "first_time_job_seeker",
+            "patterns": [
+                "What is a first-time job seeker certificate?",
+                "How do I get a first-time job seeker certificate?",
+                "What are the requirements for a first-time job seeker certificate?",
+                "Can you explain the first-time job seeker certificate?",
+                "I need to apply for a first-time job seeker certificate",
+                "What do I need to submit for a first-time job seeker certificate application?"
+            ],
+           "responses": [
+            "Ang first-time job seeker certificate ay isang dokumentong ibinibigay sa mga indibidwal na unang beses na naghahanap ng trabaho. Upang makakuha ng sertipikong ito, karaniwang kailangan mong magbigay ng valid na ID, patunay ng paninirahan, at anumang iba pang dokumentong hinihingi ng tanggapan ng barangay.",
+            "Ang first-time job seeker certificate ay ibinibigay sa mga residenteng unang beses papasok sa trabaho. Para mag-apply para sa sertipikong ito, kailangan mong magsumite ng valid na ID, patunay ng iyong paninirahan sa barangay, at anumang karagdagang kinakailangan na itinakda ng tanggapan ng barangay.",
+            "Ang first-time job seeker certificate ay ibinibigay sa mga indibidwal na naghahanap ng kanilang unang trabaho o oportunidad sa pagtatrabaho. Upang makuha ang sertipikong ito, dapat kang magbigay ng valid na ID, mga dokumentong nagpapatunay ng iyong paninirahan sa barangay, at anumang iba pang kinakailangang tinukoy ng tanggapan ng barangay."
+        ]
+        },
+        {
+            "tag": "late_registration",
+            "patterns": [
+                "What is a late registration certificate?",
+                "How do I get a late registration certificate?",
+                "What are the requirements for a late registration certificate?",
+                "Can you explain the late registration certificate?",
+                "I need to apply for a late registration certificate",
+                "What do I need to submit for a late registration certificate application?"
+            ],
+            "responses": [
+                "A late registration certificate is a document issued to individuals who need to register or process documents after the prescribed deadline. To obtain this certificate, you'll typically need to provide a valid ID, proof of the reason for late registration, and any other documents required by the barangay office.",
+                "The late registration certificate is given to residents who need to register or submit documents after the designated deadline due to specific circumstances. To apply for this certificate, you'll need to submit a valid ID, evidence supporting the reason for late registration (e.g., medical records, travel documents), and any additional requirements set by the barangay office.",
+                "The late registration certificate is issued to individuals who need to register or process documents beyond the specified deadline. To obtain this certificate, you must provide a valid ID, documents justifying the reason for late registration (e.g., medical certificates, travel documents), and any other requirements specified by the barangay office."
+            ]
+        },
+        {
+            "tag": "barangay_id",
+            "patterns": [
+                "How do I get a barangay ID?",
+                "What are the requirements for a barangay ID?",
+                "Can you explain the process for obtaining a barangay ID?",
+                "What documents do I need to apply for a barangay ID?",
+                "I need to apply for a barangay ID",
+                "What do I need to submit for a barangay ID application?"
+            ],
+            "responses": [
+                "Para makakuha ng barangay ID, kadalasang kailangan mong magbigay ng valid na government-issued ID, patunay ng paninirahan sa barangay, at ang iyong personal na detalye tulad ng pangalan, edad, at kaarawan. Ang presyo ng ID ay mula 80 hanggang 100 piso. Mangyaring bumisita sa barangay para iproseso ang iyong dokumento.",
+                "Ang proseso ng pagkuha ng barangay ID ay karaniwang kinabibilangan ng pagsusumite ng iyong valid na government-issued ID, mga dokumentong nagpapatunay ng iyong paninirahan sa barangay (hal., bayarin sa kuryente, kasunduan sa pag-upa), at ang iyong personal na detalye tulad ng pangalan, edad, at kaarawan. Ang presyo ng ID ay mula 80 hanggang 100 piso. Mangyaring bumisita sa barangay para iproseso ang iyong dokumento.",
+                "Para mag-apply ng barangay ID, kailangan mong ihanda ang mga sumusunod na dokumento: valid na government-issued ID, patunay ng paninirahan sa barangay (hal., bayarin sa kuryente, kasunduan sa pag-upa), at ang iyong personal na detalye tulad ng pangalan, edad, at kaarawan. Ang presyo ng ID ay mula 80 hanggang 100 piso. Mangyaring bumisita sa barangay para iproseso ang iyong dokumento."
+            ]
+        },
+        {
+            "tag": "business_closure",
+            "patterns": [
+                "What do I need to report a business closure?",
+                "How do I report that my business has closed?",
+                "What are the requirements for reporting a business closure?",
+                "Can you explain the process for reporting a business closure?",
+                "I need to report the closure of my business",
+                "My business has closed down, what should I do?"
+            ],
+            "responses": [
+                "Para mag-ulat ng pagsasara ng negosyo sa barangay, kadalasang kailangan mong magbigay ng iyong business permit o lisensya, isang nakasulat na abiso ng pagsasara, at ang iyong personal na detalye tulad ng pangalan, edad, at kaarawan. Ang presyo ng sertipiko ay mula 60 hanggang 80 piso. Mangyaring bumisita sa barangay para iproseso ang iyong dokumento.",
+                "Ang pag-uulat ng pagsasara ng negosyo ay kinabibilangan ng pagsusumite ng iyong business permit o lisensya, isang pormal na abiso na nagsasaad ng petsa ng pagsasara, at anumang karagdagang dokumento na hinihingi ng barangay office. Inirerekomenda ko na personal kang bumisita para matiyak na mayroon kang lahat ng kinakailangang papeles, at ang iyong personal na detalye tulad ng pangalan, edad, at kaarawan. Ang presyo ng sertipiko ay mula 60 hanggang 80 piso. Mangyaring bumisita sa barangay para iproseso ang iyong dokumento."
+            ]
+        },
+        {
+            "tag": "business_permit",
+            "patterns": [
+                "How do I get a business permit?",
+                "What are the requirements for a business permit?",
+                "Can you explain the process for obtaining a business permit?",
+                "What documents do I need to apply for a business permit?",
+                "I want to apply for a business permit",
+                "What do I need to submit for a business permit application?"
+            ],
+            "responses": [
+                "Para makakuha ng business permit sa barangay, kadalasang kailangan mong magbigay ng valid na pagkakakilanlan, patunay ng pagpaparehistro ng negosyo, mga dokumento ng buwis, at anumang iba pang kinakailangang tinukoy ng barangay office. Bumisita sa kanila o magtanong tungkol sa kumpletong proseso at kinakailangang mga dokumento.",
+                "Ang proseso ng pagkuha ng business permit ay karaniwang kinabibilangan ng pagsusumite ng iyong valid na ID, mga dokumento ng pagpaparehistro ng negosyo, mga rekord ng buwis, at anumang karagdagang dokumentong hinihingi ng barangay office. Inirerekomenda kong bumisita ka o makipag-ugnayan sa kanila nang direkta para matiyak na mayroon kang lahat ng kinakailangang papeles.",
+                "Para mag-apply ng business permit, kailangan mong ihanda ang mga sumusunod na dokumento: valid na ID, mga sertipiko ng pagpaparehistro ng negosyo, mga rekord ng buwis, at anumang iba pang kahilingan na itinakda ng barangay office. Magtanong sa kanila para sa mga partikular na hakbang at dokumentong kailangan para makakuha ng business permit sa barangay."
+            ]
+        },
+        {
+            "tag": "health_certificate",
+            "patterns": [
+                "How do I get a health certificate?",
+                "What are the requirements for a health certificate?",
+                "Can you explain the process for obtaining a health certificate?",
+                "What documents do I need to apply for a health certificate?",
+                "I need to apply for a health certificate",
+                "What do I need to submit for a health certificate application?"
+            ],
+            "responses": [
+                "Para makakuha ng health certificate mula sa barangay, kadalasang kailangan mong magbigay ng valid na ID, mga medikal na rekord o clearance mula sa isang pasilidad ng pangangalagang pangkalusugan, at anumang iba pang kahilingang tinukoy ng barangay office. Bumisita sa kanila o magtanong tungkol sa kumpletong proseso at kinakailangang mga dokumento.",
+                "Ang proseso ng pagkuha ng health certificate ay karaniwang kinabibilangan ng pagsusumite ng iyong valid na ID, mga medikal na rekord o clearance mula sa isang klinika o ospital, at anumang karagdagang dokumentong hinihingi ng barangay office. Inirerekomenda kong bumisita ka o makipag-ugnayan sa kanila nang direkta para matiyak na mayroon kang lahat ng kinakailangang papeles.",
+                "Para mag-apply ng health certificate, kailangan mong ihanda ang mga sumusunod na dokumento: valid na ID, mga medikal na rekord o clearance mula sa isang pasilidad ng pangangalagang pangkalusugan, at anumang iba pang kahilingang itinakda ng barangay office. Magtanong sa kanila para sa mga partikular na hakbang at dokumentong kailangan para makakuha ng health certificate sa barangay."
+            ]
+        },
+        {
+            "tag": "documents_summary",
+            "patterns": [
+                "Can you summarize the services offered by the barangay?",
+                "What are the main services provided by the barangay?",
+                "Give me an overview of the different services available in the barangay.",
+                "What kinds of documents and services can I get from the barangay?",
+                "List down the services offered by the barangay",
+                "Ano ang mga documents na pwede kuhain sa barangay?"
+            ],
+            "responses": [
+                "Ang barangay ay nag-aalok ng iba't ibang serbisyo at dokumento, kabilang ang barangay clearance, barangay indigency certificate, certificate of residency, solo parents certificate, no fix income certificate, sertipikasyon ng pagsasara ng negosyo, unable to vote certificate, business permit, health certificate, first-time job seeker certificate, late registration certificate, at barangay ID. Bisitahin ang barangay office para sa higit pang detalye sa bawat serbisyo.",
+                "Ilan sa mga pangunahing serbisyong ibinibigay ng barangay ay kinabibilangan ng pagbibigay ng mga barangay clearance, certificate of residency, indigency certificate, solo parent certificate, business permit at pagsasara, health certificate, tulong sa late registration, sertipikasyon para sa unable to vote o first-time job seekers, at pagbibigay ng barangay ID.",
+                "Ang barangay ay nag-aalok ng iba't ibang serbisyo sa mga residente nito, tulad ng barangay clearance, certificate of residency, indigency certification, solo parent certificate, business permit at pagsasara, health certificate, tulong sa late registration, sertipikasyon para sa unable to vote o first-time job seekers, at pagbibigay ng barangay ID. Inirerekomenda kong bumisita sa barangay office para magtanong tungkol sa mga partikular na kahilingan para sa bawat serbisyo."
+            ]
+        },
+        {
+            "tag": "community_events",
+            "patterns": [
+                "Are there any community events happening in the barangay?",
+                "What kind of events or activities are organized in the barangay?",
+                "How can I learn about upcoming events in the barangay?",
+                "Does the barangay host any special events or celebrations?",
+                "What community events are scheduled in the barangay?",
+                "Are there any upcoming festivals or activities in the barangay?"
+            ],
+            "responses": [
+                "Ang barangay ay nag-oorganisa ng iba't ibang kaganapan at aktibidad sa komunidad sa buong taon, tulad ng mga pista, palaro sa sports, kampanya sa kalusugan, at mga inisyatiba sa kapaligiran. Maaari kang magtanong sa barangay office o tingnan ang kanilang mga pahina sa social media para sa mga update sa mga darating na kaganapan.",
+                "Oo, ang barangay ay nagho-host ng ilang kaganapan at selebrasyon sa komunidad. Maaaring kabilang dito ang mga kultural na pista, selebrasyon ng piyesta, palaro sa sports, mga programa sa kalusugan at wellness, at mga kampanya sa kamalayan sa kapaligiran. Bisitahin ang barangay office o sundan ang kanilang mga online channel para manatiling may kaalaman tungkol sa mga darating na kaganapan.",
+                "Ang barangay ay regular na nag-oorganisa ng iba't ibang uri ng kaganapan at aktibidad sa komunidad para sa mga residente nito. Maaaring ito ay mula sa mga kultural na pista at selebrasyon ng piyesta hanggang sa mga palaro sa sports, kampanya sa kalusugan, at mga inisyatiba sa kapaligiran. Iminumungkahi kong tingnan sa barangay office o sundan ang kanilang mga pahina sa social media para malaman ang tungkol sa mga darating na kaganapan."
+            ]
+        },
+        {
+            "tag": "emergency_services",
+            "patterns": [
+                "What should I do in case of an emergency in the barangay?",
+                "Who should I contact for emergency assistance in the barangay?",
+                "Are there any emergency services provided by the barangay?",
+                "How can I report an emergency situation in the barangay?",
+                "What is the emergency hotline or contact in the barangay?",
+                "Who do I call in case of an emergency in the barangay?"
+            ],
+           "responses": [
+                "Sa kaso ng emergency sa barangay, dapat kang makipag-ugnayan kaagad sa Barangay Captain o sa itinalagang emergency response team. Ang barangay ay nakikipagtulungan din sa lokal na tagapagpatupad ng batas, departamento ng bumbero, at mga serbisyong medikal para tumulong sa mga sitwasyong pang-emergency. Huwag mag-atubiling mag-ulat ng anumang emergency sa barangay office.",
+                "Para sa tulong pang-emergency sa barangay, maaari kang direktang makipag-ugnayan sa Barangay Captain o sa emergency response team. Ang barangay ay malapit na nakikipagtulungan sa mga lokal na awtoridad, tulad ng pulisya, departamento ng bumbero, at mga serbisyong medikal, para tugunan ang mga sitwasyong pang-emergency. Iulat ang anumang emergency sa barangay office sa lalong madaling panahon.",
+                "Ang barangay ay nagbibigay ng mga serbisyong pang-emergency at nakikipagtulungan sa mga lokal na awtoridad para tulungan ang mga residente sa mga sitwasyong pang-emergency. Kung makakaranas ka ng emergency, dapat mo itong iulat kaagad sa Barangay Captain o sa itinalagang emergency response team. Makikipagtulungan ang barangay sa mga naaangkop na ahensya, tulad ng tagapagpatupad ng batas, departamento ng bumbero, o mga serbisyong medikal, para tugunan ang emergency."
+            ]
+        },
+        {
+            "tag": "barangay_programs",
+            "patterns": [
+                "What kind of programs does the barangay offer?",
+                "Are there any special programs or initiatives in the barangay?",
+                "How can I learn about the different programs available in the barangay?",
+                "Does the barangay have any programs for specific groups or communities?",
+                "What social programs are available in the barangay?",
+                "Are there any livelihood or skills training programs offered by the barangay?"
+            ],
+            "responses": [
+                "Ang barangay ay nag-aalok ng iba't ibang programa at inisyatiba na naglalayong paglingkuran ang mga pangangailangan ng mga residente nito. Maaaring kabilang dito ang mga programa sa social welfare, kabuhayan at pagsasanay sa kasanayan, programa sa pagpapaunlad ng kabataan, tulong sa mga senior citizen, at mga pagsisikap sa pangangalaga ng kapaligiran. Maaari kang magtanong sa barangay office o tingnan ang kanilang website para sa higit pang impormasyon sa mga partikular na programa.",
+                "Oo, ang barangay ay may ilang programa at inisyatiba. Maaaring ito ay mula sa mga programa sa social welfare para sa mga pamilyang mahirap, mga programa sa kabuhayan at pagsasanay sa kasanayan, programa sa pagpapaunlad ng kabataan at sports, tulong para sa mga senior citizen, at mga inisyatiba sa pangangalaga ng kapaligiran. Bisitahin ang barangay office o tingnan ang kanilang mga online channel para malaman ang higit pa tungkol sa mga available na programa.",
+                "Ang barangay ay nagpapatupad ng iba't ibang programa at inisyatiba para paglingkuran ang mga pangangailangan ng kanilang komunidad. Maaaring kabilang dito ang mga programa sa social welfare, kabuhayan at pagsasanay sa kasanayan, programa sa pagpapaunlad ng kabataan, tulong para sa mga senior citizen, mga pagsisikap sa pangangalaga ng kapaligiran, at mga programang nakatutok sa mga partikular na grupo o komunidad sa loob ng barangay. Iminumungkahi kong magtanong sa barangay office o sa kanilang website para sa mas detalyadong impormasyon tungkol sa iba't ibang programang inaalok."
+            ]
+        },
+        {
+            "tag": "complaint_or_concern",
+            "patterns": [
+                "How can I file a complaint or report a concern to the barangay?",
+                "What is the process for raising an issue or concern with the barangay?",
+                "Is there a way to submit a formal complaint to the barangay?",
+                "Who should I talk to if I have a concern or issue related to the barangay?",
+                "I want to report a complaint or concern to the barangay",
+                "Where do I file a complaint or grievance against the barangay?"
+            ],
+            "responses": [
+                "Kung mayroon kang reklamo o alalahanin na nais iulat sa barangay, maaari kang pumunta sa barangay office at magsumite ng nakasulat o berbal na reklamo. Tutulungan ka ng mga tauhan ng barangay na idokumento nang maayos ang iyong alalahanin at gumawa ng kinakailangang hakbang para matugunan ito.",
+                "Para magsumite ng reklamo o magtanong tungkol sa isang isyu sa barangay, maaari kang pumunta sa barangay office at makipag-usap sa itinalagang tauhan o opisyal. Gagabayan ka nila sa proseso ng pagsusumite ng pormal na reklamo o alalahanin, na maaaring magsangkot ng pagpuno ng mga form o pagbibigay ng mga sumusuportang dokumento.",
+                "Ang barangay ay may proseso para sa mga residente na magsumite ng mga reklamo o mag-ulat ng mga alalahanin. Maaari kang pumunta sa barangay office at humiling na magsumite ng pormal na reklamo. Tutulungan ka ng mga tauhan ng barangay na idokumento ang iyong reklamo at gumawa ng naaangkop na hakbang para matugunan ang iyong alalahanin."
+            ]
+        },
+        {
+            "tag": "documents",
+            "patterns": [
+                "Can you list all available services I can get?",
+                "What are the services?",
+                "What documents can I get?",
+                "What can I request?",
+                "What services do you offer?",
+                "List down the services and documents offered by the barangay",
+                "What are the different services and documents provided by the barangay?"
+            ],
+            "responses": [
+                "Ang barangay ay nag-aalok ng mga sumusunod na serbisyo at dokumento: \n\n- Barangay Clearance\n- Barangay Indigency Certificate\n- Certificate of Residency\n- Solo Parents Certificate\n- No Fix Income Certificate\n- Sertipikasyon ng Pagsasara ng Negosyo\n- Unable to Vote Certificate\n- Business Permit\n- Health Certificate\n- First-Time Job Seeker Certificate\n- Late Registration Certificate\n- Barangay ID",
+                "Maaari mong hilingin ang mga sumusunod na serbisyo at dokumento mula sa barangay: \n\n- Barangay Clearance\n- Barangay Indigency Certificate\n- Certificate of Residency\n- Solo Parents Certificate\n- No Fix Income Certificate\n- Sertipikasyon ng Pagsasara ng Negosyo\n- Unable to Vote Certificate\n- Business Permit\n- Health Certificate\n- First-Time Job Seeker Certificate\n- Late Registration Certificate\n- Barangay ID",
+                "Ang mga serbisyo at dokumento na available sa barangay ay: \n\n- Barangay Clearance\n- Barangay Indigency Certificate\n- Certificate of Residency\n- Solo Parents Certificate\n- No Fix Income Certificate\n- Sertipikasyon ng Pagsasara ng Negosyo\n- Unable to Vote Certificate\n- Business Permit\n- Health Certificate\n- First-Time Job Seeker Certificate\n- Late Registration Certificate\n- Barangay ID",
+                "Narito ang mga serbisyo at dokumento na maaari mong makuha mula sa barangay: \n\n- Barangay Clearance\n- Barangay Indigency Certificate\n- Certificate of Residency\n- Solo Parents Certificate\n- No Fix Income Certificate\n- Sertipikasyon ng Pagsasara ng Negosyo\n- Unable to Vote Certificate\n- Business Permit\n- Health Certificate\n- First-Time Job Seeker Certificate\n- Late Registration Certificate\n- Barangay ID"
+            ]
+        },
+        {
+            "tag": "papeles",
+            "patterns": [
+                "Ano ang mga papeles sa barangay?",
+                "Pwede mo bang ilista ang mga papeles maaaring makuha sa barangay?",
+                "Anong mga sertipiko ang inaalok ng barangay?",
+                "Ano-ano ang mga papeles na pwedeng kunin sa barangay?",
+                "Mayroon ba kayong listahan ng mga certificate inilalabas ng barangay?",
+                "Pwede bang malaman ang mga serbisyong dokumento ng barangay?",
+                "Ano-ano ang mga sertipikasyon na ibinibigay ng barangay?"
+            ],
+            "responses": [
+                "Ang mga dokumentong maaaring makuha sa barangay ay ang mga sumusunod:\n\n1. Barangay Clearance\n2. Barangay Indigency Certificate\n3. Certificate of Residency\n4. Solo Parents Certificate\n5. No Fix Income Certificate\n6. Sertipikasyon ng Pagsasara ng Negosyo\n7. Unable to Vote Certificate\n8. Business Permit\n9. Health Certificate\n10. First-Time Job Seeker Certificate\n11. Late Registration Certificate\n12. Barangay ID\n\nPara sa higit pang impormasyon tungkol sa bawat dokumento, maaari kang magtanong sa akin o bumisita sa barangay office.",
+                "Narito ang listahan ng mga dokumentong inaalok ng barangay:\n\n1. Barangay Clearance\n2. Barangay Indigency Certificate\n3. Certificate of Residency\n4. Solo Parents Certificate\n5. No Fix Income Certificate\n6. Sertipikasyon ng Pagsasara ng Negosyo\n7. Unable to Vote Certificate\n8. Business Permit\n9. Health Certificate\n10. First-Time Job Seeker Certificate\n11. Late Registration Certificate\n12. Barangay ID\n\nKung nais mo ng karagdagang detalye tungkol sa mga dokumentong ito, huwag mag-atubiling magtanong.",
+                "Ang barangay ay nag-aalok ng mga sumusunod na dokumento:\n\n1. Barangay Clearance\n2. Barangay Indigency Certificate\n3. Certificate of Residency\n4. Solo Parents Certificate\n5. No Fix Income Certificate\n6. Sertipikasyon ng Pagsasara ng Negosyo\n7. Unable to Vote Certificate\n8. Business Permit\n9. Health Certificate\n10. First-Time Job Seeker Certificate\n11. Late Registration Certificate\n12. Barangay ID\n\nPara sa mga kinakailangan at proseso ng pagkuha ng mga dokumentong ito, maaari kang magtanong sa akin o direktang bumisita sa barangay office."
+            ]
+        }
+    ]
+}
