@@ -1,3 +1,34 @@
+const services = {
+  english: [
+    "Barangay Clearance",
+    "Barangay Indigency Certificate",
+    "Certificate of Residency",
+    "Solo Parents Certificate",
+    "No Fix Income Certificate",
+    "Business Closure Certification",
+    "Unable to Vote Certificate",
+    "Business Permit",
+    "Health Certificate",
+    "First-Time Job Seeker Certificate",
+    "Late Registration Certificate",
+    "Barangay ID"
+  ],
+  tagalog: [
+    "Barangay Clearance",
+    "Barangay Indigency Certificate",
+    "Certificate of Residency",
+    "Solo Parents Certificate",
+    "No Fix Income Certificate",
+    "Business Closure Certification",
+    "Unable to Vote Certificate",
+    "Business Permit",
+    "Health Certificate",
+    "First-Time Job Seeker Certificate",
+    "Late Registration Certificate",
+    "Barangay ID"
+  ]
+};
+
 class Chatbox {
   constructor() {
     this.args = {
@@ -6,16 +37,67 @@ class Chatbox {
       textInput: document.querySelector(".chatbox__input"),
     };
 
+    this.handleResize = this.handleResize.bind(this);
+    window.addEventListener('resize', this.handleResize);
+    this.choicesContainer = this.args.chatBox.querySelector(".chatbox__choices");
+    this.setupChoices();
     this.userLanguagePreference = this.args.chatBox.dataset.languagePreference;
     this.state = false;
     this.messages = [];
     this.init();
   }
 
+  handleResize() {
+    this.setupChoices();
+  }
+
+  destroy() {
+    // ... other cleanup code ...
+    window.removeEventListener('resize', this.handleResize);
+  }
+
   init() {
     this.display();
+    this.setupChoices();
     this.args.sendButton.addEventListener("click", () => this.onSendButton());
     this.args.textInput.addEventListener("keyup", (event) => this.onEnterPress(event));
+  }
+
+  setupChoices() {
+    const languageServices = this.userLanguagePreference === 'tagalog' ? services.tagalog : services.english;
+    const screenWidth = window.innerWidth;
+    let choiceCount;
+
+    if (screenWidth > 768) {
+      choiceCount = 5;
+    } else if (screenWidth > 480) {
+      choiceCount = 3;
+    } else {
+      choiceCount = 2;
+    }
+
+    const randomChoices = this.getRandomChoices(languageServices, choiceCount);
+
+    this.choicesContainer.innerHTML = '';
+    randomChoices.forEach(choice => {
+      const button = document.createElement('button');
+      button.textContent = choice;
+      button.addEventListener('click', () => this.onChoiceClick(choice));
+      this.choicesContainer.appendChild(button);
+    });
+  }
+
+  getRandomChoices(array, count) {
+    const shuffled = array.sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, count);
+  }
+  
+  onChoiceClick(choice) {
+    this.args.textInput.value = `How can I get a ${choice}?`;
+    if (this.userLanguagePreference === 'tagalog') {
+      this.args.textInput.value = `Paano ako makakakuha ng ${choice}?`;
+    }
+    this.onSendButton();
   }
 
   display() {
@@ -103,6 +185,7 @@ class Chatbox {
     const chatContainer = this.args.chatBox.querySelector(".chatbox__messages");
     chatContainer.innerHTML = '';
     chatContainer.scrollTop = 0;
+    this.setupChoices(); 
   }
 
   loadChatHistory(messages) {
@@ -113,6 +196,8 @@ class Chatbox {
   }
 
 }
+
+
 
 let chatbox;
 
@@ -220,7 +305,7 @@ function sendMessageToServer(userMessage) {
     },
     body: JSON.stringify({
       message: userMessage,
-      language: chatbox.userLanguagePreference 
+      language: chatbox.userLanguagePreference
     })
   })
     .then(response => response.json())
@@ -264,3 +349,5 @@ function updateChatboxWithHistory(messages) {
   const textInput = document.querySelector('.chatbox__input');
   textInput.addEventListener('keyup', handleUserInput);
 }
+
+

@@ -192,10 +192,10 @@
                 "What do I need to submit for a first-time job seeker certificate application?"
             ],
            "responses": [
-                "Para makakuha ng business permit sa barangay, kadalasang kailangan mong magbigay ng valid na pagkakakilanlan, patunay ng pagpaparehistro ng negosyo, mga dokumento ng buwis, at anumang iba pang kinakailangang tinukoy ng barangay office. Bumisita sa kanila o magtanong tungkol sa kumpletong proseso at kinakailangang mga dokumento.",
-                "Ang proseso ng pagkuha ng business permit ay karaniwang kinabibilangan ng pagsusumite ng iyong valid na ID, mga dokumento ng pagpaparehistro ng negosyo, mga rekord ng buwis, at anumang karagdagang dokumentong hinihingi ng barangay office. Inirerekomenda kong bumisita ka o makipag-ugnayan sa kanila nang direkta para matiyak na mayroon kang lahat ng kinakailangang papeles.",
-                "Para mag-apply ng business permit, kailangan mong ihanda ang mga sumusunod na dokumento: valid na ID, mga sertipiko ng pagpaparehistro ng negosyo, mga rekord ng buwis, at anumang iba pang kahilingan na itinakda ng barangay office. Magtanong sa kanila para sa mga partikular na hakbang at dokumentong kailangan para makakuha ng business permit sa barangay."
-            ]
+            "Ang first-time job seeker certificate ay isang dokumentong ibinibigay sa mga indibidwal na unang beses na naghahanap ng trabaho. Upang makakuha ng sertipikong ito, karaniwang kailangan mong magbigay ng valid na ID, patunay ng paninirahan, at anumang iba pang dokumentong hinihingi ng tanggapan ng barangay.",
+            "Ang first-time job seeker certificate ay ibinibigay sa mga residenteng unang beses papasok sa trabaho. Para mag-apply para sa sertipikong ito, kailangan mong magsumite ng valid na ID, patunay ng iyong paninirahan sa barangay, at anumang karagdagang kinakailangan na itinakda ng tanggapan ng barangay.",
+            "Ang first-time job seeker certificate ay ibinibigay sa mga indibidwal na naghahanap ng kanilang unang trabaho o oportunidad sa pagtatrabaho. Upang makuha ang sertipikong ito, dapat kang magbigay ng valid na ID, mga dokumentong nagpapatunay ng iyong paninirahan sa barangay, at anumang iba pang kinakailangang tinukoy ng tanggapan ng barangay."
+        ]
         },
         {
             "tag": "late_registration",
@@ -389,22 +389,6 @@
                 "Ang mga dokumentong maaaring makuha sa barangay ay ang mga sumusunod:\n\n1. Barangay Clearance\n2. Barangay Indigency Certificate\n3. Certificate of Residency\n4. Solo Parents Certificate\n5. No Fix Income Certificate\n6. Sertipikasyon ng Pagsasara ng Negosyo\n7. Unable to Vote Certificate\n8. Business Permit\n9. Health Certificate\n10. First-Time Job Seeker Certificate\n11. Late Registration Certificate\n12. Barangay ID\n\nPara sa higit pang impormasyon tungkol sa bawat dokumento, maaari kang magtanong sa akin o bumisita sa barangay office.",
                 "Narito ang listahan ng mga dokumentong inaalok ng barangay:\n\n1. Barangay Clearance\n2. Barangay Indigency Certificate\n3. Certificate of Residency\n4. Solo Parents Certificate\n5. No Fix Income Certificate\n6. Sertipikasyon ng Pagsasara ng Negosyo\n7. Unable to Vote Certificate\n8. Business Permit\n9. Health Certificate\n10. First-Time Job Seeker Certificate\n11. Late Registration Certificate\n12. Barangay ID\n\nKung nais mo ng karagdagang detalye tungkol sa mga dokumentong ito, huwag mag-atubiling magtanong.",
                 "Ang barangay ay nag-aalok ng mga sumusunod na dokumento:\n\n1. Barangay Clearance\n2. Barangay Indigency Certificate\n3. Certificate of Residency\n4. Solo Parents Certificate\n5. No Fix Income Certificate\n6. Sertipikasyon ng Pagsasara ng Negosyo\n7. Unable to Vote Certificate\n8. Business Permit\n9. Health Certificate\n10. First-Time Job Seeker Certificate\n11. Late Registration Certificate\n12. Barangay ID\n\nPara sa mga kinakailangan at proseso ng pagkuha ng mga dokumentong ito, maaari kang magtanong sa akin o direktang bumisita sa barangay office."
-            ]
-        },
-        {
-            "tag": "document_requirements",
-            "patterns": [
-                "Ano ang mga kailangan para makakuha ng dokumento sa barangay?",
-                "Paano ako makakakuha ng barangay clearance?",
-                "Anong mga requirements ang kailangan para sa certificate of residency?",
-                "Ano ang proseso para makakuha ng business permit sa barangay?",
-                "Paano ako mag-apply para sa barangay ID?",
-                "Anong mga papeles ang kailangan para sa solo parent certificate?"
-            ],
-            "responses": [
-                "Para sa karamihan ng mga dokumento sa barangay, kailangan mo ng valid ID at patunay ng paninirahan sa barangay. Para sa mga partikular na requirements ng bawat dokumento, maaari kang magtanong sa akin tungkol sa isang partikular na dokumento o bumisita sa barangay office para sa kumpletong listahan ng mga kinakailangan.",
-                "Ang mga karaniwang requirements para sa mga dokumento sa barangay ay kinabibilangan ng valid ID, patunay ng paninirahan, at mga karagdagang dokumento depende sa uri ng sertipiko o clearance na kinakailangan mo. Kung gusto mong malaman ang mga partikular na requirements para sa isang dokumento, maaari mong itanong sa akin at bibigyan kita ng mas detalyadong impormasyon.",
-                "Ang mga pangunahing requirements para sa karamihan ng mga dokumento sa barangay ay ang iyong valid ID at patunay ng paninirahan sa barangay. Gayunpaman, ang mga partikular na requirements ay maaaring mag-iba depende sa dokumento. Kung mayroon kang partikular na dokumento na gusto mong kunin, sabihin mo lang sa akin at tutulungan kitang malaman ang mga kinakailangan para dito."
             ]
         }
     ]
