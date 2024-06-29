@@ -27114,21 +27114,24 @@ pre[class*=language-] {
   display: none;
 }
 
+/* CHATBOX */
+
 .chatbox__choices {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
   padding: 10px;
+  
 }
 
 .chatbox__choices button {
   padding: 5px 10px;
   background-color: #f0f0f0;
-  border: 1px solid #ddd;
+  border: 1px solid green;
   border-radius: 15px;
   cursor: pointer;
   transition: background-color 0.3s;
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .chatbox__choices button:hover {
@@ -27150,7 +27153,7 @@ pre[class*=language-] {
 
 @media (max-width: 480px) {
   .chat_container {
-    max-height: 83vh; /* Adjust this value as needed */
+    max-height: 83vh;
     height: auto;
     overflow: hidden;
   }
@@ -27198,7 +27201,6 @@ pre[class*=language-] {
     background-color: #fff;
     padding: 10px;
     box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.1);
-    margin-bottom: 30px;
   }
 
   .chatbox__input {
@@ -27217,23 +27219,6 @@ pre[class*=language-] {
     padding: 10px;
     text-align: center;
   }
-}
-
-/* Responsive styles */
-@media (max-width: 768px) {
-  .chat_container {
-    height: calc(100vh - 80px); /* Adjust based on your layout */
-  }
-}
-
-/* Responsive styles */
-@media (max-width: 768px) {
-  .chatbox__messages {
-    padding: 15px;
-  }
-}
-
-@media (max-width: 480px) {
 
   .messages__item {
     max-width: 90%;
@@ -27243,7 +27228,16 @@ pre[class*=language-] {
   }
 }
 
+
 @media (max-width: 768px) {
+  .chat_container {
+    height: calc(100vh - 80px); /* Adjust based on your layout */
+  }
+
+  .chatbox__messages {
+    padding: 15px;
+  }
+
   .chatbox__choices {
     gap: 5px;
     padding: 5px;
@@ -27300,7 +27294,7 @@ pre[class*=language-] {
 
 .chatbox__support {
   background: #f9f9f9;
-  height: 600px;
+  height: 800px;
   width: auto;
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
@@ -27382,7 +27376,6 @@ pre[class*=language-] {
   box-shadow: var(--secondaryBoxShadow);
   border-bottom-right-radius: 10px;
   border-bottom-left-radius: 10px;
-  margin-bottom: 30px;
 }
 
 .chatbox__footer input {
