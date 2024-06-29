@@ -1,9 +1,9 @@
 services:
   - type: web
-    name: flask-argon
+    name: babu-brgybuddy
     plan: starter
     env: python
-    region: frankfurt  # region should be same as your database region.
+    region: singapore
     buildCommand: "./build.sh"
     startCommand: "gunicorn run:app"
     envVars:

@@ -13,9 +13,10 @@ from flask import render_template, redirect, request, url_for, session
 from flask_login import (
     current_user,
     login_user,
-    logout_user
+    logout_user,
+    login_required
 )
-from datetime import timedelta
+from datetime import datetime, timedelta, timezone
 from functools import wraps
 import time
 from apps.authentication.util import check_timeout, check_session_timeout, update_last_activity
@@ -72,13 +73,15 @@ def login():
         username = request.form['username']
         password = request.form['password']
         remember = login_form.remember.data
-
         user = Users.query.filter_by(username=username).first()
-
         if user and verify_pass(password, user.password):
             login_user(user, remember=remember)
             session['remember'] = remember
             session['last_activity'] = time.time()
+            
+            # Update login info
+            user.update_login_info()
+            session['login_time'] = datetime.now(timezone.utc)
             
             if remember:
                 user.set_remember_token()
@@ -89,15 +92,18 @@ def login():
                 user.clear_remember_token()
                 session.permanent = False
                 session.permanent_session_lifetime = timedelta(minutes=30)
-
-            return redirect(url_for('authentication_blueprint.route_default'))
-
+                
+            # Role-based redirection
+            if user.role == 'admin':
+                return redirect(url_for('home_blueprint.admin_only'))
+            else:
+                return redirect(url_for('home_blueprint.index'))         
         flash('Incorrect username or password', 'danger')
         return render_template('accounts/login.html', form=login_form)
-
     if not current_user.is_authenticated:
         return render_template('accounts/login.html', form=login_form)
     return redirect(url_for('home_blueprint.index'))
+
 
 @blueprint.route('/register', methods=['GET', 'POST'])
 def register():
@@ -107,6 +113,7 @@ def register():
         email = request.form['email']
         password = request.form['password']
         confirm_password = request.form['confirm_password']
+        language = request.form['language']
 
         # Check if passwords match
         if password != confirm_password:
@@ -124,7 +131,7 @@ def register():
             return render_template('accounts/register.html', msg='Email already registered', success=False, form=create_account_form, check_username_url=check_username_url)
 
         # Create the user
-        user = Users(username=username, email=email, password=password)
+        user = Users(username=username, email=email, password=password, language_preference=language)
         db.session.add(user)
         db.session.commit()
 
@@ -138,19 +145,33 @@ def register():
 
 
 @blueprint.route('/logout')
+@login_required
 def logout():
     if current_user.is_authenticated:
+        # Update session duration
+        login_time = session.get('login_time')
+        if login_time:
+            duration = (datetime.now(timezone.utc) - login_time).total_seconds()
+            current_user.update_session_duration(int(duration))
+        
+        # Clear remember token
         current_user.clear_remember_token()
+    
+    # Perform logout
     logout_user()
+    
+    # Clear session data
     session.pop('remember', None)
     session.pop('remember_token', None)
+    session.pop('login_time', None)
+    
     return redirect(url_for('authentication_blueprint.login'))
-
 # Errors
 
 @login_manager.unauthorized_handler
 def unauthorized_handler():
-    return render_template('home/page-403.html'), 403
+    flash('Session Expired. Please log in.', 'warning')
+    return redirect(url_for('authentication_blueprint.login'))
 
 
 @blueprint.errorhandler(403)
@@ -208,12 +229,9 @@ def forgot_password():
 
 @blueprint.route('/reset_password/<token>', methods=['GET', 'POST'])
 def reset_password(token):
-    print(f"Received token: {token}")
     try:
         email = s.loads(token, salt='email-confirm', max_age=1800)
-        print(f"Decoded email: {email}")
     except Exception as e:
-        print(f"Error decoding token: {e}")
         flash('The reset link is invalid or has expired.', 'warning')
         return redirect(url_for('authentication_blueprint.forgot_password'))
 
@@ -221,6 +239,10 @@ def reset_password(token):
     if form.validate_on_submit():
         user = Users.query.filter_by(email=email).first()
         if user:
+            if verify_pass(form.password.data, user.password):
+                flash('New password must be different from the current password', 'danger')
+                return render_template('accounts/reset_password.html', form=form)
+            
             hashed_password = util.hash_pass(form.password.data)
             user.password = hashed_password
             db.session.commit()
