@@ -3,6 +3,7 @@
 
 from apps.home import blueprint
 from flask import render_template, request
+from flask_paginate import get_page_args, Pagination
 from flask_login import login_required, current_user
 from jinja2 import TemplateNotFound
 from apps.chatbot.chat import get_response, preprocess_input

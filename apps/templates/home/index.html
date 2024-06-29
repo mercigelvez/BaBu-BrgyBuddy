@@ -6,6 +6,17 @@
 
 {% block stylesheets %}
   <style>
+    .chatbox__support {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .chatbox__bottom {
+      border-top: 3px solid #CED2D6;
+      background-color: #f8f9fa;
+    }
+    
     .logo-description {
       position: absolute;
       top: 250px;
@@ -60,10 +71,15 @@
               <div class="chatbox__messages" id="chatbox-messages">
                 <div></div>
               </div>
-            </div>
-            <div class="chatbox__footer">
-              <input type="text" class="chatbox__input" placeholder="Write a message..." oninput="this.previousElementSibling.style.display='none'" />
-              <button class="chatbox__send--footer send__button">Send</button>
+              <div class="chatbox__bottom">
+                <div class="chatbox__choices">
+                  <!-- Choices will be dynamically added here -->
+                </div>
+                <div class="chatbox__footer">
+                  <input type="text" class="chatbox__input" placeholder="Write a message..." oninput="this.previousElementSibling.style.display='none'" />
+                  <button class="chatbox__send--footer send__button">Send</button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
