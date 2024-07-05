@@ -37,6 +37,7 @@ class Chatbox {
       textInput: document.querySelector(".chatbox__input"),
     };
 
+    this.typingLoader = null;
     this.handleResize = this.handleResize.bind(this);
     window.addEventListener('resize', this.handleResize);
     this.choicesContainer = this.args.chatBox.querySelector(".chatbox__choices");
@@ -91,7 +92,7 @@ class Chatbox {
     const shuffled = array.sort(() => 0.5 - Math.random());
     return shuffled.slice(0, count);
   }
-  
+
   onChoiceClick(choice) {
     this.args.textInput.value = `How can I get a ${choice}?`;
     if (this.userLanguagePreference === 'tagalog') {
@@ -131,6 +132,10 @@ class Chatbox {
   }
 
   sendMessageToServer(userMessage) {
+    // Show typing indicator
+    this.addMessage('Bot', 'typing');
+    const startTime = Date.now();
+  
     fetch($SCRIPT_ROOT + '/predict', {
       method: 'POST',
       body: JSON.stringify({
@@ -148,30 +153,57 @@ class Chatbox {
         return response.json();
       })
       .then(data => {
-        if (data.error) {
-          console.error('Error:', data.error);
+        const endTime = Date.now();
+        const elapsedTime = endTime - startTime;
+        const minimumLoaderTime = 1000; // 1 second in milliseconds
+  
+        const hideLoader = () => {
+          // Remove typing indicator
+          if (this.typingLoader && this.typingLoader.parentNode) {
+            this.typingLoader.parentNode.removeChild(this.typingLoader);
+            this.typingLoader = null;
+          }
+  
+          if (data.error) {
+            console.error('Error:', data.error);
+          } else {
+            this.addMessage('Bot', data.answer);
+          }
+        };
+  
+        if (elapsedTime < minimumLoaderTime) {
+          // If the response was too fast, wait a bit before hiding the loader
+          setTimeout(hideLoader, minimumLoaderTime - elapsedTime);
         } else {
-          this.addMessage('Bot', data.answer);
+          // If enough time has passed, hide the loader immediately
+          hideLoader();
         }
       })
       .catch((error) => {
+        // Remove typing indicator
+        if (this.typingLoader && this.typingLoader.parentNode) {
+          this.typingLoader.parentNode.removeChild(this.typingLoader);
+          this.typingLoader = null;
+        }
         console.error('Error:', error);
       });
   }
 
   addMessage(sender, message) {
-    this.messages.push({ sender, message });
-
     const chatmessages = this.args.chatBox.querySelector(".chatbox__messages");
     const messageElement = document.createElement('div');
     messageElement.classList.add('messages__item');
-    messageElement.classList.add(sender === 'User' ? 'messages__item--operator' : 'messages__item--visitor');
-    messageElement.textContent = message;
-
-    // Insert the new message at the beginning of the chat container
+    
+    if (sender === 'Bot' && message === 'typing') {
+      messageElement.classList.add('messages__item--visitor', 'typing-loader');
+      messageElement.innerHTML = '<span></span><span></span><span></span>';
+      this.typingLoader = messageElement;
+    } else {
+      messageElement.classList.add(sender === 'User' ? 'messages__item--operator' : 'messages__item--visitor');
+      messageElement.textContent = message;
+    }
+  
     chatmessages.insertBefore(messageElement, chatmessages.firstChild);
-
-    // Scroll to the top of the chat container
     chatmessages.scrollTop = 0;
   }
 
@@ -185,7 +217,7 @@ class Chatbox {
     const chatContainer = this.args.chatBox.querySelector(".chatbox__messages");
     chatContainer.innerHTML = '';
     chatContainer.scrollTop = 0;
-    this.setupChoices(); 
+    this.setupChoices();
   }
 
   loadChatHistory(messages) {
