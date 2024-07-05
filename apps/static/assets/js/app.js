@@ -2,16 +2,13 @@ const services = {
   english: [
     "Barangay Clearance",
     "Barangay Indigency Certificate",
-    "Certificate of Residency",
     "Solo Parents Certificate",
     "No Fix Income Certificate",
-    "Business Closure Certification",
     "Unable to Vote Certificate",
     "Business Permit",
     "Health Certificate",
     "First-Time Job Seeker Certificate",
-    "Late Registration Certificate",
-    "Barangay ID"
+    "Late Registration Certificate"
   ],
   tagalog: [
     "Barangay Clearance",
@@ -24,8 +21,7 @@ const services = {
     "Business Permit",
     "Health Certificate",
     "First-Time Job Seeker Certificate",
-    "Late Registration Certificate",
-    "Barangay ID"
+    "Late Registration Certificate"
   ]
 };
 
