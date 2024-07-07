@@ -76,7 +76,7 @@ def login():
         if user and verify_pass(password, user.password):
             login_user(user)
             if user.role == 'admin':
-                return redirect(url_for('home_blueprint.index'))
+                return redirect(url_for('home_blueprint.tables'))
             else:
                 flash('Only admin users can log in.', 'warning')
                 return redirect(url_for('home_blueprint.public_chatbot'))

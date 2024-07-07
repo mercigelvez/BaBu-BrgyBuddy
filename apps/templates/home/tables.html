@@ -1,11 +1,7 @@
 {% extends 'layouts/base.html' %}
 
 {% block title %}
-  Tables
-{% endblock %}
-
-<!-- Specific CSS goes HERE -->
-{% block stylesheets %}
+  Appointments
 {% endblock %}
 
 {% block content %}
@@ -21,45 +17,36 @@
         <div class="col-12">
           <div class="card mb-4">
             <div class="card-header pb-0">
-              <h6>Users Lists</h6>
+              <h6>Document Request Appointments</h6>
+            </div>
+            <div class="card-body px-0 pt-0 pb-2">
+              <div id="calendar"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="row mt-4">
+        <div class="col-12">
+          <div class="card mb-4">
+            <div class="card-header pb-0">
+              <h6>Appointment Details</h6>
             </div>
             <div class="card-body px-0 pt-0 pb-2">
               <div class="table-responsive p-0">
                 <table class="table align-items-center mb-0">
                   <thead>
                     <tr>
-                      <th class="text-uppercase text-secondary text-s font-weight-bolder">User</th>
-                      <th class="text-uppercase text-secondary text-s font-weight-bolder ps-2">Role</th>
-                      <th class="text-center text-uppercase text-secondary text-s font-weight-bolder">Last Login</th>
-                      <th class="text-center text-uppercase text-secondary text-s font-weight-bolder">Total Sessions</th>
-                      <th class="text-center text-uppercase text-secondary text-s font-weight-bolder">Avg. Session Duration</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Name</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Address</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Birthday</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Birthplace</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Purpose</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Appointment Date</th>
                     </tr>
                   </thead>
-                  <tbody>
-                    {% for user in users %}
-                      <tr>
-                        <td>
-                          <div class="d-flex px-2 py-1">
-                            <div class="d-flex flex-column justify-content-center">
-                              <h6 class="mb-0 text-sm">{{ user.username }}</h6>
-                              <p class="text-s text-secondary mb-0">{{ user.email }}</p>
-                            </div>
-                          </div>
-                        </td>
-                        <td>
-                          <p class="text-s font-weight-bold mb-0">{{ user.role }}</p>
-                        </td>
-                        <td class="align-middle text-center text-sm">
-                          <span class="text-secondary text-s font-weight-bold">{{ user.last_login }}</span>
-                        </td>
-                        <td class="align-middle text-center">
-                          <span class="text-secondary text-s font-weight-bold">{{ user.total_sessions }}</span>
-                        </td>
-                        <td class="align-middle text-center">
-                          <span class="text-secondary text-s font-weight-bold">{{ user.avg_session_duration }}</span>
-                        </td>
-                      </tr>
-                    {% endfor %}
+                  <tbody id="appointmentTableBody">
+                    <!-- Table rows will be populated by JavaScript -->
                   </tbody>
                 </table>
               </div>
@@ -71,6 +58,64 @@
   </main>
 {% endblock %}
 
-<!-- Specific JS goes HERE -->
 {% block javascripts %}
+  {{ super() }}
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.2/main.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.2/main.min.js"></script>
+  <script>
+    var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var calendarEl = document.getElementById('calendar');
+      if (!calendarEl) {
+        console.error('Calendar element not found');
+        return;
+      }
+
+      fetch($SCRIPT_ROOT + '/get_appointments')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          console.log('Appointment data:', data);
+
+          window.calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            events: data,
+            eventClick: function(info) {
+              const row = document.getElementById('appointment-' + info.event.id);
+              if (row) {
+                row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                row.classList.add('highlight');
+                setTimeout(() => row.classList.remove('highlight'), 2000);
+              }
+            }
+          });
+          window.calendar.render();
+
+          const tableBody = document.getElementById('appointmentTableBody');
+          data.forEach(apt => {
+            const row = document.createElement('tr');
+            row.id = 'appointment-' + apt.id;
+            row.innerHTML = `
+              <td>${apt.title.split(' - ')[0]}</td>
+              <td>${apt.address || ''}</td>
+              <td class="text-center">${apt.birthday || ''}</td>
+              <td class="text-center">${apt.birthplace || ''}</td>
+              <td class="text-center">${apt.title.split(' - ')[1]}</td>
+              <td class="text-center">${new Date(apt.start).toLocaleString()}</td>
+            `;
+            tableBody.appendChild(row);
+          });
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          calendarEl.textContent = 'Failed to load appointments';
+        });
+    });
+  </script>
 {% endblock %}

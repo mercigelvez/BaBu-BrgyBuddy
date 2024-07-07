@@ -131,7 +131,7 @@ class Chatbox {
     // Show typing indicator
     this.addMessage('Bot', 'typing');
     const startTime = Date.now();
-  
+
     fetch($SCRIPT_ROOT + '/predict', {
       method: 'POST',
       body: JSON.stringify({
@@ -142,36 +142,36 @@ class Chatbox {
         'Content-Type': 'application/json'
       },
     })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`HTTP error ${response.status}`);
-        }
-        return response.json();
-      })
+      .then(response => response.json())
       .then(data => {
         const endTime = Date.now();
         const elapsedTime = endTime - startTime;
         const minimumLoaderTime = 1000; // 1 second in milliseconds
-  
+
         const hideLoader = () => {
           // Remove typing indicator
           if (this.typingLoader && this.typingLoader.parentNode) {
             this.typingLoader.parentNode.removeChild(this.typingLoader);
             this.typingLoader = null;
           }
-  
+
           if (data.error) {
             console.error('Error:', data.error);
           } else {
-            this.addMessage('Bot', data.answer);
+            if (data.ticket_image) {
+              this.addMessage('Bot', {
+                message: data.message || 'Here is your appointment ticket:',
+                ticket_image: data.ticket_image
+              });
+            } else {
+              this.addMessage('Bot', data.message || data.answer);
+            }
           }
         };
-  
+
         if (elapsedTime < minimumLoaderTime) {
-          // If the response was too fast, wait a bit before hiding the loader
           setTimeout(hideLoader, minimumLoaderTime - elapsedTime);
         } else {
-          // If enough time has passed, hide the loader immediately
           hideLoader();
         }
       })
@@ -185,20 +185,81 @@ class Chatbox {
       });
   }
 
+  confirmAppointment(appointmentData) {
+    const confirmMessage = `Please confirm your appointment details:`;
+    this.addMessage('Bot', confirmMessage);
+
+    const ticket = generate_appointment_ticket(appointmentData);
+    this.addStyledMessage('Bot', ticket);
+
+    this.addMessage('Bot', "Type 'confirm' to schedule this appointment or 'cancel' to start over.");
+  }
+
+  addStyledMessage(sender, message) {
+    const chatmessages = this.args.chatBox.querySelector(".chatbox__messages");
+    const messageElement = document.createElement('div');
+    messageElement.classList.add('messages__item');
+    messageElement.classList.add(sender === 'User' ? 'messages__item--operator' : 'messages__item--visitor');
+    
+    // Check if the message contains HTML (like an image tag)
+    if (message.startsWith('<') && message.endsWith('>')) {
+      messageElement.innerHTML = message;
+    } else {
+      messageElement.textContent = message;
+    }
+    
+    chatmessages.insertBefore(messageElement, chatmessages.firstChild);
+    chatmessages.scrollTop = 0;
+  }
+
+  updateCalendar() {
+    fetch($SCRIPT_ROOT + '/get_appointments')
+      .then(response => response.json())
+      .then(appointments => {
+        if (window.calendar) {
+          window.calendar.removeAllEvents();
+          window.calendar.addEventSource(appointments);
+        }
+      })
+      .catch((error) => {
+        console.error('Error updating calendar:', error);
+      });
+  }
+
   addMessage(sender, message) {
     const chatmessages = this.args.chatBox.querySelector(".chatbox__messages");
     const messageElement = document.createElement('div');
     messageElement.classList.add('messages__item');
-    
+
     if (sender === 'Bot' && message === 'typing') {
       messageElement.classList.add('messages__item--visitor', 'typing-loader');
       messageElement.innerHTML = '<span></span><span></span><span></span>';
       this.typingLoader = messageElement;
     } else {
       messageElement.classList.add(sender === 'User' ? 'messages__item--operator' : 'messages__item--visitor');
-      messageElement.textContent = message;
+      
+      if (typeof message === 'object' && message.ticket_image) {
+        const ticketImage = document.createElement('img');
+        ticketImage.src = `data:image/png;base64,${message.ticket_image}`;
+        ticketImage.alt = 'Appointment Ticket';
+        ticketImage.classList.add('ticket-image');
+        
+        const downloadButton = document.createElement('a');
+        downloadButton.href = ticketImage.src;
+        downloadButton.download = 'appointment_ticket.png';
+        downloadButton.textContent = 'Download Ticket';
+        downloadButton.classList.add('btn', 'btn-primary', 'mt-2');
+        
+        messageElement.appendChild(document.createTextNode(message.message));
+        messageElement.appendChild(document.createElement('br'));
+        messageElement.appendChild(ticketImage);
+        messageElement.appendChild(document.createElement('br'));
+        messageElement.appendChild(downloadButton);
+      } else {
+        messageElement.textContent = message;
+      }
     }
-  
+
     chatmessages.insertBefore(messageElement, chatmessages.firstChild);
     chatmessages.scrollTop = 0;
   }
@@ -379,3 +440,6 @@ function updateChatboxWithHistory(messages) {
 }
 
 
+function generate_appointment_ticket(appointment_data) {
+  return null; // We're now using an image for the ticket
+}
