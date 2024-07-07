@@ -23,6 +23,9 @@ from datetime import datetime, timedelta
 @login_required
 @check_timeout
 def index():
+    if current_user.role != 'admin':
+        return redirect(url_for('home_blueprint.public_chatbot'))
+    
     # Get the current date
     today = datetime.utcnow().date()
     yesterday = today - timedelta(days=1)
@@ -137,41 +140,26 @@ def predict():
     data = request.get_json()
     user_input = data.get("message")
 
-    if not current_user.is_authenticated:
-        return jsonify({"error": "User not authenticated"}), 401
+    # Remove the authentication check
+    # if not current_user.is_authenticated:
+    #     return jsonify({"error": "User not authenticated"}), 401
 
-    user_id = current_user.id
-    user_language = current_user.language_preference  # Assuming you have this field in your User model
+    # Use a default language if user is not authenticated
+    user_language = current_user.language_preference if current_user.is_authenticated else 'en'
 
     predict_logger.debug(f"User input: {user_input}")
-    predict_logger.debug(f"User ID: {user_id}")
     predict_logger.debug(f"User Language: {user_language}")
 
     cleaned_input = preprocess_input(user_input)
-    response = get_response(cleaned_input, user_language)  # Pass language to get_response
+    response = get_response(cleaned_input, user_language)
 
-    # Get or create the chat history for the current user
-    chat_history = ChatHistory.query.filter_by(user_id=user_id).order_by(ChatHistory.id.desc()).first()
-    if not chat_history:
-        chat_history = ChatHistory(user_id=user_id, title="Untitled")
-        db.session.add(chat_history)
-        db.session.commit()
-
-    # Append the new message to the chat history
-    new_message_user = Message(
-        chat_history_id=chat_history.id, sender="user", message=user_input
-    )
-    new_message_bot = Message(
-        chat_history_id=chat_history.id, sender="Bot", message=response
-    )
-    db.session.add(new_message_user)
-    db.session.add(new_message_bot)
-    db.session.commit()
-
+    # Remove chat history saving for unauthenticated users
+    # if current_user.is_authenticated:
+    #     # Save chat history logic here
+    
     predict_logger.debug(f"Response: {response}")
 
     return jsonify({"answer": response})
-
 
 @blueprint.route('/new_chat', methods=['POST'])
 def new_chat():
@@ -411,3 +399,11 @@ def api_chat_analytics_download():
     output.headers["Content-type"] = "text/csv"
 
     return output
+
+@blueprint.route("/chatbot")
+def public_chatbot():
+    return render_template("home/chatbot.html", segment="chatbot")
+
+@blueprint.route("/landingpage")
+def landingpage():
+    return render_template("landing-page.html", segment="landingpage")

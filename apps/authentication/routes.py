@@ -72,37 +72,16 @@ def login():
     if 'login' in request.form:
         username = request.form['username']
         password = request.form['password']
-        remember = login_form.remember.data
         user = Users.query.filter_by(username=username).first()
         if user and verify_pass(password, user.password):
-            login_user(user, remember=remember)
-            session['remember'] = remember
-            session['last_activity'] = time.time()
-            
-            # Update login info
-            user.update_login_info()
-            session['login_time'] = datetime.now(timezone.utc)
-            
-            if remember:
-                user.set_remember_token()
-                session['remember_token'] = user.remember_token
-                session.permanent = True
-                session.permanent_session_lifetime = timedelta(days=30)
-            else:
-                user.clear_remember_token()
-                session.permanent = False
-                session.permanent_session_lifetime = timedelta(minutes=30)
-                
-            # Role-based redirection
+            login_user(user)
             if user.role == 'admin':
-                return redirect(url_for('home_blueprint.admin_only'))
+                return redirect(url_for('home_blueprint.index'))
             else:
-                return redirect(url_for('home_blueprint.index'))         
-        flash('Incorrect username or password', 'danger')
-        return render_template('accounts/login.html', form=login_form)
-    if not current_user.is_authenticated:
-        return render_template('accounts/login.html', form=login_form)
-    return redirect(url_for('home_blueprint.index'))
+                flash('Only admin users can log in.', 'warning')
+                return redirect(url_for('home_blueprint.public_chatbot'))
+        flash('Wrong username or password.', 'warning')
+    return render_template('accounts/login.html', form=login_form)
 
 
 @blueprint.route('/register', methods=['GET', 'POST'])

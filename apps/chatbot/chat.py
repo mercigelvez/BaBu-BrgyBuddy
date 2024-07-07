@@ -27,12 +27,12 @@ def preprocess_input(user_input):
 
 def get_response(user_input, language):
     # Choose the appropriate model based on the language
-    if language == 'tagalog':
-        model = tagalog_model
-        data = tagalog_data
-    else:  # default to English
+    if language == 'english':
         model = english_model
         data = english_data
+    else:  # default to English
+        model = tagalog_model
+        data = tagalog_data
 
     intent = model.predict([user_input])[0]
     confidence_scores = model.predict_proba([user_input])
