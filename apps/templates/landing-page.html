@@ -1,0 +1,129 @@
+{% extends 'layouts/base-fullscreen.html' %}
+
+{% block title %}Welcome to Babu - Brgy Market Area Assistant{% endblock %}
+
+{% block content %}
+<style>
+    :root {
+        --primary-green: #28a745;
+        --dark-green: #218838;
+        --light-green: #e9f7ef;
+        --white: #ffffff;
+        --light-gray: #f8f9fa;
+    }
+    .navbar {
+        background-color: var(--white) !important;
+        box-shadow: 0 2px 4px rgba(0,0,0,.1);
+    }
+    .navbar-brand, .nav-link {
+        color: var(--primary-green) !important;
+    }
+    .nav-link:hover {
+        color: var(--dark-green) !important;
+    }
+    .hero {
+        background-color: var(--light-green);
+        padding: 100px 0;
+    }
+    .hero-content {
+        color: var(--dark-green);
+    }
+    .btn-custom {
+        background-color: var(--primary-green) !important;
+        border-color: var(--primary-green) !important;
+        color: var(--white) !important;
+    }
+    .btn-custom:hover {
+        background-color: var(--dark-green) !important;
+        border-color: var(--dark-green) !important;
+    }
+    #about {
+        background-color: var(--white);
+    }
+    #chatbot {
+        background-color: var(--light-gray);
+    }
+    h2 {
+        color: var(--primary-green);
+    }
+    footer {
+        background-color: var(--primary-green);
+        color: var(--white);
+    }
+    .logo {
+        max-height: 50px;
+        width: auto;
+    }
+</style>
+
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-light">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="#">
+            <img src="{{ config.ASSETS_ROOT }}/img/babu-logo.png" alt="Logo 1" class="logo me-2">
+            <img src="{{ config.ASSETS_ROOT }}/img/market-logo.png" alt="Logo 2" class="logo me-2">
+            Babu - Brgy Buddy
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+                <li class="nav-item"><a class="nav-link" href="#chatbot">Chatbot</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<section id="home" class="hero">
+    <div class="container">
+        <div class="hero-content text-center">
+            <h1 class="display-4">Welcome to Babu</h1>
+            <p class="lead">Your Brgy Market Area Assistant Chatbot</p>
+            <a href="#about" class="btn btn-custom btn-lg mt-3">Learn More</a>
+        </div>
+    </div>
+</section>
+
+<!-- About Us Section -->
+<section id="about" class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-4">About Babu</h2>
+        <div class="row">
+            <div class="col-md-6">
+                <p>Babu is your digital Barangay Market Area Assistant, designed to make your market experience smoother and more efficient. We're here to bridge the gap between market-goers, vendors, and local market administration.</p>
+            </div>
+            <div class="col-md-6">
+                <p>With Babu, you can easily access information about market schedules, product availability, vendor locations, and make inquiries - all from the convenience of your device. We're committed to enhancing the local market experience and supporting our community.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Chatbot Section -->
+<section id="chatbot" class="py-5">
+    <div class="container text-center">
+        <h2 class="mb-4">Meet Babu - Your Brgy. Market Area AI Assistant</h2>
+        <p class="lead mb-4">Need help with market inquiries or vendor information? Our AI assistant is here to help!</p>
+        <a href="{{ url_for('authentication_blueprint.register') }}" class="btn btn-custom btn-lg">
+            Want to use our Assistant Chatbot Babu for market inquiries and information? Sign up here
+        </a>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="text-center py-3">
+    <div class="container">
+        <p>&copy; 2024 Babu - Brgy Buddy. All rights reserved.</p>
+    </div>
+</footer>
+{% endblock content %}
+
+{% block javascripts %}
+<script>
+    // Any additional JavaScript can go here
+</script>
+{% endblock javascripts %}

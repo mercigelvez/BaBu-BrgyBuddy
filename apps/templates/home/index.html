@@ -49,7 +49,7 @@
     .modal-fullscreen .modal-body {
       overflow-y: auto;
     }
-
+    
     .typing-loader {
       display: inline-block;
       background-color: whitesmoke;
@@ -58,7 +58,7 @@
       padding: 10px;
       margin: 10px 0;
     }
-  
+    
     .typing-loader span {
       height: 10px;
       width: 10px;
@@ -69,19 +69,19 @@
       border-radius: 50%;
       opacity: 0.4;
     }
-  
+    
     .typing-loader span:nth-of-type(1) {
       animation: 1s blink infinite 0.3333s;
     }
-  
+    
     .typing-loader span:nth-of-type(2) {
       animation: 1s blink infinite 0.6666s;
     }
-  
+    
     .typing-loader span:nth-of-type(3) {
       animation: 1s blink infinite 0.9999s;
     }
-  
+    
     @keyframes blink {
       50% {
         opacity: 1;
@@ -167,5 +167,9 @@
     // Add event listener for chat history selection
     document.addEventListener('click', handleChatHistorySelection);
   });
+
+  if (window.history.replaceState) {
+    window.history.replaceState(null, null, window.location.href);
+  } 
 </script>
 {% endblock %}

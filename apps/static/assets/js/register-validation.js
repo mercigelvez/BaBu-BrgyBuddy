@@ -18,6 +18,11 @@ $(document).ready(function () {
       errorMessageContainer
         .text("Username must be between 4 and 25 characters")
         .addClass("error-message");
+    } else if ((is_name.match(/[^a-zA-Z0-9]/g) || []).length > 2) {
+      input.removeClass("valid").addClass("invalid");
+      errorMessageContainer
+        .text("Username can contain a maximum of 2 special characters (including hyphens and underscores)")
+        .addClass("error-message");
     } else {
       $.post("/check_username", { username: is_name.toLowerCase() }, function (data) {
         if (data.username_exists) {

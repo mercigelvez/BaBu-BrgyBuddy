@@ -1,7 +1,7 @@
 $(document).ready(function () {
   $("#email").on("input", function () {
     var input = $(this);
-    var email = input.val();
+    var email = input.val().toLowerCase();
     var errorMessageContainer = $(".email-error-message");
     var submitButton = $("#submit-btn");
 
@@ -15,7 +15,7 @@ $(document).ready(function () {
     var testEmailPattern = /@test/i;
 
     if (email.trim() === "") {
-      setInvalid("Email is required");
+      setInvalid();
     } else if (/\s/.test(email)) {
       setInvalid("Email cannot contain spaces");
     } else if (testEmailPattern.test(email)) {
@@ -30,19 +30,20 @@ $(document).ready(function () {
 
     function setInvalid(message) {
       input.removeClass("valid").addClass("invalid");
-      errorMessageContainer
-        .text(message)
-        .addClass("error-message")
-        .removeClass("success-message");
+      if (message) {
+        errorMessageContainer
+          .text(message)
+          .addClass("error-message")
+          .removeClass("success-message");
+      } else {
+        errorMessageContainer.text("").removeClass("error-message success-message");
+      }
       submitButton.prop('disabled', true);
     }
 
     function setValid() {
       input.removeClass("invalid").addClass("valid");
-      errorMessageContainer
-        .text("Valid email address")
-        .removeClass("error-message")
-        .addClass("success-message");
+      errorMessageContainer.text("").removeClass("error-message success-message");
       submitButton.prop('disabled', false);
     }
   });

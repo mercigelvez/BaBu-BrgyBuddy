@@ -24,7 +24,7 @@ from apps import db, login_manager
 from apps.authentication import blueprint
 from apps.authentication.forms import LoginForm, CreateAccountForm, ForgotPasswordForm, ResetPasswordForm
 from apps.authentication.models import Users
-from flask import jsonify, request
+from flask import jsonify, request, make_response
 from itsdangerous import URLSafeTimedSerializer
 from flask_mail import Message
 from apps import mail
@@ -160,10 +160,19 @@ def logout():
     # Perform logout
     logout_user()
     
-    # Clear session data
-    session.pop('remember', None)
-    session.pop('remember_token', None)
-    session.pop('login_time', None)
+   # Clear session data
+    session.clear()
+    
+    # Create response
+    response = make_response(redirect(url_for('authentication_blueprint.login')))
+    
+    # Set cache control headers
+    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '0'
+    
+    # Clear any cookies
+    response.set_cookie('session', '', expires=0)
     
     return redirect(url_for('authentication_blueprint.login'))
 # Errors
@@ -260,4 +269,4 @@ def before_request():
 @blueprint.route('/')
 @update_last_activity
 def route_default():
-    return redirect(url_for('authentication_blueprint.login'))
+    return render_template('landing-page.html')
