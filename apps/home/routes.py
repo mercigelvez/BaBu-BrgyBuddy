@@ -1,5 +1,8 @@
 # -*- encoding: utf-8 -*-
 
+from importlib import import_module
+import os
+import sys
 from apps.home import blueprint
 from flask import render_template, request
 from flask_paginate import get_page_args, Pagination
@@ -105,6 +108,7 @@ def admin_only():
 @role_required("admin")
 def chat_analytics():
     return render_template("home/chat_analytics.html", segment="chat_analytics")
+
 
 
 @blueprint.route("/<template>")
@@ -507,3 +511,123 @@ def get_appointments():
 
 
 
+
+# CHATBOT MANAGEMENT---------------------------------------------------
+
+# Define the path to the intents file
+INTENTS_FILE = 'intents3.json'
+
+def get_intents_file_path():
+    """Get the full path to the intents file."""
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    apps_dir = os.path.dirname(current_dir)
+    return os.path.join(apps_dir, 'chatbot', INTENTS_FILE)
+
+@blueprint.route("/intent_management")
+@login_required
+@role_required("admin")
+def intent_management():
+    intents_file = get_intents_file_path()
+    with open(intents_file) as file:
+        intents = json.load(file)
+    return render_template("home/intent_management.html", segment="intent_management", intents=intents['intents'])
+
+@blueprint.route("/api/intents", methods=['GET', 'POST'])
+@login_required
+@role_required("admin")
+def api_intents():
+    intents_file = get_intents_file_path()
+    if request.method == 'GET':
+        with open(intents_file) as file:
+            intents = json.load(file)
+        return jsonify(intents)
+    elif request.method == 'POST':
+        new_intent = request.json
+        with open(intents_file) as file:
+            intents = json.load(file)
+        intents['intents'].append(new_intent)
+        with open(intents_file, 'w') as file:
+            json.dump(intents, file, indent=2)
+        retrain_model()
+        return jsonify({"message": "Intent added successfully"}), 201
+
+@blueprint.route("/api/intents/<string:tag>", methods=['PUT', 'DELETE'])
+@login_required
+@role_required("admin")
+def api_intent(tag):
+    intents_file = get_intents_file_path()
+    with open(intents_file) as file:
+        intents = json.load(file)
+    
+    intent_index = next((index for (index, d) in enumerate(intents['intents']) if d["tag"] == tag), None)
+    
+    if intent_index is None:
+        return jsonify({"error": "Intent not found"}), 404
+    
+    if request.method == 'PUT':
+        updated_intent = request.json
+        intents['intents'][intent_index] = updated_intent
+    elif request.method == 'DELETE':
+        del intents['intents'][intent_index]
+    
+    with open(intents_file, 'w') as file:
+        json.dump(intents, file, indent=2)
+    
+    retrain_model()
+    return jsonify({"message": "Intent updated successfully"})
+
+def retrain_model():
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    apps_dir = os.path.dirname(current_dir)
+    chatbot_dir = os.path.join(apps_dir, 'chatbot')
+    sys.path.append(chatbot_dir)
+
+    try:
+        train_module = import_module('train')
+        
+        if hasattr(train_module, 'train_model'):
+            train_module.train_model()
+            print("Model retrained and saved successfully.")
+            return True
+        else:
+            print("Error: Could not find train_model function in train.py")
+            return False
+    except Exception as e:
+        print(f"Error retraining model: {str(e)}")
+        return False
+    finally:
+        sys.path.remove(chatbot_dir)
+        
+
+@blueprint.route("/api/retrain", methods=['POST'])
+@login_required
+@role_required("admin")
+def api_retrain():
+    try:
+        retrain_model()
+        return jsonify({"message": "Model retrained successfully"}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+import math
+
+def get_paginated_intents(page, per_page):
+    file_path = get_intents_file_path()
+    with open(file_path, 'r') as file:
+        all_intents = json.load(file)['intents']
+    
+    total_intents = len(all_intents)
+    total_pages = math.ceil(total_intents / per_page)
+    
+    start = (page - 1) * per_page
+    end = start + per_page
+    
+    paginated_intents = all_intents[start:end]
+    
+    return {
+        'intents': paginated_intents,
+        'total_pages': total_pages,
+        'current_page': page,
+        'total_intents': total_intents
+    }
