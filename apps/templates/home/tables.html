@@ -53,6 +53,7 @@
       color: #28a745;
     }
 
+    .fc-prev-button, .fc-next-button,
     .fc .fc-button-primary {
       background-color: #28a745;
       border-color: #28a745;
@@ -68,6 +69,12 @@
       border-color: #74c687;
     }
 
+    .fc .fc-button-primary:not(:disabled):active,
+    .fc .fc-button-primary:not(:disabled).fc-button-active {
+      background-color: #1e7e34;
+      border-color: #1c7430;
+    }
+
     .fc .fc-daygrid-day.fc-day-today {
       background-color: rgba(40, 167, 69, 0.15);
     }
@@ -77,8 +84,8 @@
     }
 
     .fc a.fc-event {
-      background-color: #28a745;
-      border-color: #28a745;
+      background-color: #ACE1AF;
+      border-color: #ACE1AF;
     }
 
     .fc a.fc-event:hover {
@@ -101,11 +108,11 @@
     }
 
     .fc-event-title {
-      color: #ffffff;
+      color: black;
     }
 
     .fc-event-time{
-      color: #ffffff;
+      color: black;
     }
 
     /* Responsive adjustments */
@@ -247,8 +254,8 @@
                 },
                 themeSystem: 'bootstrap',
                 bootstrapFontAwesome: false,
-                eventColor: '#ffffff',
-                eventTextColor: '#ffffff',
+                eventColor: '#ACE1AF',
+                eventTextColor: '#000000',
               });
               calendar.render();
             } else {
