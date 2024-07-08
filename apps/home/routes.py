@@ -494,7 +494,12 @@ def tables():
 
 @blueprint.route("/get_appointments", methods=["GET"])
 def get_appointments():
-    appointments = Appointment.query.all()
+    page = request.args.get('page', 1, type=int)
+    per_page = 8  # You can adjust this number as needed
+
+    total = Appointment.query.count()
+    appointments = Appointment.query.order_by(Appointment.appointment_date.desc()).paginate(page=page, per_page=per_page, error_out=False)
+
     appointment_list = [
         {
             "id": apt.id,
@@ -505,9 +510,16 @@ def get_appointments():
             "birthday": apt.birthday.isoformat(),
             "birthplace": apt.birthplace,
         }
-        for apt in appointments
+        for apt in appointments.items
     ]
-    return jsonify(appointment_list)
+
+    return jsonify({
+        'appointments': appointment_list,
+        'total': total,
+        'page': page,
+        'per_page': per_page,
+        'total_pages': appointments.pages
+    })
 
 
 
@@ -681,11 +693,11 @@ def toggle_announcement(id):
 
 @blueprint.route("/api/current_announcement", methods=['GET'])
 def get_current_announcement():
-    announcement = Announcement.query.filter_by(enabled=True).order_by(Announcement.id.desc()).first()
-    if announcement:
-        return jsonify({"announcement": announcement.message})
+    announcements = Announcement.query.filter_by(enabled=True).order_by(Announcement.id.desc()).all()
+    if announcements:
+        return jsonify({"announcements": [a.message for a in announcements]})
     else:
-        return jsonify({"announcement": None})
+        return jsonify({"announcements": []})
     
 @blueprint.route("/announcement_management")
 @login_required

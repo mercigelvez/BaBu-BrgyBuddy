@@ -27,19 +27,23 @@ const services = {
 
 class AnnouncementManager {
   constructor() {
-    this.currentAnnouncement = null;
+    this.currentAnnouncements = new Set();
   }
 
   setAnnouncement(message) {
-    this.currentAnnouncement = message;
+    this.currentAnnouncements.add(message);
   }
 
-  getAnnouncement() {
-    return this.currentAnnouncement;
+  getAnnouncements() {
+    return Array.from(this.currentAnnouncements);
   }
 
-  clearAnnouncement() {
-    this.currentAnnouncement = null;
+  clearAnnouncements() {
+    this.currentAnnouncements.clear();
+  }
+
+  hasAnnouncement(message) {
+    return this.currentAnnouncements.has(message);
   }
 }
 
@@ -72,16 +76,19 @@ class Chatbox {
     fetch($SCRIPT_ROOT + '/api/current_announcement')
       .then(response => response.json())
       .then(data => {
-        if (data.announcement) {
-          this.announcementManager.setAnnouncement(data.announcement);
-          this.displayAnnouncement();
+        if (data.announcements && data.announcements.length > 0) {
+          data.announcements.forEach(announcement => {
+            if (!this.announcementManager.hasAnnouncement(announcement)) {
+              this.announcementManager.setAnnouncement(announcement);
+              this.displayAnnouncement(announcement);
+            }
+          });
         }
       })
       .catch(error => console.error('Error fetching announcement:', error));
   }
 
-  displayAnnouncement() {
-    const announcement = this.announcementManager.getAnnouncement();
+  displayAnnouncement(announcement) {
     if (announcement) {
       this.addMessage('Bot', `ANNOUNCEMENT: ${announcement}`);
     }
@@ -95,6 +102,7 @@ class Chatbox {
   init() {
     this.display();
     this.setupChoices();
+    this.checkForAnnouncement(); // Call this only once
     this.args.sendButton.addEventListener("click", () => this.onSendButton());
     this.args.textInput.addEventListener("keyup", (event) => this.onEnterPress(event));
   }
@@ -239,14 +247,14 @@ class Chatbox {
     const messageElement = document.createElement('div');
     messageElement.classList.add('messages__item');
     messageElement.classList.add(sender === 'User' ? 'messages__item--operator' : 'messages__item--visitor');
-    
+
     // Check if the message contains HTML (like an image tag)
     if (message.startsWith('<') && message.endsWith('>')) {
       messageElement.innerHTML = message;
     } else {
       messageElement.textContent = message;
     }
-    
+
     chatmessages.insertBefore(messageElement, chatmessages.firstChild);
     chatmessages.scrollTop = 0;
   }
@@ -276,19 +284,19 @@ class Chatbox {
       this.typingLoader = messageElement;
     } else {
       messageElement.classList.add(sender === 'User' ? 'messages__item--operator' : 'messages__item--visitor');
-      
+
       if (typeof message === 'object' && message.ticket_image) {
         const ticketImage = document.createElement('img');
         ticketImage.src = `data:image/png;base64,${message.ticket_image}`;
         ticketImage.alt = 'Appointment Ticket';
         ticketImage.classList.add('ticket-image');
-        
+
         const downloadButton = document.createElement('a');
         downloadButton.href = ticketImage.src;
         downloadButton.download = 'appointment_ticket.png';
         downloadButton.textContent = 'Download Ticket';
         downloadButton.classList.add('btn', 'btn-primary', 'mt-2');
-        
+
         messageElement.appendChild(document.createTextNode(message.message));
         messageElement.appendChild(document.createElement('br'));
         messageElement.appendChild(ticketImage);
