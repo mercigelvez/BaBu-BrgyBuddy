@@ -20,7 +20,7 @@ from flask import (
     make_response,
 )
 from datetime import datetime, timedelta
-from apps.models import Appointment, ChatHistory, Message
+from apps.models import Announcement, Appointment, ChatHistory, Message
 from apps import db
 from apps.authentication.util import check_timeout
 from apps.authentication.models import Users
@@ -631,3 +631,64 @@ def get_paginated_intents(page, per_page):
         'current_page': page,
         'total_intents': total_intents
     }
+
+#------ANNOUNCEMENT----------# 
+    
+@blueprint.route("/api/announcements", methods=['GET', 'POST'])
+@login_required
+@role_required("admin")
+def manage_announcements():
+    if request.method == 'GET':
+        announcements = Announcement.query.all()
+        return jsonify([{
+            'id': a.id,
+            'message': a.message,
+            'enabled': a.enabled,
+            'created_at': a.created_at.isoformat(),
+            'updated_at': a.updated_at.isoformat()
+        } for a in announcements])
+    elif request.method == 'POST':
+        data = request.json
+        new_announcement = Announcement(message=data['message'], enabled=data['enabled'])
+        db.session.add(new_announcement)
+        db.session.commit()
+        return jsonify({'message': 'Announcement created successfully'}), 201
+
+@blueprint.route("/api/announcements/<int:id>", methods=['PUT', 'DELETE'])
+@login_required
+@role_required("admin")
+def manage_announcement(id):
+    announcement = Announcement.query.get_or_404(id)
+    if request.method == 'PUT':
+        data = request.json
+        announcement.message = data['message']
+        announcement.enabled = data['enabled']
+        db.session.commit()
+        return jsonify({'message': 'Announcement updated successfully'})
+    elif request.method == 'DELETE':
+        db.session.delete(announcement)
+        db.session.commit()
+        return jsonify({'message': 'Announcement deleted successfully'})
+
+@blueprint.route("/api/announcements/<int:id>/toggle", methods=['POST'])
+@login_required
+@role_required("admin")
+def toggle_announcement(id):
+    announcement = Announcement.query.get_or_404(id)
+    announcement.enabled = not announcement.enabled
+    db.session.commit()
+    return jsonify({'message': 'Announcement toggled successfully'})
+
+@blueprint.route("/api/current_announcement", methods=['GET'])
+def get_current_announcement():
+    announcement = Announcement.query.filter_by(enabled=True).order_by(Announcement.id.desc()).first()
+    if announcement:
+        return jsonify({"announcement": announcement.message})
+    else:
+        return jsonify({"announcement": None})
+    
+@blueprint.route("/announcement_management")
+@login_required
+@role_required("admin")
+def announcement_management():
+    return render_template("home/announcement_management.html", segment="announcement_management")

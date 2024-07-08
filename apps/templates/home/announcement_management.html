@@ -1,0 +1,151 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}Announcement Management{% endblock %}
+
+{% block stylesheets %}
+<style>
+    .announcement-card {
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+    .announcement-actions {
+        margin-top: 10px;
+    }
+    .announcement-status {
+        font-weight: bold;
+    }
+    .enabled {
+        color: green;
+    }
+    .disabled {
+        color: red;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="min-height-300 bg-gradient-success position-absolute w-100"></div>
+      
+  {% include "includes/admin_sidenav.html" %}
+
+    <main class="main-content position-relative border-radius-lg ">
+
+        {% include 'includes/navigation.html' %}
+        <div class="container-fluid mt-4">
+            <h2>Announcement Management</h2>
+            
+            <!-- Create New Announcement Form -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Create New Announcement</h5>
+                    <form id="createAnnouncementForm">
+                        <div class="mb-3">
+                            <label for="message" class="form-label">Announcement Message</label>
+                            <textarea class="form-control" id="message" name="message" rows="3" required></textarea>
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="enabled" name="enabled">
+                            <label class="form-check-label" for="enabled">Enable Announcement</label>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Create Announcement</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Existing Announcements -->
+            <h3>Existing Announcements</h3>
+            <div id="announcementsList">
+                <!-- Announcements will be dynamically added here -->
+            </div>
+        </div>
+    </main>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+    // Function to load announcements
+    function loadAnnouncements() {
+        fetch('{{ url_for("home_blueprint.manage_announcements") }}')
+            .then(response => response.json())
+            .then(announcements => {
+                const announcementsList = document.getElementById('announcementsList');
+                announcementsList.innerHTML = '';
+                announcements.forEach(announcement => {
+                    announcementsList.innerHTML += `
+                        <div class="announcement-card">
+                            <p>${announcement.message}</p>
+                            <p class="announcement-status ${announcement.enabled ? 'enabled' : 'disabled'}">
+                                Status: ${announcement.enabled ? 'Enabled' : 'Disabled'}
+                            </p>
+                            <div class="announcement-actions">
+                                <button onclick="editAnnouncement(${announcement.id})" class="btn btn-sm btn-primary">Edit</button>
+                                <button onclick="toggleAnnouncement(${announcement.id})" class="btn btn-sm btn-warning">
+                                    ${announcement.enabled ? 'Disable' : 'Enable'}
+                                </button>
+                                <button onclick="deleteAnnouncement(${announcement.id})" class="btn btn-sm btn-danger">Delete</button>
+                            </div>
+                        </div>
+                    `;
+                });
+            });
+    }
+
+    // Function to create a new announcement
+    document.getElementById('createAnnouncementForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const message = document.getElementById('message').value;
+        const enabled = document.getElementById('enabled').checked;
+        fetch('{{ url_for("home_blueprint.manage_announcements") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ message, enabled }),
+        })
+        .then(response => response.json())
+        .then(() => {
+            loadAnnouncements();
+            document.getElementById('createAnnouncementForm').reset();
+        });
+    });
+
+    // Function to edit an announcement
+    function editAnnouncement(id) {
+        const newMessage = prompt("Enter the new announcement message:");
+        if (newMessage) {
+            fetch(`{{ url_for("home_blueprint.manage_announcement", id=0) }}`.replace('0', id), {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ message: newMessage }),
+            })
+            .then(response => response.json())
+            .then(() => loadAnnouncements());
+        }
+    }
+
+    // Function to toggle an announcement
+    function toggleAnnouncement(id) {
+        fetch(`{{ url_for("home_blueprint.toggle_announcement", id=0) }}`.replace('0', id), { method: 'POST' })
+            .then(response => response.json())
+            .then(() => loadAnnouncements());
+    }
+
+    // Function to delete an announcement
+    function deleteAnnouncement(id) {
+        if (confirm('Are you sure you want to delete this announcement?')) {
+            fetch(`{{ url_for("home_blueprint.manage_announcement", id=0) }}`.replace('0', id), { method: 'DELETE' })
+                .then(response => response.json())
+                .then(() => loadAnnouncements());
+        }
+    }
+
+    // Load announcements when the page loads
+    document.addEventListener('DOMContentLoaded', loadAnnouncements);
+</script>
+{% endblock %}

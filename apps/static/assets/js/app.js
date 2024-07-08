@@ -25,6 +25,24 @@ const services = {
   ]
 };
 
+class AnnouncementManager {
+  constructor() {
+    this.currentAnnouncement = null;
+  }
+
+  setAnnouncement(message) {
+    this.currentAnnouncement = message;
+  }
+
+  getAnnouncement() {
+    return this.currentAnnouncement;
+  }
+
+  clearAnnouncement() {
+    this.currentAnnouncement = null;
+  }
+}
+
 class Chatbox {
   constructor() {
     this.args = {
@@ -33,6 +51,8 @@ class Chatbox {
       textInput: document.querySelector(".chatbox__input"),
     };
 
+    this.announcementManager = new AnnouncementManager();
+    this.checkForAnnouncement();
     this.typingLoader = null;
     this.handleResize = this.handleResize.bind(this);
     window.addEventListener('resize', this.handleResize);
@@ -46,6 +66,25 @@ class Chatbox {
 
   handleResize() {
     this.setupChoices();
+  }
+
+  checkForAnnouncement() {
+    fetch($SCRIPT_ROOT + '/api/current_announcement')
+      .then(response => response.json())
+      .then(data => {
+        if (data.announcement) {
+          this.announcementManager.setAnnouncement(data.announcement);
+          this.displayAnnouncement();
+        }
+      })
+      .catch(error => console.error('Error fetching announcement:', error));
+  }
+
+  displayAnnouncement() {
+    const announcement = this.announcementManager.getAnnouncement();
+    if (announcement) {
+      this.addMessage('Bot', `ANNOUNCEMENT: ${announcement}`);
+    }
   }
 
   destroy() {

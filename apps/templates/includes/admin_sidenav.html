@@ -10,12 +10,6 @@
     <hr class="horizontal dark mt-0 font-weight-bold" />
     <div class="collapse navbar-collapse w-auto" id="sidenav-collapse-main">
       <ul class="navbar-nav">
-        <!-- <li class="nav-item">
-          <a class="nav-link" href="#" style="background-color: white; border-radius: 20px; width: 90%; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin: 10px;">
-            <i class="fas fa-chart-bar me-2"></i>
-            <span class="nav-link-text">Reports Dashboard</span>
-          </a>
-        </li> -->
         <li class="nav-item">
           <a class="nav-link" href="{{ url_for('home_blueprint.admin_only') }}" style="background-color: white; border-radius: 20px; width: 90%; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin: 10px;">
             <i class="fas fa-users me-2"></i>
@@ -23,9 +17,9 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{{ url_for('home_blueprint.chat_analytics') }}" style="background-color: white; border-radius: 20px; width: 90%; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin: 10px;">
+          <a class="nav-link" href="{{ url_for('home_blueprint.announcement_management') }}" style="background-color: white; border-radius: 20px; width: 90%; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin: 10px;">
             <i class="fas fa-comments me-2"></i>
-            <span class="nav-link-text">Chat Statistics</span>
+            <span class="nav-link-text">Announcement</span>
           </a>
         </li>
         <li class="nav-item">
@@ -34,12 +28,6 @@
             <span class="nav-link-text">Chatbot Management</span>
           </a>
         </li>
-        <!-- <li class="nav-item">
-          <a class="nav-link" href="#" style="background-color: white; border-radius: 20px; width: 90%; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin: 10px;">
-            <i class="fas fa-cog me-2"></i>
-            <span class="nav-link-text">System Settings</span>
-          </a>
-        </li> -->
       </ul>
     </div>
   </aside>
