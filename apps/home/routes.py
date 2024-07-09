@@ -162,11 +162,6 @@ def predict():
     data = request.get_json()
     user_input = data.get("message")
 
-    # Remove the authentication check
-    # if not current_user.is_authenticated:
-    #     return jsonify({"error": "User not authenticated"}), 401
-
-    # Use a default language if user is not authenticated
     user_language = (
         current_user.language_preference if current_user.is_authenticated else "en"
     )
@@ -176,10 +171,6 @@ def predict():
 
     cleaned_input = preprocess_input(user_input)
     response = get_response(cleaned_input, user_language)
-
-    # Remove chat history saving for unauthenticated users
-    # if current_user.is_authenticated:
-    #     # Save chat history logic here
 
     predict_logger.debug(f"Response: {response}")
 
@@ -520,8 +511,14 @@ def get_appointments():
         'per_page': per_page,
         'total_pages': appointments.pages
     })
+    
 
+from flask import session
 
+@blueprint.route("/clear_scheduling_data", methods=['POST'])
+def clear_scheduling_data():
+    session.pop('appointment_data', None)
+    return '', 204
 
 
 # CHATBOT MANAGEMENT---------------------------------------------------

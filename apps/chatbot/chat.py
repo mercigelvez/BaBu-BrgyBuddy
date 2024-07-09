@@ -1,7 +1,8 @@
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 import random
 import re
 import traceback
+from flask import session
 import joblib
 import json
 from nltk.tokenize import word_tokenize
@@ -31,6 +32,7 @@ tagalog_model = joblib.load(os.path.join(script_dir, "chatmodeltagalog.joblib"))
 
 lemmatizer = WordNetLemmatizer()
 
+
 def preprocess_input(user_input):
     tokens = word_tokenize(user_input)
     tokens = [
@@ -40,18 +42,19 @@ def preprocess_input(user_input):
     ]
     return " ".join(tokens)
 
+
 appointment_data = {}
 
-def get_response(user_input, language):
-    global appointment_data
 
+def get_response(user_input, language):
     # Check if the user wants to schedule an appointment
-    if "schedule" in user_input.lower() and "appointment_step" not in appointment_data:
-        appointment_data["appointment_step"] = "full_name"
+    if "schedule" in user_input.lower() and "appointment_data" not in session:
+        session["appointment_data"] = {"appointment_step": "full_name"}
+        session["last_activity"] = datetime.utcnow()
         return "To schedule an appointment, please provide your full name."
 
     # If we're in the middle of scheduling an appointment, continue with that process
-    if "appointment_step" in appointment_data:
+    if "appointment_data" in session:
         return handle_appointment_scheduling(user_input, language)
 
     # Otherwise, proceed with normal conversation
@@ -83,29 +86,64 @@ def get_response(user_input, language):
         if language == "english"
         else "Paumanhin, hindi ko alam kung paano sasagutin 'yan."
     )
-    
+
+
+def ensure_naive_datetime(dt):
+    if dt.tzinfo is not None:
+        return dt.replace(tzinfo=None)
+    return dt
 
 
 def handle_appointment_scheduling(user_input, language):
-    global appointment_data
-
-    print(f"Current appointment step: {appointment_data.get('appointment_step', 'Not set')}")  # Debug line
-
+    print("Session data at start:", session)
     try:
+        current_time = ensure_naive_datetime(datetime.now())
+
+        if "appointment_data" not in session or "last_activity" not in session:
+            session["appointment_data"] = {"appointment_step": "full_name"}
+            session["last_activity"] = current_time.isoformat()
+            return "Let's start over. To schedule an appointment, please provide your full name."
+
+        # Convert last_activity to datetime object
+        last_activity = session.get("last_activity")
+        if isinstance(last_activity, str):
+            last_activity = ensure_naive_datetime(datetime.fromisoformat(last_activity))
+        elif isinstance(last_activity, datetime):
+            last_activity = ensure_naive_datetime(last_activity)
+        else:
+            # If it's neither a string nor a datetime, reset the session
+            session.pop("appointment_data", None)
+            session.pop("last_activity", None)
+            return "There was an issue with your session. Please start over."
+
+        # Check if the session has expired
+        if current_time - last_activity > timedelta(days=30):
+            session.pop("appointment_data", None)
+            session.pop("last_activity", None)
+            return "Scheduling session has expired. Please start over."
+
+        # Update last activity
+        session["last_activity"] = current_time.isoformat()
+
+        appointment_data = session["appointment_data"]
+
         if appointment_data["appointment_step"] == "full_name":
             appointment_data["full_name"] = user_input
             appointment_data["appointment_step"] = "address"
+            session["appointment_data"] = appointment_data
             return "Thank you. Now, please provide your address."
 
         elif appointment_data["appointment_step"] == "address":
             appointment_data["address"] = user_input
             appointment_data["appointment_step"] = "birthday"
+            session["appointment_data"] = appointment_data
             return "Great. What's your birthday? (Please use YYYY-MM-DD format)"
 
         elif appointment_data["appointment_step"] == "birthday":
             if re.match(r"\d{4}-\d{2}-\d{2}", user_input):
                 appointment_data["birthday"] = user_input
                 appointment_data["appointment_step"] = "birthplace"
+                session["appointment_data"] = appointment_data
                 return "Thank you. What's your birthplace?"
             else:
                 return "Please provide your birthday in YYYY-MM-DD format."
@@ -113,12 +151,14 @@ def handle_appointment_scheduling(user_input, language):
         elif appointment_data["appointment_step"] == "birthplace":
             appointment_data["birthplace"] = user_input
             appointment_data["appointment_step"] = "purpose"
+            session["appointment_data"] = appointment_data
             return "What's the purpose of your appointment?"
 
         elif appointment_data["appointment_step"] == "purpose":
             appointment_data["purpose"] = user_input
             appointment_data["appointment_step"] = "appointment_date"
-            return "When would you like to schedule your appointment? Please enter a date in YYYY-MM-DD format, or type 'today' or 'ngayon' for the earliest available date. Note that our office is only open Monday to Friday from 8am to 5pm."
+            session["appointment_data"] = appointment_data
+            return "When would you like to schedule your appointment? Please enter a date in YYYY-MM-DD format, or type 'today' or 'ngayon' for the earliest available date."
 
         elif appointment_data["appointment_step"] == "appointment_date":
             if user_input.lower() in ["today", "ngayon"]:
@@ -129,17 +169,10 @@ def handle_appointment_scheduling(user_input, language):
                 except ValueError:
                     return "The date format is incorrect. Please use YYYY-MM-DD format (e.g., 2023-07-15) or type 'today'/'ngayon'."
 
-            # Check if the appointment date is valid (Monday to Friday)
-            if appointment_date.weekday() >= 5:  # 5 and 6 are Saturday and Sunday
-                return "Sorry, appointments are only available from Monday to Friday. Please choose another date."
-
-            # Check if the appointment date is not in the past
-            if appointment_date < datetime.now().date():
-                return "Sorry, you cannot schedule an appointment in the past. Please choose a future date."
-
             appointment_data["appointment_date"] = appointment_date.strftime("%Y-%m-%d")
             appointment_data["appointment_step"] = "confirm"
-            
+            session["appointment_data"] = appointment_data
+
             confirmation_text = f"""
             Please confirm your appointment details:
             Full Name: {appointment_data['full_name']}
@@ -149,38 +182,38 @@ def handle_appointment_scheduling(user_input, language):
             Purpose: {appointment_data['purpose']}
             Appointment Date: {appointment_data['appointment_date']}
 
-            IMPORTANT: The office is only open Monday to Friday from 8am to 5pm.
-            
             Do you confirm this appointment? (Yes/No)
             """
             return confirmation_text
 
         elif appointment_data["appointment_step"] == "confirm":
             if user_input.lower() in ["oo", "yes", "confirm", "okay"]:
-                response = schedule_appointment(appointment_data)
-                if response["status"] == "success":
+                # Save the appointment to the database
+                result = schedule_appointment(appointment_data)
+                if result["status"] == "success":
+                    # Generate the ticket image
                     ticket_image = generate_appointment_ticket_image(appointment_data)
-                    appointment_data = {}  # Reset appointment data
-                    return {
-                        "message": "Your appointment has been scheduled successfully. Here is your appointment ticket:",
-                        "ticket_image": ticket_image
-                    }
+                    if ticket_image:
+                        session.pop("appointment_data", None)
+                        return {
+                            "message": "Your appointment has been scheduled successfully.",
+                            "ticket_image": ticket_image
+                        }
+                    else:
+                        return "Your appointment has been scheduled, but there was an error generating the ticket. Please contact support."
                 else:
-                    appointment_data = {}  # Reset appointment data
-                    return response["message"]
+                    return result["message"]
             else:
-                appointment_data = {}  # Reset appointment data
+                session.pop("appointment_data", None)
                 return "Appointment scheduling cancelled. How else can I assist you?"
 
-        # If we reach here, something went wrong
-        print("Reached the end of the function unexpectedly")  # Debug line
-        appointment_data = {}  # Reset appointment data
-        return "There was an error in the appointment scheduling process. Please try again."
-
     except Exception as e:
-        print(f"An exception occurred: {str(e)}")  # Debug line
-        appointment_data = {}  # Reset appointment data
+        print(f"An exception occurred: {str(e)}")
+        traceback.print_exc()  # This will print the full stack trace
+        session.pop("appointment_data", None)
+        session.pop("last_activity", None)
         return "An unexpected error occurred. Please try again."
+
 
 def schedule_appointment(data):
     try:
@@ -194,25 +227,33 @@ def schedule_appointment(data):
         )
         db.session.add(new_appointment)
         db.session.commit()
-        return {"status": "success", "message": "Your appointment has been scheduled successfully."}
+        return {
+            "status": "success",
+            "message": "Your appointment has been scheduled successfully.",
+        }
     except Exception as e:
         db.session.rollback()
         print(f"Error scheduling appointment: {str(e)}")
         print(f"Full error traceback: {traceback.format_exc()}")
-        return {"status": "error", "message": f"There was an error scheduling your appointment: {str(e)}. Please try again later."}
+        return {
+            "status": "error",
+            "message": f"There was an error scheduling your appointment: {str(e)}. Please try again later.",
+        }
+
 
 import logging
 
 logger = logging.getLogger(__name__)
 
+
 def generate_appointment_ticket_image(appointment_data):
     try:
         logger.debug("Generating appointment ticket image")
-        
+
         # Create a new image with a light background
         width, height = 600, 400
         background_color = (240, 248, 255)  # Light blue background
-        img = Image.new('RGB', (width, height), color=background_color)
+        img = Image.new("RGB", (width, height), color=background_color)
         d = ImageDraw.Draw(img)
 
         # Load fonts
@@ -228,7 +269,9 @@ def generate_appointment_ticket_image(appointment_data):
 
         # Add BaBu logo
         script_dir = os.path.dirname(os.path.abspath(__file__))
-        logo_path = os.path.join(script_dir, "..", "static", "assets", "img", "babu-logo.png")
+        logo_path = os.path.join(
+            script_dir, "..", "static", "assets", "img", "babu-logo.png"
+        )
         try:
             logo = Image.open(logo_path).convert("RGBA")
             logo = logo.resize((80, 80))  # Resize logo as needed
@@ -240,7 +283,7 @@ def generate_appointment_ticket_image(appointment_data):
         d.text((100, 30), "SCHEDULE TICKET", font=title_font, fill=(0, 100, 0))
 
         # Add horizontal line
-        d.line([(10, 100), (width-10, 100)], fill=(0, 100, 0), width=2)
+        d.line([(10, 100), (width - 10, 100)], fill=(0, 100, 0), width=2)
 
         # Add appointment details
         details = [
@@ -249,7 +292,7 @@ def generate_appointment_ticket_image(appointment_data):
             f"Birthday: {appointment_data['birthday']}",
             f"Birthplace: {appointment_data['birthplace']}",
             f"Purpose: {appointment_data['purpose']}",
-            f"Appointment Date: {appointment_data['appointment_date']}"
+            f"Appointment Date: {appointment_data['appointment_date']}",
         ]
 
         y_position = 120
@@ -258,14 +301,14 @@ def generate_appointment_ticket_image(appointment_data):
             y_position += 30
 
         # Add horizontal line
-        d.line([(10, 320), (width-10, 320)], fill=(0, 100, 0), width=2)
+        d.line([(10, 320), (width - 10, 320)], fill=(0, 100, 0), width=2)
 
         # Add reminders
         d.text((20, 330), "MAHALAGANG PAALALA:", font=main_font, fill=(0, 100, 0))
         reminders = [
             "• Dalhin ang ticket na ito sa araw ng schedule",
             "• Magdala ng valid ID",
-            "• Ito ay valid lamang para sa araw ng iyong schedule"
+            "• Ito ay valid lamang para sa araw ng iyong schedule",
         ]
 
         y_position = 355
@@ -275,19 +318,20 @@ def generate_appointment_ticket_image(appointment_data):
 
         # Add decorative elements
         d.rectangle([(0, 0), (width, height)], outline=(0, 100, 0), width=5)
-        d.rectangle([(5, 5), (width-5, height-5)], outline=(0, 150, 0), width=2)
+        d.rectangle([(5, 5), (width - 5, height - 5)], outline=(0, 150, 0), width=2)
 
         # Save the image to a bytes buffer
         buf = io.BytesIO()
-        img.save(buf, format='PNG')
-        
+        img.save(buf, format="PNG")
+
         # Encode the image as base64
         logger.debug("Ticket image generated successfully")
-        return base64.b64encode(buf.getvalue()).decode('utf-8')
+        return base64.b64encode(buf.getvalue()).decode("utf-8")
     except Exception as e:
         logger.error(f"Error generating ticket image: {str(e)}")
         logger.error(traceback.format_exc())
         return None
+
 
 if __name__ == "__main__":
     # For testing purposes, you can set the language preference here
