@@ -258,11 +258,12 @@ def generate_appointment_ticket_image(appointment_data):
 
         # Load fonts
         try:
-            title_font = ImageFont.truetype("arial.ttf", 24)
-            main_font = ImageFont.truetype("arial.ttf", 16)
-            small_font = ImageFont.truetype("arial.ttf", 12)
+            # Try to use a more universally available font
+            title_font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 24)
+            main_font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 16)
+            small_font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 12)
         except IOError:
-            logger.warning("Arial font not found, using default font")
+            logger.warning("DejaVu Sans font not found, using default font")
             title_font = ImageFont.load_default()
             main_font = ImageFont.load_default()
             small_font = ImageFont.load_default()
@@ -278,6 +279,7 @@ def generate_appointment_ticket_image(appointment_data):
             img.paste(logo, (10, 10), logo)
         except Exception as e:
             logger.error(f"Error loading logo: {str(e)}")
+
 
         # Add title
         d.text((100, 30), "SCHEDULE TICKET", font=title_font, fill=(0, 100, 0))
