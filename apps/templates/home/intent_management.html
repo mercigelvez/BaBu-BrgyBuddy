@@ -4,6 +4,51 @@
   Chatbot Management
 {% endblock %}
 
+{% block stylesheets %}
+<style>
+    :root {
+        --primary-green: #2ecc71;
+        --dark-green: #27ae60;
+        --light-green: #a9dfbf;
+    }
+    body {
+        background-color: #f1f8e9;
+    }
+    .btn-success, .btn-primary {
+        background-color: var(--primary-green);
+        border-color: var(--primary-green);
+    }
+    .btn-success:hover, .btn-primary:hover {
+        background-color: var(--dark-green);
+        border-color: var(--dark-green);
+    }
+    .btn-outline-success {
+        color: var(--primary-green);
+        border-color: var(--primary-green);
+    }
+    .btn-outline-success:hover {
+        background-color: var(--primary-green);
+        color: white;
+    }
+    .card {
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .modal-content {
+        border-top: 3px solid var(--primary-green);
+    }
+    .page-item.active .page-link {
+        background-color: var(--primary-green);
+        border-color: var(--primary-green);
+    }
+    .page-link {
+        color: var(--primary-green);
+    }
+    .page-link:hover {
+        color: var(--dark-green);
+    }
+</style>
+{% endblock %}
+
 {% block content %}
   <div class="min-height-300 bg-gradient-success position-absolute w-100"></div>
 
@@ -14,7 +59,7 @@
 
     <div class="container-fluid py-4">
       <h2 class="mb-4 text-white">Intent Management</h2>
-      <button id="addIntentBtn" class="btn btn-success mb-3">Add New Intent</button>
+      <button id="addIntentBtn" class="btn btn-primary mb-3">Add New Intent</button>
       <div class="card">
         <div class="card-body p-0">
           <div class="table-responsive">
@@ -46,6 +91,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="addIntentModalLabel">Add New Intent</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <form id="addIntentForm">
@@ -71,7 +117,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" id="saveIntent">Save Intent</button>
+          <button type="button" class="btn btn-success" id="saveIntent">Save Intent</button>
         </div>
       </div>
     </div>
@@ -83,7 +129,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="viewEditIntentModalLabel">View Intent</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <form id="viewEditIntentForm">
@@ -101,7 +147,7 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
           <button type="button" class="btn btn-warning" id="toggleEditMode">Edit</button>
-          <button type="button" class="btn btn-primary" id="saveEditedIntent" style="display: none;">Save Changes</button>
+          <button type="button" class="btn btn-success" id="saveEditedIntent" style="display: none;">Save Changes</button>
         </div>
       </div>
     </div>
@@ -113,6 +159,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="editIntentModalLabel">Edit Intent</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <form id="editIntentForm">
@@ -129,7 +176,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" id="updateIntent">Update Intent</button>
+          <button type="button" class="btn btn-success" id="updateIntent">Update Intent</button>
         </div>
       </div>
     </div>
@@ -176,7 +223,7 @@
                 </td>
                 <td class="align-middle">
                   <button class="btn btn-sm btn-outline-success view-intent" data-tag="${intent.tag}">View</button>
-                  <button class="btn btn-sm btn-dark delete-intent" data-tag="${intent.tag}">Delete</button>
+                  <button class="btn btn-sm btn-outline-danger delete-intent" data-tag="${intent.tag}">Delete</button>
                 </td>
               </tr>
             `);
