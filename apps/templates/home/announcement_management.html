@@ -163,11 +163,11 @@
                                 Status: ${announcement.enabled ? 'Enabled' : 'Disabled'}
                             </p>
                             <div class="announcement-actions">
-                                <button onclick="editAnnouncement(${announcement.id}, '${announcement.message.replace(/'/g, "\\'")}', ${announcement.enabled})" class="btn btn-sm btn-primary">Edit</button>
-                                <button onclick="toggleAnnouncement(${announcement.id})" class="btn btn-sm btn-warning">
+                                <button onclick="editAnnouncement(${announcement.id}, '${announcement.message.replace(/'/g, "\\'")}', ${announcement.enabled})" class="btn btn-sm btn-outline-primary">Edit</button>
+                                <button onclick="toggleAnnouncement(${announcement.id})" class="btn btn-sm btn-outline-warning">
                                     ${announcement.enabled ? 'Disable' : 'Enable'}
                                 </button>
-                                <button onclick="deleteAnnouncement(${announcement.id})" class="btn btn-sm btn-danger">Delete</button>
+                                <button onclick="deleteAnnouncement(${announcement.id})" class="btn btn-sm btn-outline-danger">Delete</button>
                             </div>
                         </div>
                     `;

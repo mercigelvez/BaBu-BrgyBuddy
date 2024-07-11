@@ -7,6 +7,16 @@
 {% block stylesheets %}
   {{ super() }}
   <style>
+    :root {
+        --primary-green: #2ecc71;
+        --dark-green: #27ae60;
+        --light-green: #a9dfbf;
+    }
+
+    body {
+        background-color: #f1f8e9;
+    }
+
     .custom-table {
       border-collapse: separate;
       border-spacing: 0 8px;
@@ -50,61 +60,47 @@
   
     /* Green theme for FullCalendar */
     .fc .fc-toolbar-title {
-      color: #28a745;
+      color: var(--primary-green);
     }
 
     .fc-prev-button, .fc-next-button,
     .fc .fc-button-primary {
-      background-color: #28a745;
-      border-color: #28a745;
+      background-color: var(--primary-green);
+      border-color: var(--primary-green);
     }
 
     .fc .fc-button-primary:hover {
-      background-color: #218838;
-      border-color: #1e7e34;
+      background-color: var(--dark-green);
+      border-color: var(--dark-green);
     }
 
     .fc .fc-button-primary:disabled {
-      background-color: #74c687;
-      border-color: #74c687;
+      background-color: var(--light-green);
+      border-color: var(--light-green);
     }
 
     .fc .fc-button-primary:not(:disabled):active,
     .fc .fc-button-primary:not(:disabled).fc-button-active {
-      background-color: #1e7e34;
-      border-color: #1c7430;
+      background-color: var(--dark-green);
+      border-color: var(--dark-green);
     }
 
     .fc .fc-daygrid-day.fc-day-today {
-      background-color: rgba(40, 167, 69, 0.15);
+      background-color: rgba(46, 204, 113, 0.15);
     }
 
     .fc .fc-highlight {
-      background-color: rgba(40, 167, 69, 0.3);
+      background-color: rgba(46, 204, 113, 0.3);
     }
 
     .fc a.fc-event {
-      background-color: #ACE1AF;
-      border-color: #ACE1AF;
+      background-color: var(--light-green);
+      border-color: var(--light-green);
     }
 
     .fc a.fc-event:hover {
-      background-color: #218838;
-      border-color: #1e7e34;
-    }
-
-    /* Make calendar more compact */
-    .fc .fc-daygrid-day-frame {
-      min-height: 5em;
-    }
-
-    .fc .fc-daygrid-day-events {
-      margin-top: 0.5em;
-    }
-
-    .fc .fc-daygrid-event {
-      margin-top: 0.25em;
-      margin-bottom: 0.25em;
+      background-color: var(--dark-green);
+      border-color: var(--dark-green);
     }
 
     .fc-event-title {
@@ -113,6 +109,47 @@
 
     .fc-event-time{
       color: black;
+    }
+
+    .btn-success, .btn-primary {
+        background-color: var(--primary-green);
+        border-color: var(--primary-green);
+    }
+
+    .btn-success:hover, .btn-primary:hover {
+        background-color: var(--dark-green);
+        border-color: var(--dark-green);
+    }
+
+    .btn-outline-success {
+        color: var(--primary-green);
+        border-color: var(--primary-green);
+    }
+
+    .btn-outline-success:hover {
+        background-color: var(--primary-green);
+        color: white;
+    }
+
+    .card {
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .modal-content {
+        border-top: 3px solid var(--primary-green);
+    }
+
+    .page-item.active .page-link {
+        background-color: var(--primary-green);
+        border-color: var(--primary-green);
+    }
+
+    .page-link {
+        color: var(--primary-green);
+    }
+
+    .page-link:hover {
+        color: var(--dark-green);
     }
 
     /* Responsive adjustments */
