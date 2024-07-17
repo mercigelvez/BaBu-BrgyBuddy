@@ -54,6 +54,11 @@
         max-height: 50px;
         width: auto;
     }
+
+    .partnership-logo {
+        max-height: 50px;
+        width: auto;
+    }
 </style>
 
 <!-- Navigation -->
@@ -137,8 +142,8 @@
 <section id="partnership" class="py-5 bg-light">
     <div class="container text-center">
         <h2 class="mb-4">Official Partnership</h2>
-        <div class="row">
-            <div class="col-md-8 offset-md-2">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
                 <p class="lead">
                     This AI chatbot is officially partnered with the 
                     <strong>Barangay Market Area of Santa Rosa, Laguna</strong>.
@@ -149,6 +154,10 @@
                     Babu is here to serve the residents of Brgy. Market Area, Santa Rosa with the support 
                     and approval of the barangay officials.
                 </p>
+                <div class="mt-2 d-flex justify-content-center align-items-center">
+                    <img src="{{ config.ASSETS_ROOT }}/img/babu-logo.png" alt="Babu Logo" class="partnership-logo me-2">
+                    <img src="{{ config.ASSETS_ROOT }}/img/market-logo.png" alt="Market Area Logo" class="partnership-logo ms-2">
+                </div>
             </div>
         </div>
     </div>
