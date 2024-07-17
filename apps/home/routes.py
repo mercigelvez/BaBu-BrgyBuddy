@@ -1,5 +1,8 @@
 # -*- encoding: utf-8 -*-
 
+from importlib import import_module
+import os
+import sys
 from apps.home import blueprint
 from flask import render_template, request
 from flask_paginate import get_page_args, Pagination
@@ -17,7 +20,7 @@ from flask import (
     make_response,
 )
 from datetime import datetime, timedelta
-from apps.models import Appointment, ChatHistory, Message
+from apps.models import Announcement, Appointment, ChatHistory, Message
 from apps import db
 from apps.authentication.util import check_timeout
 from apps.authentication.models import Users
@@ -107,6 +110,7 @@ def chat_analytics():
     return render_template("home/chat_analytics.html", segment="chat_analytics")
 
 
+
 @blueprint.route("/<template>")
 @login_required
 def route_template(template):
@@ -158,11 +162,6 @@ def predict():
     data = request.get_json()
     user_input = data.get("message")
 
-    # Remove the authentication check
-    # if not current_user.is_authenticated:
-    #     return jsonify({"error": "User not authenticated"}), 401
-
-    # Use a default language if user is not authenticated
     user_language = (
         current_user.language_preference if current_user.is_authenticated else "en"
     )
@@ -172,10 +171,6 @@ def predict():
 
     cleaned_input = preprocess_input(user_input)
     response = get_response(cleaned_input, user_language)
-
-    # Remove chat history saving for unauthenticated users
-    # if current_user.is_authenticated:
-    #     # Save chat history logic here
 
     predict_logger.debug(f"Response: {response}")
 
@@ -490,7 +485,12 @@ def tables():
 
 @blueprint.route("/get_appointments", methods=["GET"])
 def get_appointments():
-    appointments = Appointment.query.all()
+    page = request.args.get('page', 1, type=int)
+    per_page = 8  # You can adjust this number as needed
+
+    total = Appointment.query.count()
+    appointments = Appointment.query.order_by(Appointment.appointment_date.desc()).paginate(page=page, per_page=per_page, error_out=False)
+
     appointment_list = [
         {
             "id": apt.id,
@@ -501,9 +501,203 @@ def get_appointments():
             "birthday": apt.birthday.isoformat(),
             "birthplace": apt.birthplace,
         }
-        for apt in appointments
+        for apt in appointments.items
     ]
-    return jsonify(appointment_list)
+
+    return jsonify({
+        'appointments': appointment_list,
+        'total': total,
+        'page': page,
+        'per_page': per_page,
+        'total_pages': appointments.pages
+    })
+    
+
+from flask import session
+
+@blueprint.route("/clear_scheduling_data", methods=['POST'])
+def clear_scheduling_data():
+    session.pop('appointment_data', None)
+    return '', 204
 
 
+# CHATBOT MANAGEMENT---------------------------------------------------
 
+# Define the path to the intents file
+INTENTS_FILE = 'intents3.json'
+
+def get_intents_file_path():
+    """Get the full path to the intents file."""
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    apps_dir = os.path.dirname(current_dir)
+    return os.path.join(apps_dir, 'chatbot', INTENTS_FILE)
+
+@blueprint.route("/intent_management")
+@login_required
+@role_required("admin")
+def intent_management():
+    intents_file = get_intents_file_path()
+    with open(intents_file) as file:
+        intents = json.load(file)
+    return render_template("home/intent_management.html", segment="intent_management", intents=intents['intents'])
+
+@blueprint.route("/api/intents", methods=['GET', 'POST'])
+@login_required
+@role_required("admin")
+def api_intents():
+    intents_file = get_intents_file_path()
+    if request.method == 'GET':
+        with open(intents_file) as file:
+            intents = json.load(file)
+        return jsonify(intents)
+    elif request.method == 'POST':
+        new_intent = request.json
+        with open(intents_file) as file:
+            intents = json.load(file)
+        intents['intents'].append(new_intent)
+        with open(intents_file, 'w') as file:
+            json.dump(intents, file, indent=2)
+        retrain_model()
+        return jsonify({"message": "Intent added successfully"}), 201
+
+@blueprint.route("/api/intents/<string:tag>", methods=['PUT', 'DELETE'])
+@login_required
+@role_required("admin")
+def api_intent(tag):
+    intents_file = get_intents_file_path()
+    with open(intents_file) as file:
+        intents = json.load(file)
+    
+    intent_index = next((index for (index, d) in enumerate(intents['intents']) if d["tag"] == tag), None)
+    
+    if intent_index is None:
+        return jsonify({"error": "Intent not found"}), 404
+    
+    if request.method == 'PUT':
+        updated_intent = request.json
+        intents['intents'][intent_index] = updated_intent
+    elif request.method == 'DELETE':
+        del intents['intents'][intent_index]
+    
+    with open(intents_file, 'w') as file:
+        json.dump(intents, file, indent=2)
+    
+    retrain_model()
+    return jsonify({"message": "Intent updated successfully"})
+
+def retrain_model():
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    apps_dir = os.path.dirname(current_dir)
+    chatbot_dir = os.path.join(apps_dir, 'chatbot')
+    sys.path.append(chatbot_dir)
+
+    try:
+        train_module = import_module('train')
+        
+        if hasattr(train_module, 'train_model'):
+            train_module.train_model()
+            print("Model retrained and saved successfully.")
+            return True
+        else:
+            print("Error: Could not find train_model function in train.py")
+            return False
+    except Exception as e:
+        print(f"Error retraining model: {str(e)}")
+        return False
+    finally:
+        sys.path.remove(chatbot_dir)
+        
+
+@blueprint.route("/api/retrain", methods=['POST'])
+@login_required
+@role_required("admin")
+def api_retrain():
+    try:
+        retrain_model()
+        return jsonify({"message": "Model retrained successfully"}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+import math
+
+def get_paginated_intents(page, per_page):
+    file_path = get_intents_file_path()
+    with open(file_path, 'r') as file:
+        all_intents = json.load(file)['intents']
+    
+    total_intents = len(all_intents)
+    total_pages = math.ceil(total_intents / per_page)
+    
+    start = (page - 1) * per_page
+    end = start + per_page
+    
+    paginated_intents = all_intents[start:end]
+    
+    return {
+        'intents': paginated_intents,
+        'total_pages': total_pages,
+        'current_page': page,
+        'total_intents': total_intents
+    }
+
+#------ANNOUNCEMENT----------# 
+    
+@blueprint.route("/api/announcements", methods=['GET', 'POST'])
+@login_required
+@role_required("admin")
+def manage_announcements():
+    if request.method == 'GET':
+        announcements = Announcement.query.all()
+        return jsonify([{
+            'id': a.id,
+            'message': a.message,
+            'enabled': a.enabled,
+            'created_at': a.created_at.isoformat(),
+            'updated_at': a.updated_at.isoformat()
+        } for a in announcements])
+    elif request.method == 'POST':
+        data = request.json
+        new_announcement = Announcement(message=data['message'], enabled=data['enabled'])
+        db.session.add(new_announcement)
+        db.session.commit()
+        return jsonify({'message': 'Announcement created successfully'}), 201
+
+@blueprint.route("/api/announcements/<int:id>", methods=['PUT', 'DELETE'])
+@login_required
+@role_required("admin")
+def manage_announcement(id):
+    announcement = Announcement.query.get_or_404(id)
+    if request.method == 'PUT':
+        data = request.json
+        announcement.message = data['message']
+        announcement.enabled = data['enabled']
+        db.session.commit()
+        return jsonify({'message': 'Announcement updated successfully'})
+    elif request.method == 'DELETE':
+        db.session.delete(announcement)
+        db.session.commit()
+        return jsonify({'message': 'Announcement deleted successfully'})
+
+@blueprint.route("/api/announcements/<int:id>/toggle", methods=['POST'])
+@login_required
+@role_required("admin")
+def toggle_announcement(id):
+    announcement = Announcement.query.get_or_404(id)
+    announcement.enabled = not announcement.enabled
+    db.session.commit()
+    return jsonify({'message': 'Announcement toggled successfully'})
+
+@blueprint.route("/api/current_announcement", methods=['GET'])
+def get_current_announcement():
+    announcements = Announcement.query.filter_by(enabled=True).order_by(Announcement.id.desc()).all()
+    if announcements:
+        return jsonify({"announcements": [a.message for a in announcements]})
+    else:
+        return jsonify({"announcements": []})
+    
+@blueprint.route("/announcement_management")
+@login_required
+@role_required("admin")
+def announcement_management():
+    return render_template("home/announcement_management.html", segment="announcement_management")

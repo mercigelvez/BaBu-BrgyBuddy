@@ -10,7 +10,7 @@ TEAM BABU - BSIT 3-2 OF 23-24
 """
 from time import sleep
 import click
-from flask import Flask, session, redirect, url_for
+from flask import Flask, request, session, redirect, url_for
 from flask_login import LoginManager, current_user
 from flask_sqlalchemy import SQLAlchemy
 from importlib import import_module
@@ -21,6 +21,7 @@ from flask.cli import with_appcontext
 from sqlalchemy.exc import OperationalError, SQLAlchemyError
 import logging
 from logging.handlers import RotatingFileHandler
+from flask_session import Session
 
 db = SQLAlchemy()
 login_manager = LoginManager()
@@ -109,10 +110,8 @@ def create_admin_command(username, email, password):
 def create_app(config):
     app = Flask(__name__)
     app.config.from_object(config)
-
-    # Configure session
-    app.config["SESSION_PERMANENT"] = False  # Change this to False
-    app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(days=30)
+    Session(app)
+    
     register_error_handlers(app)
     register_extensions(app)
     register_blueprints(app)
