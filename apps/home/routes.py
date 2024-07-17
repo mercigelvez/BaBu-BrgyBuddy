@@ -487,23 +487,23 @@ def tables():
 def get_appointments():
     page = request.args.get('page', 1, type=int)
     per_page = 8  # You can adjust this number as needed
-
     total = Appointment.query.count()
     appointments = Appointment.query.order_by(Appointment.appointment_date.desc()).paginate(page=page, per_page=per_page, error_out=False)
-
     appointment_list = [
         {
             "id": apt.id,
+            "appointment_id": apt.appointment_id,
             "title": f"{apt.full_name} - {apt.purpose}",
             "start": apt.appointment_date.isoformat(),
-            "end": (apt.appointment_date + timedelta(hours=1)).isoformat(),
+            "end": (apt.appointment_date + timedelta(hours=1)).isoformat(),  # Assuming 1-hour appointments
+            "full_name": apt.full_name,
             "address": apt.address,
-            "birthday": apt.birthday.isoformat(),
+            "birthday": apt.birthday.isoformat() if apt.birthday else None,
             "birthplace": apt.birthplace,
+            "purpose": apt.purpose,
         }
         for apt in appointments.items
     ]
-
     return jsonify({
         'appointments': appointment_list,
         'total': total,
@@ -511,6 +511,13 @@ def get_appointments():
         'per_page': per_page,
         'total_pages': appointments.pages
     })
+    
+@blueprint.route("/delete_appointment/<int:appointment_id>", methods=["DELETE"])
+def delete_appointment(appointment_id):
+    appointment = Appointment.query.get_or_404(appointment_id)
+    db.session.delete(appointment)
+    db.session.commit()
+    return jsonify({"message": "Appointment deleted successfully"}), 200
     
 
 from flask import session
