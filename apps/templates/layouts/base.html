@@ -25,6 +25,11 @@
     <link id="pagestyle" href="{{ config.ASSETS_ROOT }}/css/babu.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <link href=https://cdn.jsdelivr.net/npm/fullcalendar@5.10.2/main.css rel='stylesheet' />
+    <script src=https://cdn.jsdelivr.net/npm/fullcalendar@5.10.2/main.js></script>
 
     <!-- Specific CSS goes HERE -->
     {% block stylesheets %}
@@ -45,8 +50,6 @@
     {% block content %}
 
     {% endblock %}
-
-    <!-- {% include "includes/fixed-plugin.html" %} -->
 
     {% include 'includes/scripts.html' %}
     {% include 'modals.html' %}
@@ -135,6 +138,5 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="{{ config.ASSETS_ROOT }}/js/profile.js"></script>
-
   </body>
 </html>

@@ -1,0 +1,169 @@
+{% extends 'layouts/base-fullscreen.html' %}
+
+{% block title %}Welcome to Babu - Brgy Market Area Assistant{% endblock %}
+
+{% block content %}
+<style>
+    :root {
+        --primary-green: #28a745;
+        --dark-green: #218838;
+        --light-green: #e9f7ef;
+        --white: #ffffff;
+        --light-gray: #f8f9fa;
+    }
+    .navbar {
+        background-color: var(--white) !important;
+        box-shadow: 0 2px 4px rgba(0,0,0,.1);
+    }
+    .navbar-brand, .nav-link {
+        color: var(--primary-green) !important;
+    }
+    .nav-link:hover {
+        color: var(--dark-green) !important;
+    }
+    .hero {
+        background-color: var(--light-green);
+        padding: 100px 0;
+    }
+    .hero-content {
+        color: var(--dark-green);
+    }
+    .btn-custom {
+        background-color: var(--primary-green) !important;
+        border-color: var(--primary-green) !important;
+        color: var(--white) !important;
+    }
+    .btn-custom:hover {
+        background-color: var(--dark-green) !important;
+        border-color: var(--dark-green) !important;
+    }
+    #about {
+        background-color: var(--white);
+    }
+    #chatbot {
+        background-color: var(--light-gray);
+    }
+    h2 {
+        color: var(--primary-green);
+    }
+    footer {
+        background-color: var(--primary-green);
+        color: var(--white);
+    }
+    .logo {
+        max-height: 50px;
+        width: auto;
+    }
+</style>
+
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-light">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="#">
+            <img src="{{ config.ASSETS_ROOT }}/img/babu-logo.png" alt="Logo 1" class="logo me-2">
+            <img src="{{ config.ASSETS_ROOT }}/img/market-logo.png" alt="Logo 2" class="logo me-2">
+            Babu - Brgy Buddy
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+                <li class="nav-item"><a class="nav-link" href="#chatbot">Chatbot</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<section id="home" class="hero">
+    <div class="container">
+        <div class="hero-content text-center">
+            <h1 class="display-4">Welcome to Babu</h1>
+            <p class="lead">Your Brgy Market Area Assistant Chatbot</p>
+            <a href="#about" class="btn btn-custom btn-lg mt-3">Learn More</a>
+        </div>
+    </div>
+</section>
+
+<!-- About Us Section -->
+<section id="about" class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-4">About Babu</h2>
+        <div class="row">
+            <div class="col-md-6">
+                <p>Babu is your digital Barangay Document Assistant, designed to make the process of document inquiries and applications easy. We're here to bridge the gap between residents and the barangay administration.</p>
+                <p>With Babu, you can easily access information about various barangay documents, check application requirements, and schedule your request - all from the convenience of your device.</p>
+            </div>
+            <div class="col-md-6">
+                <p>We're committed to enhancing the efficiency of barangay services and supporting our community. Babu offers a range of features to help you:</p>
+                <ul>
+                    <li>Inquire about available barangay documents</li>
+                    <li>Check document requirements and fees</li>
+                    <li>Schedule appointments for document processing</li>
+                    <li>Stay updated on barangay announcements related to document services</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<!-- Chatbot Section -->
+<section id="chatbot" class="py-5">
+    <div class="container text-center">
+        <h2 class="mb-4">Meet Babu - Your Brgy. Document Inquiry AI Assistant</h2>
+        <p class="lead mb-4">Need help with Barangay document inquiries? Our AI assistant is here to help!</p>
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <ul class="text-start">
+                    <li>Get information on barangay clearance, residency certificates, and more</li>
+                    <li>Check document requirements and processing times</li>
+                    <li>Schedule appointments by saying "schedule" to Babu</li>
+                    <li>Get updates on barangay announcements related to document services</li>
+                </ul>
+            </div>
+        </div>
+        <a href="{{ url_for('home_blueprint.public_chatbot') }}" class="btn btn-custom btn-lg mt-4">
+            Chat with Babu for all your barangay document inquiries!
+        </a>
+    </div>
+</section>
+
+<!-- Partnership Section -->
+<section id="partnership" class="py-5 bg-light">
+    <div class="container text-center">
+        <h2 class="mb-4">Official Partnership</h2>
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <p class="lead">
+                    This AI chatbot is officially partnered with the 
+                    <strong>Barangay Market Area of Santa Rosa, Laguna</strong>.
+                </p>
+                <p>
+                    Our collaboration ensures that you receive accurate, up-to-date information 
+                    about barangay documents and services specific to our locality. 
+                    Babu is here to serve the residents of Brgy. Market Area, Santa Rosa with the support 
+                    and approval of the barangay officials.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="text-center py-3">
+    <div class="container">
+        <p>&copy; 2024 Babu - Brgy Buddy. All rights reserved.</p>
+    </div>
+</footer>
+{% endblock content %}
+
+{% block javascripts %}
+<script>
+    // Any additional JavaScript can go here
+</script>
+{% endblock javascripts %}

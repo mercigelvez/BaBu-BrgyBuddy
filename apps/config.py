@@ -12,6 +12,8 @@ TEAM BABU - BSIT 3-2 OF 23-24
 import os, random, string
 from datetime import timedelta
 
+from flask import app
+
 class Config(object):
 
     PERMANENT_SESSION_LIFETIME = timedelta(minutes=30)
@@ -25,6 +27,12 @@ class Config(object):
     SECRET_KEY  = os.getenv('SECRET_KEY', None)
     if not SECRET_KEY:
         SECRET_KEY = ''.join(random.choice( string.ascii_lowercase  ) for i in range( 32 ))    
+        
+    
+    # Session configuration
+    SESSION_PERMANENT = True
+    PERMANENT_SESSION_LIFETIME = timedelta(days=30)
+    SESSION_TYPE = 'filesystem'
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 

@@ -1,0 +1,428 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}
+  Chatbot Management
+{% endblock %}
+
+{% block stylesheets %}
+<style>
+    :root {
+        --primary-green: #2ecc71;
+        --dark-green: #27ae60;
+        --light-green: #a9dfbf;
+    }
+    body {
+        background-color: #f1f8e9;
+    }
+    .btn-success, .btn-primary {
+        background-color: var(--primary-green);
+        border-color: var(--primary-green);
+    }
+    .btn-success:hover, .btn-primary:hover {
+        background-color: var(--dark-green);
+        border-color: var(--dark-green);
+    }
+    .btn-outline-success {
+        color: var(--primary-green);
+        border-color: var(--primary-green);
+    }
+    .btn-outline-success:hover {
+        background-color: var(--primary-green);
+        color: white;
+    }
+    .card {
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .modal-content {
+        border-top: 3px solid var(--primary-green);
+    }
+    .page-item.active .page-link {
+        background-color: var(--primary-green);
+        border-color: var(--primary-green);
+    }
+    .page-link {
+        color: var(--primary-green);
+    }
+    .page-link:hover {
+        color: var(--dark-green);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+  <div class="min-height-300 bg-gradient-success position-absolute w-100"></div>
+
+  {% include 'includes/admin_sidenav.html' %}
+
+  <main class="main-content position-relative border-radius-lg">
+    {% include 'includes/navigation.html' %}
+
+    <div class="container-fluid py-4">
+      <h2 class="mb-4 text-white">Intent Management</h2>
+      <button id="addIntentBtn" class="btn btn-primary mb-3">Add New Intent</button>
+      <div class="card">
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-hover align-items-center mb-0">
+              <thead class="bg-light">
+                <tr>
+                  <th class="text-uppercase text-secondary text-lg font-weight-bolder opacity-7">Tag</th>
+                  <th class="text-uppercase text-secondary text-lg font-weight-bolder opacity-7">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Intents will be inserted here -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center mt-4" id="pagination">
+          <!-- Pagination links will be inserted here -->
+        </ul>
+      </nav>
+    </div>
+  </main>
+
+  <!-- Add Intent Modal -->
+  <div class="modal fade" id="addIntentModal" tabindex="-1" role="dialog" aria-labelledby="addIntentModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addIntentModalLabel">Add New Intent</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="addIntentForm">
+            <div class="form-group">
+              <label for="tag">Tag</label>
+              <input type="text" class="form-control" id="tag" required />
+            </div>
+            <div class="form-group">
+              <label>Patterns (max 5)</label>
+              <div id="patternInputs">
+                <input type="text" class="form-control mb-2" name="patterns[]" required />
+              </div>
+              <button type="button" class="btn btn-sm btn-secondary" id="addPatternBtn">Add Pattern</button>
+            </div>
+            <div class="form-group">
+              <label>Responses (max 3)</label>
+              <div id="responseInputs">
+                <input type="text" class="form-control mb-2" name="responses[]" required />
+              </div>
+              <button type="button" class="btn btn-sm btn-secondary" id="addResponseBtn">Add Response</button>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-success" id="saveIntent">Save Intent</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- View/Edit Intent Modal -->
+  <div class="modal fade" id="viewEditIntentModal" tabindex="-1" role="dialog" aria-labelledby="viewEditIntentModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="viewEditIntentModalLabel">View Intent</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="viewEditIntentForm">
+            <input type="hidden" id="viewEditTag" />
+            <div class="form-group">
+              <label>Patterns</label>
+              <div id="viewEditPatternsContainer"></div>
+            </div>
+            <div class="form-group">
+              <label>Responses</label>
+              <div id="viewEditResponsesContainer"></div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-warning" id="toggleEditMode">Edit</button>
+          <button type="button" class="btn btn-success" id="saveEditedIntent" style="display: none;">Save Changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Intent Modal -->
+  <div class="modal fade" id="editIntentModal" tabindex="-1" role="dialog" aria-labelledby="editIntentModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editIntentModalLabel">Edit Intent</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="editIntentForm">
+            <input type="hidden" id="editTag" />
+            <div class="form-group">
+              <label>Patterns</label>
+              <div id="editPatternsContainer"></div>
+            </div>
+            <div class="form-group">
+              <label>Responses</label>
+              <div id="editResponsesContainer"></div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-success" id="updateIntent">Update Intent</button>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+    $(document).ready(function () {
+        let allIntents = [];
+        let currentPage = 1;
+        let intentsPerPage = 8;
+        let totalPages = 1;
+      
+        function loadAllIntents() {
+          $.ajax({
+            url: '/api/intents',
+            method: 'GET',
+            success: function(response) {
+              allIntents = response.intents;
+              totalPages = Math.ceil(allIntents.length / intentsPerPage);
+              displayIntents(1);
+              updatePagination();
+            },
+            error: function(xhr, status, error) {
+              console.error('Error loading intents:', error);
+            }
+          });
+        }
+      
+        function displayIntents(page) {
+          currentPage = page;
+          let start = (page - 1) * intentsPerPage;
+          let end = start + intentsPerPage;
+          let paginatedIntents = allIntents.slice(start, end);
+      
+          $('tbody').empty();
+          
+          paginatedIntents.forEach(function(intent) {
+            $('tbody').append(`
+              <tr>
+                <td class="align-middle">
+                  <span class="text-secondary text-lg font-weight-bold">${intent.tag}</span>
+                </td>
+                <td class="align-middle">
+                  <button class="btn btn-sm btn-outline-success view-intent" data-tag="${intent.tag}">View</button>
+                  <button class="btn btn-sm btn-outline-danger delete-intent" data-tag="${intent.tag}">Delete</button>
+                </td>
+              </tr>
+            `);
+          });
+        }
+      
+        function updatePagination() {
+          $('#pagination').empty();
+          
+          // Previous button
+          $('#pagination').append(`
+            <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+              <a class="page-link" href="#" data-page="${currentPage - 1}">&laquo;</a>
+            </li>
+          `);
+          
+          // Page numbers
+          for (let i = 1; i <= totalPages; i++) {
+            $('#pagination').append(`
+              <li class="page-item ${i === currentPage ? 'active' : ''}">
+                <a class="page-link" href="#" data-page="${i}">${i}</a>
+              </li>
+            `);
+          }
+          
+          // Next button
+          $('#pagination').append(`
+            <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
+              <a class="page-link" href="#" data-page="${currentPage + 1}">&raquo;</a>
+            </li>
+          `);
+        }
+      
+        // Load all intents on initial load
+        loadAllIntents();
+      
+        // Handle pagination clicks
+        $(document).on('click', '.page-link', function(e) {
+          e.preventDefault();
+          let page = $(this).data('page');
+          if (page > 0 && page <= totalPages) {
+            displayIntents(page);
+            updatePagination();
+          }
+        });
+      
+        // Add Intent
+        $('#addIntentBtn').click(function () {
+          $('#addIntentModal').modal('show');
+        });
+      
+        // Add Pattern
+        $('#addPatternBtn').click(function () {
+          if ($('#patternInputs input').length < 5) {
+            $('#patternInputs').append('<input type="text" class="form-control mb-2" name="patterns[]" required>');
+          } else {
+            alert('Maximum 5 patterns allowed');
+          }
+        });
+      
+        // Add Response
+        $('#addResponseBtn').click(function () {
+          if ($('#responseInputs input').length < 3) {
+            $('#responseInputs').append('<input type="text" class="form-control mb-2" name="responses[]" required>');
+          } else {
+            alert('Maximum 3 responses allowed');
+          }
+        });
+      
+        // Save Intent
+        $('#saveIntent').click(function () {
+          var tag = $('#tag').val();
+          var patterns = $('input[name="patterns[]"]')
+            .map(function () {
+              return $(this).val().trim();
+            })
+            .get();
+          var responses = $('input[name="responses[]"]')
+            .map(function () {
+              return $(this).val().trim();
+            })
+            .get();
+      
+          $.ajax({
+            url: '/api/intents',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({
+              tag: tag,
+              patterns: patterns,
+              responses: responses
+            }),
+            success: function (response) {
+              $('#addIntentModal').modal('hide');
+              loadAllIntents(); // Reload intents after adding
+            },
+            error: function (xhr, status, error) {
+              alert('Error adding intent: ' + error);
+            }
+          });
+        });
+      
+        // View Intent
+        $(document).on('click', '.view-intent', function() {
+          var tag = $(this).data('tag');
+          var intent = allIntents.find(i => i.tag === tag);
+          if (intent) {
+            $('#viewEditTag').val(tag);
+            $('#viewEditIntentModalLabel').text('View Intent: ' + tag);
+      
+            // Clear previous inputs
+            $('#viewEditPatternsContainer').empty();
+            $('#viewEditResponsesContainer').empty();
+      
+            // Add pattern inputs
+            intent.patterns.forEach(function (pattern, index) {
+              addViewEditInput('viewEditPatterns', pattern, index, true);
+            });
+      
+            // Add response inputs
+            intent.responses.forEach(function (response, index) {
+              addViewEditInput('viewEditResponses', response, index, true);
+            });
+      
+            $('#toggleEditMode').text('Edit').show();
+            $('#saveEditedIntent').hide();
+            $('.modal-header .close').show();
+      
+            $('#viewEditIntentModal').modal('show');
+          }
+        });
+      
+        function addViewEditInput(type, value, index, disabled) {
+          var input = $('<input type="text" class="form-control mb-2">').val(value);
+          input.attr('name', type + '[' + index + ']');
+          input.prop('disabled', disabled);
+          $('#' + type + 'Container').append(input);
+        }
+      
+        // Toggle Edit Mode
+        $('#toggleEditMode').click(function () {
+          var isEditMode = $(this).text() === 'Edit';
+          $(this).text(isEditMode ? 'Cancel' : 'Edit');
+          $('#saveEditedIntent').toggle(isEditMode);
+          $('input[name^="viewEditPatterns"], input[name^="viewEditResponses"]').prop('disabled', !isEditMode);
+      
+          // Hide/show close button based on edit mode
+          $('.modal-header .close').toggle(!isEditMode);
+        });
+      
+        // Save Edited Intent
+        $('#saveEditedIntent').click(function () {
+          var tag = $('#viewEditTag').val();
+          var patterns = $('input[name^="viewEditPatterns"]')
+            .map(function () {
+              return $(this).val().trim();
+            })
+            .get();
+          var responses = $('input[name^="viewEditResponses"]')
+            .map(function () {
+              return $(this).val().trim();
+            })
+            .get();
+      
+          $.ajax({
+            url: '/api/intents/' + tag,
+            method: 'PUT',
+            contentType: 'application/json',
+            data: JSON.stringify({
+              tag: tag,
+              patterns: patterns,
+              responses: responses
+            }),
+            success: function (response) {
+              $('#viewEditIntentModal').modal('hide');
+              loadAllIntents(); // Reload intents after editing
+            },
+            error: function (xhr, status, error) {
+              alert('Error updating intent: ' + error);
+            }
+          });
+        });
+      
+        // Delete Intent
+        $(document).on('click', '.delete-intent', function() {
+          var tag = $(this).data('tag');
+          if (confirm('Are you sure you want to delete this intent?')) {
+            $.ajax({
+              url: '/api/intents/' + tag,
+              method: 'DELETE',
+              success: function (response) {
+                loadAllIntents(); // Reload intents after deletion
+              },
+              error: function (xhr, status, error) {
+                alert('Error deleting intent: ' + error);
+              }
+            });
+          }
+        });
+      });
+</script>
+{% endblock %}
