@@ -1,5 +1,5 @@
 {% extends 'layouts/base-fullscreen.html' %} {% block title %}
-  Sign IN
+  Sign In
 {% endblock %}
 
 <!-- Specific CSS goes HERE -->
@@ -42,7 +42,7 @@
                     {{ form.hidden_tag() }}
                     <div class="mb-3 col-md-12">
                       <label for="input" style="font-size: 16px;">Username <span style="color: red;">*</span></label>
-                      <div class="input-field">{{ form.username(placeholder='Enter Username', class='custom-input') }}</div>
+                      <div class="input-field">{{ form.username(placeholder='Enter Username', class='custom-input', maxlength="25") }}</div>
                     </div>
 
                     <div class="mb-3 col-md-12">
@@ -70,12 +70,6 @@
                     </div>
                   </form>
                 </div>
-                <div class="card-footer text-center pt-0 px-lg-2 px-1">
-                  <p class="mb-4 text-sm mx-auto">
-                    Don't have an account?
-                    <a href="{{ url_for('authentication_blueprint.register') }}" class="text-success text-gradient font-weight-bold">Sign Up</a>
-                  </p>
-                </div>
               </div>
             </div>
             <div class="col-6 d-lg-flex d-none h-100 my-auto pe-0 position-absolute top-0 end-0 text-center justify-content-center flex-column">
@@ -99,4 +93,9 @@
 <!-- Specific JS goes HERE -->
 {% block javascripts %}
   <script src="{{ config.ASSETS_ROOT }}/js/login-validation.js"></script>
+  <script>
+    if (window.performance && window.performance.navigation.type === window.performance.navigation.TYPE_BACK_FORWARD) {
+      window.location.replace(window.location.href);
+    }
+  </script>
 {% endblock %}

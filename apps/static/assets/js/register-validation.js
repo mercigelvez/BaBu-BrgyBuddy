@@ -5,51 +5,39 @@ $(document).ready(function () {
     var is_name = input.val();
     var errorMessageContainer = $(".username-error-message");
 
-    // Check if username contains space
-    if (/\s/.test(is_name)) {
+    if (is_name.length === 0) {
+      input.removeClass("valid invalid");
+      errorMessageContainer.text("").removeClass("error-message");
+    } else if (/\s/.test(is_name)) {
       input.removeClass("valid").addClass("invalid");
       errorMessageContainer
         .text("Username cannot contain spaces")
-        .addClass("error-message")
-        .removeClass("success-message");
-    } else if (is_name.length >= 4 && is_name.length <= 25) {
-      // Convert username to lowercase before sending AJAX request
+        .addClass("error-message");
+    } else if (is_name.length < 4 || is_name.length > 25) {
+      input.removeClass("valid").addClass("invalid");
+      errorMessageContainer
+        .text("Username must be between 4 and 25 characters")
+        .addClass("error-message");
+    } else if ((is_name.match(/[^a-zA-Z0-9]/g) || []).length > 2) {
+      input.removeClass("valid").addClass("invalid");
+      errorMessageContainer
+        .text("Username can contain a maximum of 2 special characters (including hyphens and underscores)")
+        .addClass("error-message");
+    } else {
       $.post("/check_username", { username: is_name.toLowerCase() }, function (data) {
         if (data.username_exists) {
           input.removeClass("valid").addClass("invalid");
           errorMessageContainer
             .text("Username is already taken")
-            .addClass("error-message")
-            .removeClass("success-message");
+            .addClass("error-message");
         } else {
           input.removeClass("invalid").addClass("valid");
-          errorMessageContainer
-            .text("Username is valid")
-            .addClass("success-message")
-            .removeClass("error-message");
+          errorMessageContainer.text("").removeClass("error-message");
         }
       });
-    } else {
-      input.removeClass("valid").addClass("invalid");
-      if (is_name.length === 0) {
-        errorMessageContainer
-          .text("Username is required")
-          .addClass("error-message")
-          .removeClass("success-message");
-      } else {
-        errorMessageContainer
-          .text("Username must be between 4 and 25 characters")
-          .addClass("error-message")
-          .removeClass("success-message");
-      }
     }
   });
 });
-
-function isLanguageSelected() {
-  return $("#language-select").val() !== "";
-}
-
 
 //-----------EMAIL VALIDATION--------//
 $(document).ready(function () {
@@ -58,121 +46,80 @@ $(document).ready(function () {
     var email = input.val();
     var errorMessageContainer = $(".email-error-message");
 
-    // Regular expression pattern for email validation
     var emailPattern = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
-
-    // Check for .c0m or .c00m instead of .com
     var invalidDomainPattern = /\.(c0m|c00m)$/i;
-
-    // Check if email contains @test
     var testEmailPattern = /@test/i;
 
-    // Check if email contains space
-    if (/\s/.test(email)) {
+    if (email.length === 0) {
+      input.removeClass("valid invalid");
+      errorMessageContainer.text("").removeClass("error-message");
+    } else if (/\s/.test(email)) {
       input.removeClass("valid").addClass("invalid");
       errorMessageContainer
         .text("Email cannot contain spaces")
-        .addClass("error-message")
-        .removeClass("success-message");
+        .addClass("error-message");
     } else if (testEmailPattern.test(email)) {
       input.removeClass("valid").addClass("invalid");
       errorMessageContainer
         .text("Email cannot contain @test")
-        .addClass("error-message")
-        .removeClass("success-message");
-    } else if (emailPattern.test(email) && !invalidDomainPattern.test(email)) {
-      // Send AJAX request to check if email exists
+        .addClass("error-message");
+    } else if (invalidDomainPattern.test(email)) {
+      input.removeClass("valid").addClass("invalid");
+      errorMessageContainer
+        .text("Invalid email format. Please use .com instead of .c0m")
+        .addClass("error-message");
+    } else if (emailPattern.test(email)) {
       $.post("/check_email", { email: email }, function (data) {
         if (data.email_exists) {
           input.removeClass("valid").addClass("invalid");
           errorMessageContainer
             .text("Email is already registered")
-            .addClass("error-message")
-            .removeClass("success-message");
+            .addClass("error-message");
         } else {
           input.removeClass("invalid").addClass("valid");
-          errorMessageContainer
-            .text("Valid email format")
-            .addClass("success-message")
-            .removeClass("error-message");
+          errorMessageContainer.text("").removeClass("error-message");
         }
       });
-    } else if (invalidDomainPattern.test(email)) {
-      input.removeClass("valid").addClass("invalid");
-      errorMessageContainer
-        .text("Invalid email format. Please use .com instead of .c0m")
-        .addClass("error-message")
-        .removeClass("success-message");
     } else {
       input.removeClass("valid").addClass("invalid");
       errorMessageContainer
-        .text("Email is required")
-        .addClass("error-message")
-        .removeClass("success-message");
+        .text("Invalid email format")
+        .addClass("error-message");
     }
   });
 });
 
-
 //-----------PASSWORD VALIDATION--------//
-
-function validatePassword(password) {
-  // At least one uppercase letter, one lowercase letter, one number, one special character, and minimum 6 characters in length
-  var passwordPattern =
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
-  return passwordPattern.test(password);
-}
-
 $(document).ready(function () {
   $("#pwd_create").on("input", function () {
     var input = $(this);
     var password = input.val();
     var errorMessageContainer = $(".password-error-message");
 
-  if (validatePassword(password)) {
-    input.removeClass("invalid").addClass("valid");
-    errorMessageContainer
-      .text("Valid Password")
-      .addClass("success-message")
-      .removeClass("error-message");
-  } else {
-    input.removeClass("valid").addClass("invalid");
-    errorMessageContainer
-      .html(
-      "<ul class='error-message'>" +
-      "<li>Password must contain at least one uppercase letter (A-Z)</li>" +
-      "<li>Password must contain at least one lowercase letter (a-z)</li>" +
-      "<li>Password must contain at least one number (0-9)</li>" +
-      "<li>Password must contain at least one special character (@, $, !, %, *, ?, &)</li>" +
-      "<li>Password must be at least 6 characters long</li>" +
-      "</ul>"
-    )
-      .addClass("error-message")
-      .removeClass("success-message");
-  }
+    if (password.length === 0) {
+      input.removeClass("valid invalid");
+      errorMessageContainer.text("").removeClass("error-message");
+    } else if (!validatePassword(password)) {
+      input.removeClass("valid").addClass("invalid");
+      errorMessageContainer
+        .html(
+        "<ul class='error-message'>" +
+        "<li>Password must contain at least one uppercase letter (A-Z)</li>" +
+        "<li>Password must contain at least one lowercase letter (a-z)</li>" +
+        "<li>Password must contain at least one number (0-9)</li>" +
+        "<li>Password must contain at least one special character (@, $, !, %, *, ?, &)</li>" +
+        "<li>Password must be at least 6 characters long</li>" +
+        "</ul>"
+      )
+        .addClass("error-message");
+    } else {
+      input.removeClass("invalid").addClass("valid");
+      errorMessageContainer.text("").removeClass("error-message");
+    }
   });
 });
 
-function togglePasswordVisibility(inputId, iconId) {
-  var passwordInput = document.getElementById(inputId);
-  var eyeIcon = document.getElementById(iconId);
-  if (passwordInput.type === "password") {
-    passwordInput.type = "text";
-    eyeIcon.classList.remove("fa-eye-slash");
-    eyeIcon.classList.add("fa-eye");
-  } else {
-    passwordInput.type = "password";
-    eyeIcon.classList.remove("fa-eye");
-    eyeIcon.classList.add("fa-eye-slash");
-  }
-}
-
 //-----------CONFIRM PASSWORD VALIDATION--------//
-
-function validateConfirmPassword(password, confirmPassword) {
-  return password === confirmPassword;
-}
-
 $(document).ready(function () {
   $("#confirm_pwd_create").on("input", function () {
     var input = $(this);
@@ -180,28 +127,27 @@ $(document).ready(function () {
     var password = $("#pwd_create").val();
     var errorMessageContainer = $(".confirm-password-error-message");
 
-    if (validateConfirmPassword(password, confirmPassword)) {
-      input.removeClass("invalid").addClass("valid");
-      errorMessageContainer
-        .text("Passwords match")
-        .addClass("success-message")
-        .removeClass("error-message");
-    } else {
+    if (confirmPassword.length === 0) {
+      input.removeClass("valid invalid");
+      errorMessageContainer.text("").removeClass("error-message");
+    } else if (!validateConfirmPassword(password, confirmPassword)) {
       input.removeClass("valid").addClass("invalid");
       errorMessageContainer
         .text("Confirm password must match the password")
-        .addClass("error-message")
-        .removeClass("success-message");
+        .addClass("error-message");
+    } else {
+      input.removeClass("invalid").addClass("valid");
+      errorMessageContainer.text("").removeClass("error-message");
     }
   });
 });
 
-//CHECK FORMS IF ALL VALID
+//CHECK FORMS IF ALL VALID AND NO ERROR MESSAGES
 function checkFormValidity() {
-  var usernameIsValid = $("#username_create").hasClass("valid");
-  var emailIsValid = $("#email_create").hasClass("valid");
-  var passwordIsValid = $("#pwd_create").hasClass("valid");
-  var confirmPasswordIsValid = $("#confirm_pwd_create").hasClass("valid");
+  var usernameIsValid = $("#username_create").hasClass("valid") && !$(".username-error-message").hasClass("error-message");
+  var emailIsValid = $("#email_create").hasClass("valid") && !$(".email-error-message").hasClass("error-message");
+  var passwordIsValid = $("#pwd_create").hasClass("valid") && !$(".password-error-message").hasClass("error-message");
+  var confirmPasswordIsValid = $("#confirm_pwd_create").hasClass("valid") && !$(".confirm-password-error-message").hasClass("error-message");
   var languageIsSelected = isLanguageSelected();
 
   return usernameIsValid && emailIsValid && passwordIsValid && confirmPasswordIsValid && languageIsSelected;

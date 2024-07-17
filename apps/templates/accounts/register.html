@@ -81,7 +81,7 @@ endblock title %}
                   <div class="mb-3 col-md-12">
                     <label for="input"style="font-size: 16px;">Username<span style="color: red;">*</span></label>
                       <div class="input-field">
-                        {{ form.username(placeholder="Enter Username", class='custom-input', id="username_create") }}
+                        {{ form.username(placeholder="Enter Username", class='custom-input', id="username_create", maxlength="25") }}
                       </div>
                        <div class="username-error-message"></div>
                   </div>
@@ -89,7 +89,7 @@ endblock title %}
                   <div class="mb-3 col-md-12">
                     <label for="input"style="font-size: 16px;">Email<span style="color: red;">*</span></label>
                       <div class="input-field">
-                        {{ form.email(placeholder="Enter Email", class='custom-input', id="email_create", maxlength="70") }}
+                        {{ form.email(placeholder="Enter Email", class='custom-input', id="email_create", maxlength="65") }}
                       </div>
                       <div class="email-error-message"></div>
                   </div>

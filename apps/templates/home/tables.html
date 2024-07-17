@@ -1,11 +1,174 @@
 {% extends 'layouts/base.html' %}
 
 {% block title %}
-  Tables
+  Appointments
 {% endblock %}
 
-<!-- Specific CSS goes HERE -->
 {% block stylesheets %}
+  {{ super() }}
+  <style>
+    :root {
+        --primary-green: #2ecc71;
+        --dark-green: #27ae60;
+        --light-green: #a9dfbf;
+    }
+
+    body {
+        background-color: #f1f8e9;
+    }
+
+    .custom-table {
+      border-collapse: separate;
+      border-spacing: 0 8px;
+    }
+    
+    .custom-table thead th {
+      border-bottom: none;
+      padding: 12px 16px;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: #8898aa;
+    }
+    
+    .custom-table tbody tr {
+      background-color: #ffffff;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      transition: all 0.2s ease;
+    }
+    
+    .custom-table tbody tr:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .custom-table tbody td {
+      padding: 16px;
+      vertical-align: middle;
+      border-top: none;
+    }
+    
+    .custom-table tbody td:first-child {
+      border-top-left-radius: 8px;
+      border-bottom-left-radius: 8px;
+    }
+    
+    .custom-table tbody td:last-child {
+      border-top-right-radius: 8px;
+      border-bottom-right-radius: 8px;
+    }
+  
+    /* Green theme for FullCalendar */
+    .fc .fc-toolbar-title {
+      color: var(--primary-green);
+    }
+
+    .fc-prev-button, .fc-next-button,
+    .fc .fc-button-primary {
+      background-color: var(--primary-green);
+      border-color: var(--primary-green);
+    }
+
+    .fc .fc-button-primary:hover {
+      background-color: var(--dark-green);
+      border-color: var(--dark-green);
+    }
+
+    .fc .fc-button-primary:disabled {
+      background-color: var(--light-green);
+      border-color: var(--light-green);
+    }
+
+    .fc .fc-button-primary:not(:disabled):active,
+    .fc .fc-button-primary:not(:disabled).fc-button-active {
+      background-color: var(--dark-green);
+      border-color: var(--dark-green);
+    }
+
+    .fc .fc-daygrid-day.fc-day-today {
+      background-color: rgba(46, 204, 113, 0.15);
+    }
+
+    .fc .fc-highlight {
+      background-color: rgba(46, 204, 113, 0.3);
+    }
+
+    .fc a.fc-event {
+      background-color: var(--light-green);
+      border-color: var(--light-green);
+    }
+
+    .fc a.fc-event:hover {
+      background-color: var(--dark-green);
+      border-color: var(--dark-green);
+    }
+
+    .fc-event-title {
+      color: black;
+    }
+
+    .fc-event-time{
+      color: black;
+    }
+
+    .btn-success, .btn-primary {
+        background-color: var(--primary-green);
+        border-color: var(--primary-green);
+    }
+
+    .btn-success:hover, .btn-primary:hover {
+        background-color: var(--dark-green);
+        border-color: var(--dark-green);
+    }
+
+    .btn-outline-success {
+        color: var(--primary-green);
+        border-color: var(--primary-green);
+    }
+
+    .btn-outline-success:hover {
+        background-color: var(--primary-green);
+        color: white;
+    }
+
+    .card {
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .modal-content {
+        border-top: 3px solid var(--primary-green);
+    }
+
+    .page-item.active .page-link {
+        background-color: var(--primary-green);
+        border-color: var(--primary-green);
+    }
+
+    .page-link {
+        color: var(--primary-green);
+    }
+
+    .page-link:hover {
+        color: var(--dark-green);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .fc .fc-toolbar {
+        flex-direction: column;
+      }
+      
+      .fc .fc-toolbar-title {
+        font-size: 1.2em;
+        margin-bottom: 0.5em;
+      }
+      
+      .fc .fc-button {
+        font-size: 0.9em;
+        padding: 0.3em 0.6em;
+      }
+    }
+  </style>
 {% endblock %}
 
 {% block content %}
@@ -17,52 +180,48 @@
     {% include 'includes/navigation.html' %}
 
     <div class="container-fluid py-4">
+      <h2 class="text-white">Appointment Schedules</h2>
       <div class="row">
         <div class="col-12">
           <div class="card mb-4">
+            <div class="card-body">
+              <div id="calendar" class="p-3 bg-white rounded"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="row mt-4">
+        <div class="col-12">
+          <div class="card mb-4">
             <div class="card-header pb-0">
-              <h6>Users Lists</h6>
+              <h6 class="text-lg font-weight-bolder">Appointment Details</h6>
             </div>
             <div class="card-body px-0 pt-0 pb-2">
               <div class="table-responsive p-0">
-                <table class="table align-items-center mb-0">
+                <table class="table align-items-center mb-0 custom-table">
                   <thead>
                     <tr>
-                      <th class="text-uppercase text-secondary text-s font-weight-bolder">User</th>
-                      <th class="text-uppercase text-secondary text-s font-weight-bolder ps-2">Role</th>
-                      <th class="text-center text-uppercase text-secondary text-s font-weight-bolder">Last Login</th>
-                      <th class="text-center text-uppercase text-secondary text-s font-weight-bolder">Total Sessions</th>
-                      <th class="text-center text-uppercase text-secondary text-s font-weight-bolder">Avg. Session Duration</th>
+                      <th class="text-uppercase text-secondary text-lg font-weight-bolder opacity-7">Name</th>
+                      <th class="text-uppercase text-secondary text-lg font-weight-bolder opacity-7 ps-2">Address</th>
+                      <th class="text-center text-uppercase text-secondary text-lg font-weight-bolder opacity-7">Birthday</th>
+                      <th class="text-center text-uppercase text-secondary text-lg font-weight-bolder opacity-7">Birthplace</th>
+                      <th class="text-center text-uppercase text-secondary text-lg font-weight-bolder opacity-7">Purpose</th>
+                      <th class="text-center text-uppercase text-secondary text-lg font-weight-bolder opacity-7">Date & Time</th>
                     </tr>
                   </thead>
-                  <tbody>
-                    {% for user in users %}
-                      <tr>
-                        <td>
-                          <div class="d-flex px-2 py-1">
-                            <div class="d-flex flex-column justify-content-center">
-                              <h6 class="mb-0 text-sm">{{ user.username }}</h6>
-                              <p class="text-s text-secondary mb-0">{{ user.email }}</p>
-                            </div>
-                          </div>
-                        </td>
-                        <td>
-                          <p class="text-s font-weight-bold mb-0">{{ user.role }}</p>
-                        </td>
-                        <td class="align-middle text-center text-sm">
-                          <span class="text-secondary text-s font-weight-bold">{{ user.last_login }}</span>
-                        </td>
-                        <td class="align-middle text-center">
-                          <span class="text-secondary text-s font-weight-bold">{{ user.total_sessions }}</span>
-                        </td>
-                        <td class="align-middle text-center">
-                          <span class="text-secondary text-s font-weight-bold">{{ user.avg_session_duration }}</span>
-                        </td>
-                      </tr>
-                    {% endfor %}
+                  <tbody id="appointmentTableBody">
+                    <!-- Table rows will be populated by JavaScript -->
                   </tbody>
                 </table>
               </div>
+            </div>
+            <div class="card-footer py-3">
+              <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center mb-0" id="pagination">
+                  <!-- Pagination links will be inserted here -->
+                </ul>
+              </nav>
             </div>
           </div>
         </div>
@@ -71,6 +230,144 @@
   </main>
 {% endblock %}
 
-<!-- Specific JS goes HERE -->
 {% block javascripts %}
+  {{ super() }}
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.2/main.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.2/main.min.js"></script>
+  <script>
+    var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+  </script>
+  <script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+      var calendarEl = document.getElementById('calendar');
+      if (!calendarEl) {
+        console.error('Calendar element not found');
+        return;
+      }
+    
+      let currentPage = 1;
+      let totalPages = 1;
+      let calendar;
+    
+      function loadAppointments(page = 1) {
+        fetch($SCRIPT_ROOT + '/get_appointments?page=' + page)
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            return response.json();
+          })
+          .then(data => {
+            console.log('Appointment data:', data);
+    
+            currentPage = data.page;
+            totalPages = data.total_pages;
+    
+            if (!calendar) {
+              calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                events: data.appointments,
+                eventClick: function(info) {
+                  const row = document.getElementById('appointment-' + info.event.id);
+                  if (row) {
+                    row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    row.classList.add('highlight');
+                    setTimeout(() => row.classList.remove('highlight'), 2000);
+                  }
+                },
+                height: 'auto',
+                aspectRatio: 1.8,
+                headerToolbar: {
+                  left: 'prev,next today',
+                  center: 'title',
+                  right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                buttonText: {
+                  today: 'Today',
+                  month: 'Month',
+                  week: 'Week',
+                  day: 'Day'
+                },
+                themeSystem: 'bootstrap',
+                bootstrapFontAwesome: false,
+                eventColor: '#ACE1AF',
+                eventTextColor: '#000000',
+              });
+              calendar.render();
+            } else {
+              calendar.removeAllEvents();
+              calendar.addEventSource(data.appointments);
+            }
+    
+            updateAppointmentTable(data.appointments);
+            updatePagination();
+          })
+          .catch(error => {
+            console.error('Error:', error);
+            calendarEl.textContent = 'Failed to load appointments';
+          });
+      }
+    
+      function updateAppointmentTable(appointments) {
+        const tableBody = document.getElementById('appointmentTableBody');
+        tableBody.innerHTML = '';  // Clear existing rows
+        appointments.forEach(apt => {
+          const row = document.createElement('tr');
+          row.id = 'appointment-' + apt.id;
+          row.innerHTML = `
+            <td>${apt.title.split(' - ')[0]}</td>
+            <td>${apt.address || ''}</td>
+            <td class="text-center">${apt.birthday || ''}</td>
+            <td class="text-center">${apt.birthplace || ''}</td>
+            <td class="text-center">${apt.title.split(' - ')[1]}</td>
+            <td class="text-center">${new Date(apt.start).toLocaleString()}</td>
+          `;
+          tableBody.appendChild(row);
+        });
+      }
+    
+      function updatePagination() {
+        const paginationEl = document.getElementById('pagination');
+        paginationEl.innerHTML = '';
+        
+        // Previous button
+        paginationEl.innerHTML += `
+          <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+            <a class="page-link" href="#" data-page="${currentPage - 1}">&laquo;</a>
+          </li>
+        `;
+        
+        // Page numbers
+        for (let i = 1; i <= totalPages; i++) {
+          paginationEl.innerHTML += `
+            <li class="page-item ${i === currentPage ? 'active' : ''}">
+              <a class="page-link" href="#" data-page="${i}">${i}</a>
+            </li>
+          `;
+        }
+        
+        // Next button
+        paginationEl.innerHTML += `
+          <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
+            <a class="page-link" href="#" data-page="${currentPage + 1}">&raquo;</a>
+          </li>
+        `;
+      }
+    
+      // Handle pagination clicks
+      document.getElementById('pagination').addEventListener('click', function(e) {
+        e.preventDefault();
+        if (e.target.classList.contains('page-link')) {
+          let page = parseInt(e.target.getAttribute('data-page'));
+          if (page > 0 && page <= totalPages) {
+            loadAppointments(page);
+          }
+        }
+      });
+    
+      // Initial load
+      loadAppointments();
+    });
+  </script>
 {% endblock %}

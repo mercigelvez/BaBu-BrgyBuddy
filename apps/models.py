@@ -22,3 +22,24 @@ class Message(db.Model):
 
     def __repr__(self):
         return f'<Message {self.message}>'
+    
+class Appointment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    full_name = db.Column(db.String(100), nullable=False)
+    address = db.Column(db.String(200), nullable=False)
+    birthday = db.Column(db.Date, nullable=False)
+    birthplace = db.Column(db.String(100), nullable=False)
+    purpose = db.Column(db.String(200), nullable=False)
+    appointment_date = db.Column(db.DateTime, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def __repr__(self):
+        return f'<Appointment {self.full_name}>'
+    
+
+class Announcement(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    message = db.Column(db.String(500), nullable=False)
+    enabled = db.Column(db.Boolean, default=True)
+    created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
+    updated_at = db.Column(db.DateTime, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp())

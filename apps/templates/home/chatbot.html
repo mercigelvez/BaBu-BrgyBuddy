@@ -87,15 +87,103 @@
         opacity: 1;
       }
     }
+    :root {
+      --primary-green: #28a745;
+      --dark-green: #218838;
+      --light-green: #e9f7ef;
+      --white: #ffffff;
+      --light-gray: #f8f9fa;
+    }
+    .navbar {
+      background-color: var(--white) !important;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .navbar-brand,
+    .nav-link {
+      color: var(--primary-green) !important;
+    }
+    .nav-link:hover {
+      color: var(--dark-green) !important;
+    }
+    .hero {
+      background-color: var(--light-green);
+      padding: 100px 0;
+    }
+    .hero-content {
+      color: var(--dark-green);
+    }
+    .btn-custom {
+      background-color: var(--primary-green) !important;
+      border-color: var(--primary-green) !important;
+      color: var(--white) !important;
+    }
+    .btn-custom:hover {
+      background-color: var(--dark-green) !important;
+      border-color: var(--dark-green) !important;
+    }
+    #about {
+      background-color: var(--white);
+    }
+    #chatbot {
+      background-color: var(--light-gray);
+    }
+    h2 {
+      color: var(--primary-green);
+    }
+    footer {
+      background-color: var(--primary-green);
+      color: var(--white);
+    }
+    .logo {
+      max-height: 50px;
+      width: auto;
+    }
+    
+    .ticket-image {
+      max-width: 100%;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      margin: 10px 0;
+    }
+    .messages__item--visitor .btn-primary {
+      background-color: #28a745;
+      border-color: #28a745;
+    }
+    .messages__item--visitor .btn-primary:hover {
+      background-color: #218838;
+      border-color: #1e7e34;
+    }
   </style>
 {% endblock %}
 
 {% block content %}
   <div class="min-height-300 bg-white position-absolute w-100"></div>
-  {% include 'includes/sidenav.html' %}
 
   <main class="main-content position-relative border-radius-lg">
-    {% include 'includes/navigation.html' %}
+    <nav class="navbar navbar-expand-lg navbar-light">
+      <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="#">
+          <img src="{{ config.ASSETS_ROOT }}/img/babu-logo.png" alt="Logo 1" class="logo me-2" />
+          <img src="{{ config.ASSETS_ROOT }}/img/market-logo.png" alt="Logo 2" class="logo me-2" />
+          Babu - Brgy Buddy
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"><span class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('home_blueprint.landingpage') }}">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#about">About</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#chatbot">Chatbot</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
 
     <div class="container-fluid py-2 col-md-12">
       <div class="row">
@@ -155,21 +243,35 @@
     // Add a MutationObserver to watch for changes in the chatbox messages
     var observer = new MutationObserver(updateLogoVisibility);
     observer.observe(chatboxMessages, { childList: true, subtree: true });
-
-    // Function to handle chat history selection
-    function handleChatHistorySelection(event) {
-      if (event.target.closest('[data-chat-history-id]')) {
-        // Simulate a delay for the chat history to load
-        setTimeout(updateLogoVisibility, 500);
-      }
-    }
-
-    // Add event listener for chat history selection
-    document.addEventListener('click', handleChatHistorySelection);
   });
 
   if (window.history.replaceState) {
     window.history.replaceState(null, null, window.location.href);
   } 
+
+  window.addEventListener('beforeunload', function() {
+    fetch($SCRIPT_ROOT + '/clear_scheduling_data', { 
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCookie('csrf_token')  // Ensure you have a function to get CSRF token
+        }
+    });
+});
+
+// Function to get CSRF token from cookies
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
 </script>
 {% endblock %}
