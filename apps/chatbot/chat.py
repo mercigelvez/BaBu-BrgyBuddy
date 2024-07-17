@@ -1,7 +1,8 @@
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
 import random
 import re
 import traceback
+import uuid
 from flask import session
 import joblib
 import json
@@ -12,11 +13,13 @@ import os
 from PIL import Image, ImageDraw, ImageFont
 import io
 import base64
-
-import requests
+import logging
 
 from apps.models import Appointment
 from apps import db
+
+# Set up logging
+logger = logging.getLogger(__name__)
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -43,21 +46,15 @@ def preprocess_input(user_input):
     return " ".join(tokens)
 
 
-appointment_data = {}
-
-
-def get_response(user_input, language):
-    # Check if the user wants to schedule an appointment
+def get_response(user_input, language="tagalog"):
     if "schedule" in user_input.lower() and "appointment_data" not in session:
         session["appointment_data"] = {"appointment_step": "full_name"}
         session["last_activity"] = datetime.utcnow()
-        return "To schedule an appointment, please provide your full name."
+        return "Para mag-schedule ng appointment, pakibigay ang iyong buong pangalan."
 
-    # If we're in the middle of scheduling an appointment, continue with that process
     if "appointment_data" in session:
         return handle_appointment_scheduling(user_input, language)
 
-    # Otherwise, proceed with normal conversation
     if language == "english":
         model = english_model
         data = english_data
@@ -94,7 +91,7 @@ def ensure_naive_datetime(dt):
     return dt
 
 
-def handle_appointment_scheduling(user_input, language):
+def handle_appointment_scheduling(user_input, language="tagalog"):
     print("Session data at start:", session)
     try:
         current_time = ensure_naive_datetime(datetime.now())
@@ -102,27 +99,23 @@ def handle_appointment_scheduling(user_input, language):
         if "appointment_data" not in session or "last_activity" not in session:
             session["appointment_data"] = {"appointment_step": "full_name"}
             session["last_activity"] = current_time.isoformat()
-            return "Let's start over. To schedule an appointment, please provide your full name."
+            return "Magsimula tayo ulit. Para mag-schedule ng appointment, pakibigay ang iyong buong pangalan."
 
-        # Convert last_activity to datetime object
         last_activity = session.get("last_activity")
         if isinstance(last_activity, str):
             last_activity = ensure_naive_datetime(datetime.fromisoformat(last_activity))
         elif isinstance(last_activity, datetime):
             last_activity = ensure_naive_datetime(last_activity)
         else:
-            # If it's neither a string nor a datetime, reset the session
             session.pop("appointment_data", None)
             session.pop("last_activity", None)
-            return "There was an issue with your session. Please start over."
+            return "May problema sa iyong session. Pakiulit mula sa simula."
 
-        # Check if the session has expired
         if current_time - last_activity > timedelta(days=30):
             session.pop("appointment_data", None)
             session.pop("last_activity", None)
-            return "Scheduling session has expired. Please start over."
+            return "Nag-expire na ang scheduling session. Pakiulit mula sa simula."
 
-        # Update last activity
         session["last_activity"] = current_time.isoformat()
 
         appointment_data = session["appointment_data"]
@@ -131,134 +124,152 @@ def handle_appointment_scheduling(user_input, language):
             appointment_data["full_name"] = user_input
             appointment_data["appointment_step"] = "address"
             session["appointment_data"] = appointment_data
-            return "Thank you. Now, please provide your address."
+            return "Salamat. Ngayon, pakibigay ang iyong address."
 
         elif appointment_data["appointment_step"] == "address":
             appointment_data["address"] = user_input
             appointment_data["appointment_step"] = "birthday"
             session["appointment_data"] = appointment_data
-            return "Great. What's your birthday? (Please use YYYY-MM-DD format)"
+            return (
+                "Mahusay. Ano ang iyong kaarawan? (Pakigamit ang format na YYYY-MM-DD)"
+            )
 
         elif appointment_data["appointment_step"] == "birthday":
             if re.match(r"\d{4}-\d{2}-\d{2}", user_input):
                 appointment_data["birthday"] = user_input
                 appointment_data["appointment_step"] = "birthplace"
                 session["appointment_data"] = appointment_data
-                return "Thank you. What's your birthplace?"
+                return "Salamat. Ano ang iyong lugar ng kapanganakan?"
             else:
-                return "Please provide your birthday in YYYY-MM-DD format."
+                return "Pakibigay ang iyong kaarawan sa format na YYYY-MM-DD."
 
         elif appointment_data["appointment_step"] == "birthplace":
             appointment_data["birthplace"] = user_input
             appointment_data["appointment_step"] = "purpose"
             session["appointment_data"] = appointment_data
-            return "What's the purpose of your appointment?"
+            return "Ano ang layunin ng iyong appointment?"
 
         elif appointment_data["appointment_step"] == "purpose":
             appointment_data["purpose"] = user_input
             appointment_data["appointment_step"] = "appointment_date"
             session["appointment_data"] = appointment_data
-            return "When would you like to schedule your appointment? Please enter a date in YYYY-MM-DD format, or type 'today' or 'ngayon' for the earliest available date."
+            return "Kailan mo gustong i-schedule ang iyong appointment? Pakienter ang petsa sa format na YYYY-MM-DD, o i-type ang 'ngayon' para sa pinakamaagang available na petsa."
 
         elif appointment_data["appointment_step"] == "appointment_date":
             if user_input.lower() in ["today", "ngayon"]:
                 appointment_date = datetime.now().date()
+                appointment_data["appointment_date"] = appointment_date.strftime(
+                    "%Y-%m-%d"
+                )
+                appointment_data["appointment_step"] = "appointment_time"
+                session["appointment_data"] = appointment_data
+                return "Anong oras mo gustong i-schedule ang iyong appointment? Pakigamit ang format na HH:MM AM/PM (hal., 02:30 PM)."
             else:
                 try:
                     appointment_date = datetime.strptime(user_input, "%Y-%m-%d").date()
+                    appointment_data["appointment_date"] = appointment_date.strftime(
+                        "%Y-%m-%d"
+                    )
+                    appointment_data["appointment_step"] = "appointment_time"
+                    session["appointment_data"] = appointment_data
+                    return "Anong oras mo gustong i-schedule ang iyong appointment? Pakigamit ang format na HH:MM AM/PM (hal., 02:30 PM)."
                 except ValueError:
-                    return "The date format is incorrect. Please use YYYY-MM-DD format (e.g., 2023-07-15) or type 'today'/'ngayon'."
+                    return "Mali ang format ng petsa. Pakigamit ang format na YYYY-MM-DD (hal., 2023-07-15) o i-type ang 'ngayon'."
 
-            appointment_data["appointment_date"] = appointment_date.strftime("%Y-%m-%d")
-            appointment_data["appointment_step"] = "confirm"
-            session["appointment_data"] = appointment_data
+        elif appointment_data["appointment_step"] == "appointment_time":
+            try:
+                appointment_time = datetime.strptime(user_input, "%I:%M %p").time()
+                appointment_data["appointment_time"] = appointment_time.strftime(
+                    "%I:%M %p"
+                )
+                appointment_data["appointment_step"] = "confirm"
+                session["appointment_data"] = appointment_data
 
-            confirmation_text = f"""
-            Please confirm your appointment details:
-            Full Name: {appointment_data['full_name']}
-            Address: {appointment_data['address']}
-            Birthday: {appointment_data['birthday']}
-            Birthplace: {appointment_data['birthplace']}
-            Purpose: {appointment_data['purpose']}
-            Appointment Date: {appointment_data['appointment_date']}
+                confirmation_text = f"""
+                Pakikumpirma ang mga detalye ng iyong appointment:
+                Buong Pangalan: {appointment_data['full_name']}
+                Address: {appointment_data['address']}
+                Kaarawan: {appointment_data['birthday']}
+                Lugar ng Kapanganakan: {appointment_data['birthplace']}
+                Layunin: {appointment_data['purpose']}
+                Petsa ng Appointment: {appointment_data['appointment_date']}
+                Oras ng Appointment: {appointment_data['appointment_time']}
 
-            Do you confirm this appointment? (Yes/No)
-            """
-            return confirmation_text
+                Kinukumpirma mo ba ang appointment na ito? (Oo/Hindi)
+                """
+                return confirmation_text
+            except ValueError:
+                return "Mali ang format ng oras. Pakigamit ang format na HH:MM AM/PM (hal., 02:30 PM)."
 
         elif appointment_data["appointment_step"] == "confirm":
             if user_input.lower() in ["oo", "yes", "confirm", "okay"]:
-                # Save the appointment to the database
                 result = schedule_appointment(appointment_data)
                 if result["status"] == "success":
-                    # Generate the ticket image
+                    appointment_data["appointment_id"] = result["appointment_id"]
                     ticket_image = generate_appointment_ticket_image(appointment_data)
                     if ticket_image:
                         session.pop("appointment_data", None)
                         return {
-                            "message": "Your appointment has been scheduled successfully.",
-                            "ticket_image": ticket_image
+                            "message": "Matagumpay na na-schedule ang iyong appointment.",
+                            "ticket_image": ticket_image,
                         }
                     else:
-                        return "Your appointment has been scheduled, but there was an error generating the ticket. Please contact support."
+                        return "Na-schedule na ang iyong appointment, ngunit may error sa pag-generate ng ticket. Mangyaring makipag-ugnayan sa support."
                 else:
                     return result["message"]
             else:
                 session.pop("appointment_data", None)
-                return "Appointment scheduling cancelled. How else can I assist you?"
+                return "Kinansela ang pag-schedule ng appointment. Paano pa kita matutulungan?"
 
     except Exception as e:
-        print(f"An exception occurred: {str(e)}")
-        traceback.print_exc()  # This will print the full stack trace
+        print(f"May naganap na exception: {str(e)}")
+        traceback.print_exc()
         session.pop("appointment_data", None)
         session.pop("last_activity", None)
-        return "An unexpected error occurred. Please try again."
+        return "May nangyaring hindi inaasahang error. Pakisubukang muli."
 
 
 def schedule_appointment(data):
     try:
+        appointment_datetime = datetime.strptime(
+            f"{data['appointment_date']} {data['appointment_time']}",
+            "%Y-%m-%d %I:%M %p",
+        )
         new_appointment = Appointment(
             full_name=data["full_name"],
             address=data["address"],
             birthday=datetime.strptime(data["birthday"], "%Y-%m-%d").date(),
             birthplace=data["birthplace"],
             purpose=data["purpose"],
-            appointment_date=datetime.strptime(data["appointment_date"], "%Y-%m-%d"),
+            appointment_date=appointment_datetime,
         )
         db.session.add(new_appointment)
         db.session.commit()
         return {
             "status": "success",
-            "message": "Your appointment has been scheduled successfully.",
+            "message": "Matagumpay na na-schedule ang iyong appointment.",
+            "appointment_id": new_appointment.appointment_id
         }
     except Exception as e:
         db.session.rollback()
-        print(f"Error scheduling appointment: {str(e)}")
-        print(f"Full error traceback: {traceback.format_exc()}")
+        print(f"Error sa pag-schedule ng appointment: {str(e)}")
+        print(f"Buong error traceback: {traceback.format_exc()}")
         return {
             "status": "error",
-            "message": f"There was an error scheduling your appointment: {str(e)}. Please try again later.",
+            "message": f"Nagkaroon ng error sa pag-schedule ng iyong appointment: {str(e)}. Pakisubukang muli mamaya.",
         }
-
-
-import logging
-
-logger = logging.getLogger(__name__)
-
 
 def generate_appointment_ticket_image(appointment_data):
     try:
-        logger.debug("Generating appointment ticket image")
+        logger.debug("Gumagawa ng appointment ticket image")
 
-        # Create a new image with a light background
         width, height = 600, 400
-        background_color = (240, 248, 255)  # Light blue background
+        background_color = (240, 248, 255)
         img = Image.new("RGB", (width, height), color=background_color)
         d = ImageDraw.Draw(img)
 
         # Load fonts
         try:
-            # Try to use a more universally available font
             title_font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 24)
             main_font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 16)
             small_font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 12)
@@ -270,16 +281,14 @@ def generate_appointment_ticket_image(appointment_data):
 
         # Add BaBu logo
         script_dir = os.path.dirname(os.path.abspath(__file__))
-        logo_path = os.path.join(
-            script_dir, "..", "static", "assets", "img", "babu-logo.png"
-        )
+        logo_path = os.path.join(script_dir, "..", "static", "assets", "img", "babu-logo.png")
         try:
             logo = Image.open(logo_path).convert("RGBA")
-            logo = logo.resize((80, 80))  # Resize logo as needed
+            logo = logo.resize((80, 80))
             img.paste(logo, (10, 10), logo)
         except Exception as e:
             logger.error(f"Error loading logo: {str(e)}")
-
+            # Continue without the logo if it can't be loaded
 
         # Add title
         d.text((100, 30), "SCHEDULE TICKET", font=title_font, fill=(0, 100, 0))
@@ -287,14 +296,20 @@ def generate_appointment_ticket_image(appointment_data):
         # Add horizontal line
         d.line([(10, 100), (width - 10, 100)], fill=(0, 100, 0), width=2)
 
-        # Add appointment details
+        # Add appointment ID on the right side
+        appointment_id_text = f"ID: {appointment_data['appointment_id']}"
+        appointment_id_bbox = d.textbbox((0, 0), appointment_id_text, font=main_font)
+        appointment_id_width = appointment_id_bbox[2] - appointment_id_bbox[0]
+        d.text((width - appointment_id_width - 20, 70), appointment_id_text, font=main_font, fill=(0, 100, 0))
+
         details = [
-            f"Name: {appointment_data['full_name']}",
+            f"Pangalan: {appointment_data['full_name']}",
             f"Address: {appointment_data['address']}",
-            f"Birthday: {appointment_data['birthday']}",
-            f"Birthplace: {appointment_data['birthplace']}",
-            f"Purpose: {appointment_data['purpose']}",
-            f"Appointment Date: {appointment_data['appointment_date']}",
+            f"Kaarawan: {appointment_data['birthday']}",
+            f"Lugar ng Kapanganakan: {appointment_data['birthplace']}",
+            f"Layunin: {appointment_data['purpose']}",
+            f"Petsa ng Appointment: {appointment_data['appointment_date']}",
+            f"Oras ng Appointment: {appointment_data['appointment_time']}",
         ]
 
         y_position = 120
@@ -302,10 +317,8 @@ def generate_appointment_ticket_image(appointment_data):
             d.text((20, y_position), detail, font=main_font, fill=(0, 0, 0))
             y_position += 30
 
-        # Add horizontal line
         d.line([(10, 320), (width - 10, 320)], fill=(0, 100, 0), width=2)
 
-        # Add reminders
         d.text((20, 330), "MAHALAGANG PAALALA:", font=main_font, fill=(0, 100, 0))
         reminders = [
             "• Dalhin ang ticket na ito sa araw ng schedule",
@@ -331,12 +344,11 @@ def generate_appointment_ticket_image(appointment_data):
         return base64.b64encode(buf.getvalue()).decode("utf-8")
     except Exception as e:
         logger.error(f"Error generating ticket image: {str(e)}")
+        import traceback
         logger.error(traceback.format_exc())
         return None
 
-
 if __name__ == "__main__":
-    # For testing purposes, you can set the language preference here
     language_preference = input("Choose language (english/tagalog): ").lower()
 
     print(

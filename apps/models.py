@@ -1,4 +1,5 @@
 from datetime import datetime
+import uuid
 from apps import db
 from .authentication.models import Users
 
@@ -25,6 +26,7 @@ class Message(db.Model):
     
 class Appointment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    appointment_id = db.Column(db.String(8), unique=True, nullable=False, default=lambda: uuid.uuid4().hex[:8])
     full_name = db.Column(db.String(100), nullable=False)
     address = db.Column(db.String(200), nullable=False)
     birthday = db.Column(db.Date, nullable=False)
@@ -32,9 +34,9 @@ class Appointment(db.Model):
     purpose = db.Column(db.String(200), nullable=False)
     appointment_date = db.Column(db.DateTime, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
-
+    
     def __repr__(self):
-        return f'<Appointment {self.full_name}>'
+        return f'<Appointment {self.appointment_id}>'
     
 
 class Announcement(db.Model):
